@@ -131,3 +131,15 @@ Agregar `geoespacial` como valor de `TrackEnum` y mostrarlo como **QGIS y datos 
 ### Justificación
 
 La nueva pista organiza futuras guías de datos geoespaciales sin mezclar contenido con las pistas de Python o conocimiento. Mantener `tools` libre conserva la extensión del catálogo sin cambios estructurales cada vez que se agregue una herramienta.
+
+## 8. Matriz responsive y auditoría automatizada
+
+### Decisión (2026-09-30)
+
+Se agrega `@axe-core/playwright` como dependencia de desarrollo para ejecutar axe-core desde la suite Playwright ya existente. El adaptador oficial de Deque evita mantener una integración propia y publica licencia MPL-2.0; el repositorio registra actividad y versiones recientes al 2026-09-30 ([npm](https://www.npmjs.com/package/%40axe-core/playwright), [GitHub](https://github.com/dequelabs/axe-core-npm)).
+
+Las pruebas responsive quedan en `tests/responsive/`, y las capturas se guardan en una ruta ignorada por Git. `/_estres` ejecuta `notFound()` en producción y contiene datos de tensión exclusivamente para pruebas locales. Para lectura y adaptación, los controles principales usan dimensiones táctiles de 44 px, los inputs usan 16 px y los textos de 10/11 px suben a 12 px. Los bloques de código conservan scroll interno horizontal accesible.
+
+Tailwind conserva dos cortes de ancho: `md` en 768 px y `lg` en 1201 px; las variantes `sm`, `xl` y `2xl` se eliminan para alinear el sitio con los tres rangos del diseño. El corte CSS de 767 px separa el móvil y el rango de 768–1200 px se trata como tablet. Las tarjetas y sus cuadrículas usan padding y separación fluidos; los artículos limitan sus bloques de lectura a unas 70 letras por línea.
+
+La simulación Chromium no cubre Safari real, barras dinámicas, teclado en pantalla ni safe areas de hardware; queda un checklist manual para esos casos.

@@ -26,7 +26,7 @@ export const mdxComponents = {
   // Sobrescritura de elementos HTML estándar
   h1: ({ className = "", ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
-      className={`font-heading text-3xl sm:text-4xl font-semibold text-on-surface tracking-tight mt-8 mb-4 border-b border-outline-variant/60 pb-3 ${className}`}
+      className={`fluid-heading font-heading text-3xl md:text-4xl font-semibold text-on-surface tracking-tight mt-8 mb-4 border-b border-outline-variant/60 pb-3 ${className}`}
       {...props}
     />
   ),
@@ -78,6 +78,15 @@ export const mdxComponents = {
   code: ({ className = "", ...props }: React.HTMLAttributes<HTMLElement>) => (
     <code
       className={`rounded bg-surface-container-high px-1.5 py-0.5 font-mono text-[0.875em] text-on-surface border border-outline-variant/60 ${className}`}
+      {...props}
+    />
+  ),
+  pre: ({ className = "", ...props }: React.HTMLAttributes<HTMLPreElement>) => (
+    <pre
+      className={`scroll-region rounded-lg border border-outline/30 bg-inverse-surface p-4 text-sm font-mono leading-relaxed text-inverse-on-surface ${className}`}
+      tabIndex={0}
+      role="region"
+      aria-label="Bloque de código de la guía"
       {...props}
     />
   ),

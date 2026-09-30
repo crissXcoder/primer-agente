@@ -24,11 +24,11 @@ export function OsSelector({ supportedOs }: OsSelectorProps) {
   };
 
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-outline-variant bg-surface-container-low p-2">
+    <div className="flex min-w-0 flex-wrap items-center gap-2 rounded-lg border border-outline-variant bg-surface-container-low p-2">
       <span className="font-mono text-xs text-on-surface-variant font-medium px-2">
         Tu sistema preferido:
       </span>
-      <div className="flex items-center gap-1">
+      <div className="flex min-w-0 flex-wrap items-center gap-1">
         {supportedOs.map((os) => {
           const isSelected = activeOs === os;
           const { label, icon } = osLabels[os];
@@ -37,7 +37,7 @@ export function OsSelector({ supportedOs }: OsSelectorProps) {
               key={os}
               type="button"
               onClick={() => setPreferredOs(os)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+              className={`inline-flex min-h-11 min-w-11 items-center gap-1.5 px-3 py-1 rounded text-xs font-mono text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 isSelected
                   ? "bg-primary-container text-on-primary-fixed font-bold border border-primary/40 shadow-xs"
                   : "bg-surface text-on-surface hover:bg-surface-container-high border border-outline-variant/60"

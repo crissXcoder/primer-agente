@@ -23,7 +23,7 @@ export default function TallerPage() {
             Taller Presencial de Agentes de IA
           </span>
         </div>
-        <h1 className="font-heading text-3xl sm:text-4xl font-bold text-on-surface tracking-tight">
+        <h1 className="fluid-heading font-heading text-3xl md:text-4xl font-bold text-on-surface tracking-tight">
           Taller: Instalación y Configuración de tu Primer Agente de IA
         </h1>
         <p className="font-sans text-base text-on-surface-variant leading-relaxed">

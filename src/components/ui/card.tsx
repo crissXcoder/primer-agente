@@ -18,7 +18,7 @@ export function Card({
 
   return (
     <div
-      className={`rounded-lg border p-5 transition-colors duration-150 ${variantStyles[variant]} ${className}`}
+      className={`adaptive-card min-w-0 @container rounded-lg border transition-colors duration-150 ${variantStyles[variant]} ${className}`}
       {...props}
     >
       {children}

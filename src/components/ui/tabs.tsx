@@ -76,8 +76,9 @@ export function Tabs({
       <div
         ref={tabListRef}
         role="tablist"
+        aria-label="Opciones disponibles"
         aria-orientation="horizontal"
-        className="flex items-center gap-1 border-b border-outline-variant bg-surface-container-low p-1 rounded-t-lg"
+        className="scroll-region flex items-center gap-1 border-b border-outline-variant bg-surface-container-low p-1 rounded-t-lg"
       >
         {items.map((tab, idx) => {
           const isSelected = activeTab === tab.id;
@@ -91,7 +92,7 @@ export function Tabs({
               tabIndex={isSelected ? 0 : -1}
               onClick={() => handleSelect(tab.id)}
               onKeyDown={(e) => handleKeyDown(e, idx)}
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-mono font-medium rounded transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1
+              className={`inline-flex min-h-11 shrink-0 items-center gap-2 px-3.5 py-1.5 text-xs font-mono font-medium rounded transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1
                 ${
                   isSelected
                     ? "bg-surface-container-lowest text-primary font-semibold border border-outline-variant/60 shadow-xs"
@@ -113,7 +114,7 @@ export function Tabs({
           id={`${instanceId}-tabpanel-${activeItem.id}`}
           aria-labelledby={`${instanceId}-tab-${activeItem.id}`}
           tabIndex={0}
-          className="rounded-b-lg border-x border-b border-outline-variant bg-surface-container-lowest p-5 font-sans text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-container"
+          className="min-w-0 max-w-full rounded-b-lg border-x border-b border-outline-variant bg-surface-container-lowest p-5 font-sans text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-container"
         >
           {activeItem.content}
         </div>

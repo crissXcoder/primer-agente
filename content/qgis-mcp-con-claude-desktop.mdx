@@ -1,0 +1,224 @@
+---
+title: "Conectar QGIS MCP con Claude Desktop"
+slug: "qgis-mcp-con-claude-desktop"
+summary: "Compara cuatro proyectos QGIS MCP y configura Claude Desktop con pasos prudentes para cada ruta."
+track: "geoespacial"
+audience: "todos"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "qgis"
+  - "claude-desktop"
+  - "mcp"
+tags:
+  - "qgis"
+  - "mcp"
+  - "claude-desktop"
+  - "seguridad"
+prerequisites:
+  - "qgis-instalar-y-preparar"
+  - "qgis-plugins-instalar-y-gestionar"
+  - "qgis-mcp-que-es-y-como-elegir"
+  - "instalar-uv"
+related:
+  - "qgis-mcp-que-es-y-como-elegir"
+  - "qgis-mcp-con-claude-code-y-codex"
+timeMinutes: 40
+verifiedAt: "2026-09-30"
+appliesTo:
+  qgis: "Verifica el rango declarado por cada proyecto; WAI declara QGIS 3.28–4.99, piatkowski 3.22+, y los otros README pueden cambiar."
+  claude-desktop: "Claude Desktop con extensiones MCP o servidores locales; interfaz y archivos de configuración pueden cambiar por versión y sistema."
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://plugins.qgis.org/plugins/qgis_mcp_wiseman/"
+  - "https://github.com/wiseman/qgis_mcp"
+  - "https://github.com/nkarasiak/qgis-mcp"
+  - "https://github.com/jjsantos01/qgis_mcp"
+  - "https://github.com/piatkowski/qgis-mcp"
+  - "https://modelcontextprotocol.io/docs/2026-07-28/concepts/security"
+  - "https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector"
+  - "https://docs.astral.sh/uv/guides/tools/"
+  - "https://docs.anthropic.com/en/docs/claude-desktop"
+  - "https://github.com/anthropics/mcpb"
+  - "https://www.qgis.org/resources/installation-guide/"
+errors: []
+---
+
+Esta guía instala una conexión entre Claude Desktop y una sesión de QGIS que está abierta en la misma computadora. Primero escogé **una** de las cuatro rutas; no instalés varios plugins MCP a la vez porque podrían competir por el mismo puerto o registrar herramientas parecidas.
+
+Antes de empezar, prepará QGIS y un proyecto de práctica siguiendo [instalar y preparar QGIS](/guias/qgis-instalar-y-preparar), revisá [cómo instalar y gestionar plugins](/guias/qgis-plugins-instalar-y-gestionar), y leé [qué conecta QGIS con MCP y cómo elegir un proyecto](/guias/qgis-mcp-que-es-y-como-elegir). Si vas a usar `uvx`, seguí también [instalar uv](/guias/instalar-uv).
+
+## 1. Elegí una ruta
+
+| Ruta | Cuándo considerarla | Qué instalar/configurar |
+| --- | --- | --- |
+| [WAI QGIS MCP](https://github.com/wiseman/qgis_mcp) | Querés instalar una extensión `.mcpb` desde Claude Desktop y el plugin QGIS ofrece la ayuda de conexión. | Plugin QGIS y extensión Claude; el plugin figura como experimental en el repositorio oficial. |
+| [nkarasiak/qgis-mcp](https://github.com/nkarasiak/qgis-mcp) | Querés el plugin del repositorio de QGIS y un servidor iniciado con `uvx`. | Plugin QGIS, `uv` y configuración JSON manual. |
+| [jjsantos01/qgis_mcp](https://github.com/jjsantos01/qgis_mcp) | Necesitás consultar el proyecto original como referencia histórica o reproducir ese entorno. | Plugin copiado al perfil, `uv`, repo clonado y servidor por separado. El README indica que puede ejecutar código PyQGIS arbitrario. |
+| [piatkowski/qgis-mcp](https://github.com/piatkowski/qgis-mcp) | Preferís un servidor Python separado con entorno virtual y un plugin instalado desde un ZIP de Releases. | QGIS 3.22+, Python 3.12+, `uv`, ZIP del plugin y JSON con ruta absoluta. |
+
+WAI es la única ruta descrita aquí que instala un paquete `.mcpb` en Claude Desktop. Un `.mcpb` es un paquete de extensión que instala/gestiona el servidor desde Claude; el modo manual guarda un comando y argumentos en `claude_desktop_config.json`. El paquete reduce pasos de configuración, pero sigue ejecutando código local con los permisos de tu usuario. La ficha oficial de QGIS marca WAI como experimental y declara QGIS 3.28 a 4.99; eso no es una prueba independiente de compatibilidad en cada combinación.
+
+Las otras tres rutas usan un servidor local lanzado por Claude y normalmente un plugin dentro de QGIS. `uvx` descarga/ejecuta una herramienta Python sin que tengas que clonar el repo; eso no la convierte en código auditado. El proyecto de `jjsantos01` declara una herramienta que ejecuta PyQGIS arbitrario, así que el texto que le pasés puede ejecutar operaciones de alto impacto.
+
+## 2. Requisitos y preparación común
+
+1. Instalá QGIS y confirmá que abre. Anotá la versión en **Ayuda → Acerca de**. Contrastá esa versión con la columna de compatibilidad del README elegido.
+2. Instalá Claude Desktop desde [Anthropic](https://www.anthropic.com/claude/desktop) e iniciá sesión. Los archivos/configuración de Claude son específicos de la aplicación de escritorio; Claude en navegador no inicia un servidor local.
+3. Creá una copia de un proyecto de prueba y usá datos no sensibles. No conectés el primer intento a un proyecto de producción.
+4. Para `nkarasiak`, `jjsantos01` o `piatkowski`, instalá `uv` de acuerdo con [su guía](/guias/instalar-uv). Verificá en una terminal con `uv --version`; debe imprimirse una versión. No pegues aquí el instalador de `uv` de otro sistema operativo.
+5. Mantené QGIS y Claude Desktop en la misma computadora. El puente local no significa que el modelo de Claude procese localmente los mensajes o los datos que compartás.
+
+WAI declara que su plugin no necesita dependencias PIP externas. Su ficha de QGIS también declara versión mínima 3.28 y máxima 4.99, además de la categoría experimental. Para `nkarasiak`, usá los requisitos y pasos actuales del README, ya que el proyecto cambia. `piatkowski` declara QGIS 3.22+, Claude Desktop y Python 3.12+ para el servidor. `jjsantos01` declara QGIS 3.x (probado por el autor en 3.22), Python 3.10+ y `uv`; su README no acredita compatibilidad moderna por sistema operativo.
+
+## 3. Ruta WAI: instalar la extensión `.mcpb`
+
+1. En QGIS, abrí **Complementos → Administrar e instalar complementos**, buscá **WAI QGIS MCP** e instalalo. La ficha del plugin lo identifica como experimental; si no aparece, revisá la ficha actual y el repositorio del autor en vez de bajar un ZIP de un sitio no relacionado.
+2. Abrí **Complementos → WAI QGIS MCP → WAI QGIS MCP** y pulsá **Start Server**. El panel incluye **Assistant setup help**, que muestra instrucciones específicas para el asistente.
+3. En Claude Desktop, descargá el `.mcpb` desde la sección Releases del [repositorio WAI](https://github.com/wiseman/qgis_mcp) y abrilo/instalalo desde Claude Desktop según la documentación de extensiones MCP de Anthropic. Confirmá que el editor de extensiones muestra WAI instalado y habilitado.
+4. Cerrá y volvé a abrir Claude Desktop si la interfaz lo solicita. Con QGIS abierto y el servidor iniciado, abrí la lista de herramientas MCP de la conversación.
+
+El README/ficha indica que Claude Desktop usa `.mcpb`; no requiere Node.js por separado. Esa instrucción no permite afirmar que cualquier paquete procedente de cualquier fuente sea seguro: confirmá que el archivo venga de las Releases enlazadas desde el repositorio del autor. El instalador puede ejecutar código en el equipo con los permisos de tu usuario.
+
+## 4. Ruta `nkarasiak`: plugin QGIS y `uvx`
+
+1. En QGIS, abrí **Complementos → Administrar e instalar complementos**, buscá **QGIS MCP** e instalá el plugin publicado por el proyecto. Confirmá el autor y el enlace al repositorio para no confundirlo con otro complemento del mismo nombre.
+2. Reiniciá QGIS y abrí el panel QGIS MCP. Pulsá **Start Server** si el plugin lo solicita. El README de esta ruta describe un plugin que atiende al servidor local por socket.
+3. En Claude Desktop, abrí **Settings → Developer → Edit Config** (o el botón equivalente que muestre tu versión) y añadí este objeto dentro de `mcpServers`:
+
+```json
+{
+  "mcpServers": {
+    "qgis": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "https://github.com/nkarasiak/qgis-mcp/archive/refs/heads/main.zip",
+        "qgis-mcp-server"
+      ]
+    }
+  }
+}
+```
+
+El ejemplo usa `main`, una rama que puede cambiar. Para instalaciones repetibles, consultá la documentación de Releases/tags del proyecto y fijá una versión que el plugin declare compatible. Si tu JSON ya tiene `mcpServers`, combiná las entradas: no reemplaces el archivo entero. En Windows independiente, el README citado usa la configuración común de Claude; para MSIX/Store la evidencia de ruta y `cwd` es distinta (ver más abajo).
+
+4. Guardá el JSON, cerrá por completo Claude Desktop y volvé a abrirlo. La ficha de cliente debe mostrar las herramientas QGIS. Si el programa no encuentra `uvx`, confirmá que `uv` esté instalado y disponible en el entorno de Claude; usá el comando absoluto de `uvx` solo si el README vigente de esta ruta lo admite.
+
+El README del proyecto documenta `QGIS_MCP_TOKEN` como opción para el puente en versiones compatibles. No agregués un token por intuición: verificá que tanto el plugin como el servidor instalados admitan esa misma opción, y seguí la configuración oficial de esa versión. El token no aísla procesos que corren con tu misma cuenta.
+
+## 5. Ruta original `jjsantos01`: referencia histórica
+
+Esta ruta requiere más pasos manuales y su README describe `execute_code`, que puede ejecutar código PyQGIS arbitrario. Para una primera instalación, preferí otra ruta salvo que ocupés reproducir este proyecto expresamente.
+
+1. Cloná el repositorio con Git siguiendo el enlace oficial [jjsantos01/qgis_mcp](https://github.com/jjsantos01/qgis_mcp). No descargués una copia de terceros.
+2. En QGIS, abrí **Configuración → Perfiles de usuario → Abrir carpeta del perfil activo**. Copiá la carpeta `qgis_mcp_plugin` del repo a `python/plugins` del perfil. La ruta exacta depende del perfil activo; usá el menú de QGIS, no una ruta fija copiada de otra computadora.
+3. Reiniciá QGIS y habilitá **QGIS MCP** desde **Complementos**. Abrí su panel y pulsá **Start Server**.
+4. En Claude Desktop, abrí el editor de configuración. En `mcpServers` añadí una entrada como la siguiente, sustituyendo el marcador por la ruta absoluta a `src/qgis_mcp` dentro del clon:
+
+```json
+{
+  "mcpServers": {
+    "qgis-original": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "<RUTA-ABSOLUTA>/qgis_mcp/src/qgis_mcp",
+        "run",
+        "qgis_mcp_server.py"
+      ]
+    }
+  }
+}
+```
+
+En Windows podés usar barras `/` en la ruta JSON, según las instrucciones del README; en macOS/Linux usá una ruta absoluta válida del sistema. No incluyás literalmente `<RUTA-ABSOLUTA>`.
+
+5. Guardá el archivo, reiniciá Claude Desktop y confirmá que el servidor aparece conectado. El README consultado documenta instalación en Windows y macOS y no aporta pasos equivalentes detallados para Linux; no extrapolés esas rutas a Linux sin comprobar el repo.
+
+## 6. Ruta `piatkowski`: plugin ZIP y entorno Python
+
+1. Descargá el ZIP `qgis_mcp-<versión>.zip` desde [Releases](https://github.com/piatkowski/qgis-mcp/releases). En QGIS, abrí **Complementos → Administrar e instalar complementos → Instalar desde ZIP**, seleccioná el archivo y habilitá QGIS MCP.
+2. Cloná el repositorio oficial. En una terminal, entrá a la carpeta creada y ejecutá:
+
+```bash
+uv sync
+```
+
+El README declara que esto crea `.venv` e instala las dependencias fijadas en `uv.lock`. Si usás Windows y no tenés `uv`, seguí la guía de prerrequisito; no uses sintaxis de shell Unix en PowerShell.
+
+3. En Claude Desktop, añadí una entrada bajo `mcpServers`. Sustituí el marcador por la ruta absoluta real a Python del entorno virtual. El JSON usa barras `/` para evitar escapes en Windows:
+
+```json
+{
+  "mcpServers": {
+    "qgis-mcp": {
+      "command": "<RUTA-ABSOLUTA>/qgis-mcp/.venv/Scripts/python.exe",
+      "args": ["-m", "server"]
+    }
+  }
+}
+```
+
+En macOS/Linux, el valor de `command` termina normalmente en `.venv/bin/python`, según el README. Si tu clon está en otro lugar, ajustá la ruta; no uses la ruta literal del ejemplo.
+
+4. Reiniciá Claude Desktop. Mantené QGIS abierto y el plugin activo; el README indica que el plugin inicia automáticamente un servicio local al habilitarse. Si actualizás el plugin, reiniciá QGIS para cargar el código nuevo.
+
+## 7. Clientes JSON, archivos y diferencias de sistema
+
+Para configuración manual, abrí **Settings → Developer → Edit Config** en Claude Desktop y permití que la aplicación abra el archivo correcto cuando la opción exista. Las ubicaciones documentadas por los proyectos consultados son:
+
+| Sistema | Ruta común declarada en README |
+| --- | --- |
+| Windows independiente | `%APPDATA%\Claude\claude_desktop_config.json` |
+| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Linux | `~/.config/Claude/claude_desktop_config.json` (documentada por `piatkowski`; confirmá soporte de tu distribución/versión) |
+
+**Windows MSIX/Store:** el fork documentado por `nkarasiak` explica que la instalación MSIX usa una carpeta bajo `%LOCALAPPDATA%\Packages\Claude_<id>\LocalCache\Roaming\Claude\` y que el sandbox puede descartar `cwd`; para ese caso indica usar `--directory` en el comando del servidor. Esto es evidencia del README de ese proyecto, no una afirmación universal para todas las versiones de Claude ni para todas las rutas anteriores. Si instalaste Claude desde Microsoft Store, abrí **Edit Config** para ubicar el archivo efectivo y seguí la instrucción específica del proyecto seleccionado. El README original y el de `piatkowski` no documentan la diferencia MSIX con el mismo detalle.
+
+El JSON completo anterior valida como JSON estándar; hay que cambiar el marcador de ruta y combinarlo con las entradas que ya existan. No pongás comentarios, comas finales ni credenciales ficticias en el archivo. Para pegar varias rutas, cada nombre (`qgis`, `qgis-original`, `qgis-mcp`) debe ser único.
+
+## 8. Seguridad y permisos
+
+Un servidor MCP local puede leer o cambiar el proyecto abierto y los archivos a los que tiene acceso tu cuenta. Revisá la lista de herramientas antes de aprobar una llamada y aceptá solo operaciones que entendás. WAI y el proyecto original `jjsantos01` describen ejecución de código PyQGIS; tratá esas rutas como capaces de realizar cualquier operación que permita QGIS y Python.
+
+- Empezá con un proyecto duplicado y datos de práctica sin información personal, de clientes ni credenciales.
+- Pedí primero consultas de lectura. Aprobá cambios solo tras revisar capas, rutas de salida y parámetros. Guardá resultados en una carpeta aparte.
+- No habilités herramientas ni servidores de origen que no reconocés. Instalá únicamente desde los repositorios oficiales enlazados por cada proyecto.
+- La conexión entre Claude y MCP puede ser local, pero el contenido que compartás en la conversación puede enviarse al proveedor del modelo. Revisá la política y configuración de privacidad de Claude antes de usar datos sensibles.
+- Un token compartido, si el proyecto y versión lo soportan, no reemplaza la revisión de herramientas ni protege contra procesos con tu misma cuenta.
+
+## 9. ¿Cómo sé que funcionó? Actualización y desinstalación
+
+Con QGIS abierto, el plugin habilitado y Claude Desktop reiniciado, pedile al asistente estas tres consultas. No autorizés operaciones de escritura durante esta comprobación:
+
+1. **“Solo lectura: ¿qué versión de QGIS está conectada y cuál es el nombre del proyecto actual?”** Resultado esperado: versión e información del proyecto activo; no debe crear ni guardar archivos.
+2. **“Solo lectura: listá las capas cargadas y devolvé únicamente sus nombres y tipos.”** Resultado esperado: lista correspondiente al panel Capas de QGIS; no debe agregar, borrar o editar capas.
+3. **“Solo lectura: resumí la capa `<NOMBRE-DE-CAPA>` indicando su tipo y campos, sin ejecutar algoritmos ni cambiar el proyecto.”** Resultado esperado: resumen de esa capa, sin modificaciones. Reemplazá el marcador por una capa de práctica.
+
+La presencia de herramientas en Claude confirma que el cliente inició un servidor; una respuesta sobre proyecto/capas confirma además que el puente llegó a QGIS. Esta guía no ejecutó QGIS, Claude Desktop ni ninguna de las cuatro rutas: los resultados anteriores son lo que deberías observar, no una prueba realizada aquí.
+
+### Actualizar
+
+- **WAI:** revisá la versión nueva en la ficha QGIS y Releases del autor. Actualizá el plugin desde el administrador de QGIS; actualizá la extensión desde Claude Desktop. Confirmá que sus versiones se declaren compatibles.
+- **`nkarasiak`:** actualizá el plugin y fijá una release/tag de servidor compatible en vez de dejar `main` si necesitás reproducibilidad. Reiniciá QGIS y Claude.
+- **`jjsantos01`:** compará los cambios del repositorio antes de actualizar; plugin y servidor provienen del mismo clon. Reiniciá ambas aplicaciones después de una actualización.
+- **`piatkowski`:** descargá el ZIP correspondiente a una release y actualizá el entorno según su README; al actualizar el plugin, reiniciá QGIS.
+
+No actualicés solo una mitad si el proyecto mantiene versiones acopladas. Guardá copia del proyecto y del JSON antes de cambiar componentes.
+
+### Desinstalar
+
+Primero quitá la entrada correspondiente de `mcpServers` (o desinstalá la extensión WAI en Claude Desktop) y reiniciá Claude Desktop. Después deshabilitá/eliminá el plugin desde el administrador de QGIS. Para WAI, quitá la extensión `.mcpb` desde el administrador de extensiones. Para `piatkowski`, también podés borrar el clon y su `.venv` cuando ya no lo necesités; para las rutas `uvx`, limpiá la herramienta con el procedimiento de caché de `uv` solo si querés liberar espacio. No borres carpetas de perfiles completas: pueden contener otros plugins y ajustes.
+
+## Fuentes y alcance de la verificación
+
+Las instrucciones se contrastaron el **2026-09-30** con la ficha oficial de WAI en el repositorio de plugins QGIS y los README de los cuatro proyectos, además de las referencias enlazadas en el frontmatter. La ficha de WAI declara experimentalidad y versiones; los requisitos y comandos de las otras rutas son declaraciones de sus mantenedores. La diferencia Windows MSIX se atribuye únicamente al README que la describe.
+
+Durante este trabajo solo se leyó documentación web y archivos del repositorio; no se instaló ningún plugin, no se ejecutó un MCP contra QGIS y no se comprobó la interfaz de Claude Desktop. La validación local del JSON y del contenido del sitio se reporta por separado al cierre.

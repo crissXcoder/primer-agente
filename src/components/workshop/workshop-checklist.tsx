@@ -72,7 +72,7 @@ export function WorkshopChecklist() {
 
   return (
     <div className="rounded-lg border border-outline-variant bg-surface-container-lowest p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant/40 pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-outline-variant/40 pb-4">
         <div>
           <h2 className="font-heading text-xl font-bold text-on-surface">
             Checklist: Preparación Técnica de tu Máquina
@@ -108,6 +108,7 @@ export function WorkshopChecklist() {
             >
               <input
                 type="checkbox"
+                aria-label={item.title}
                 checked={isChecked}
                 onChange={() => {}}
                 className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer mt-0.5"

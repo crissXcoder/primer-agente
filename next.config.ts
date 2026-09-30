@@ -4,10 +4,10 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   async rewrites() {
     return [
-      {
-        source: "/_diseno",
-        destination: "/diseno",
-      },
+      { source: "/_diseno", destination: "/diseno" },
+      ...(process.env.NODE_ENV === "development"
+        ? [{ source: "/_estres", destination: "/stress-test" }]
+        : []),
     ];
   },
 };

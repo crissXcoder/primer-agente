@@ -67,7 +67,7 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
         <span className="font-mono text-xs text-primary font-bold">
           SECUENCIA FORMATIVA GUIADA
         </span>
-        <h1 className="font-heading text-3xl sm:text-4xl font-bold text-on-surface tracking-tight">
+        <h1 className="fluid-heading font-heading text-3xl md:text-4xl font-bold text-on-surface tracking-tight">
           {route.title}
         </h1>
         <p className="font-sans text-base text-on-surface-variant leading-relaxed max-w-3xl">

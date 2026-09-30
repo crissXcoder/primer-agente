@@ -17,11 +17,11 @@ export default function Home() {
           </span>
         </div>
 
-        <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold text-on-surface tracking-tight leading-tight">
+        <h1 className="fluid-heading font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-on-surface tracking-tight leading-tight">
           Instala y configura tus primeros agentes de IA sin enredos
         </h1>
 
-        <p className="font-sans text-base sm:text-lg text-on-surface-variant max-w-3xl leading-relaxed">
+        <p className="font-sans text-base md:text-lg text-on-surface-variant max-w-3xl leading-relaxed">
           Base de conocimiento práctica y verificable para principiantes absolutos. Aprende a dominar la terminal, Git, Node.js, Python, uv, y a integrar herramientas con el protocolo MCP y skills de agentes.
         </p>
 

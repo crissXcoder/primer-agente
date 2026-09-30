@@ -121,6 +121,7 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
   }, [initialGuides, searchQuery, osParam, trackParam, audienceParam, levelParam, toolParam]);
 
   const hasActiveFilters = Boolean(searchQuery || osParam || trackParam || audienceParam || levelParam || toolParam);
+  const activeFilterCount = [searchQuery, osParam, trackParam, audienceParam, levelParam, toolParam].filter(Boolean).length;
 
   return (
     <div className="space-y-8">
@@ -142,7 +143,12 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
         </div>
 
         {/* Filtros desplegables y chips */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2">
+        <details className="group pt-2" open>
+          <summary className="min-h-11 flex cursor-pointer list-none items-center justify-between rounded border border-outline-variant px-3 font-mono text-sm text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden">
+            <span>Filtros {activeFilterCount ? `(${activeFilterCount} activos)` : ""}</span>
+            <span aria-hidden="true">⌄</span>
+          </summary>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 pt-3">
           {/* Filtro Sistema Operativo */}
           <div>
             <label htmlFor="filter-os" className="font-mono text-xs text-on-surface-variant font-medium block mb-1">
@@ -236,7 +242,8 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
               ))}
             </select>
           </div>
-        </div>
+          </div>
+        </details>
 
         {/* Resumen de filtros y botón limpiar */}
         <div className="flex items-center justify-between pt-2 border-t border-outline-variant/40">
@@ -263,7 +270,7 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
 
       {/* Grid de Guías */}
       {filteredGuides.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="responsive-grid gap-6">
           {filteredGuides.map((guide) => (
             <Card key={guide.slug} className="flex flex-col justify-between hover:border-primary-container transition-colors">
               <CardHeader>
@@ -307,7 +314,7 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
               </CardContent>
 
               <CardFooter>
-                <div className="flex items-center justify-between w-full pt-2">
+                <div className="card-actions flex items-center justify-between gap-2 w-full pt-2">
                   <span className="font-mono text-xs capitalize text-on-surface-variant">
                     Nivel: {guide.level}
                   </span>

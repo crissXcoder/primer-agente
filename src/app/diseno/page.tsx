@@ -44,7 +44,7 @@ python3 --version`;
             Industrial Electromechanical B2B UI
           </span>
         </div>
-        <h1 className="font-heading text-3xl sm:text-4xl font-semibold text-on-surface">
+        <h1 className="fluid-heading font-heading text-3xl md:text-4xl font-semibold text-on-surface">
           Catálogo del Sistema de Diseño (/_diseno)
         </h1>
         <p className="font-sans text-base text-on-surface-variant max-w-3xl">
@@ -60,7 +60,7 @@ python3 --version`;
             (Tailwind v4 @theme)
           </span>
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <div className="p-3 rounded border border-outline-variant bg-surface space-y-1">
             <div className="h-10 rounded bg-primary-container border border-primary flex items-center justify-center font-mono text-xs text-on-primary-fixed font-bold">
               #00B4D8
@@ -120,7 +120,7 @@ python3 --version`;
           <div className="space-y-4">
             <div className="border-b border-outline-variant/60 pb-3">
               <span className="font-mono text-xs text-tertiary">IBM Plex Sans (font-heading / semibold)</span>
-              <p className="font-heading text-2xl sm:text-3xl font-semibold text-on-surface mt-1">
+              <p className="font-heading text-2xl md:text-3xl font-semibold text-on-surface mt-1">
                 Encabezado Industrial de Instrumentación (32px / 24px)
               </p>
             </div>

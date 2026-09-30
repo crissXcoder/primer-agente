@@ -4,7 +4,7 @@ import Link from "next/link";
 export function Footer() {
   return (
     <footer className="w-full border-t border-outline-variant/60 bg-surface-container-low text-on-surface-variant font-sans text-sm mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Columna 1: Identidad del proyecto */}
           <div className="md:col-span-2 space-y-3">
@@ -105,7 +105,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-outline-variant/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-on-surface-variant">
+        <div className="mt-8 pt-6 border-t border-outline-variant/60 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-on-surface-variant">
           <p>© 2026 Cristian Araya · Universidad Nacional de Costa Rica (UNA)</p>
           <div className="flex items-center gap-4">
             <a

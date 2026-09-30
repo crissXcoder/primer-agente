@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 @theme {
+  --breakpoint-*: initial;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 75.0625rem;
+
   --color-surface: #f5fafd;
   --color-surface-dim: #d5dbde;
   --color-surface-bright: #f5fafd;
@@ -65,6 +69,7 @@
 
 html {
   color-scheme: light;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
 }
 
 body {
@@ -72,6 +77,118 @@ body {
   color: var(--color-on-surface);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-wrap: anywhere;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea,
+summary {
+  min-width: 24px;
+  min-height: 44px;
+}
+
+button {
+  min-width: 44px;
+}
+
+input,
+select,
+textarea {
+  font-size: max(1rem, 16px);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  header[data-site-header] {
+    position: relative;
+  }
+  header[data-site-header] > div:first-child {
+    min-height: 3rem;
+  }
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-outline-variant: #6d797e;
+  }
+}
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.adaptive-card {
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.scroll-region {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: auto;
+}
+
+.scroll-region > pre {
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+}
+
+@media (max-width: 767px) {
+  .fluid-heading {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+}
+
+[class~="text-[10px]"],
+[class~="text-[11px]"] {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .page-gutter {
+    padding-inline: clamp(1rem, 3vw, 2rem);
+  }
+}
+
+@container (max-width: 24rem) {
+  .card-actions {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+}
+
+.prose > :is(p, ul, ol, blockquote, h1, h2, h3, h4) {
+  max-width: 70ch;
 }
 
 /* Reduced motion preference respect */

@@ -53,17 +53,19 @@ export function CodeBlock({
 
   return (
     <div
-      className={`rounded-lg border border-outline/30 bg-inverse-surface text-inverse-on-surface my-4 overflow-hidden shadow-xs ${className}`}
+      role="region"
+      aria-label={`Bloque de código ${filename || language}`}
+      className={`w-full min-w-0 max-w-full rounded-lg border border-outline/30 bg-inverse-surface text-inverse-on-surface my-4 shadow-xs ${className}`}
       {...props}
     >
-      <div className="flex items-center justify-between px-4 py-2 border-b border-outline/20 bg-inverse-surface/80">
+      <div className="flex min-w-0 flex-wrap items-center justify-between gap-2 px-4 py-2 border-b border-outline/20 bg-inverse-surface/80">
         <div className="flex items-center gap-2">
           <span className="flex gap-1.5" aria-hidden="true">
             <span className="w-2.5 h-2.5 rounded-full bg-error/80" />
             <span className="w-2.5 h-2.5 rounded-full bg-status-review-border/80" />
             <span className="w-2.5 h-2.5 rounded-full bg-primary-container/80" />
           </span>
-          <span className="font-mono text-xs text-inverse-on-surface/70 ml-2 font-medium">
+          <span className="min-w-0 break-all font-mono text-xs text-inverse-on-surface/70 ml-2 font-medium">
             {filename || language}
           </span>
         </div>
@@ -110,7 +112,7 @@ export function CodeBlock({
         </button>
       </div>
 
-      <div className="p-4 overflow-x-auto text-sm font-mono leading-relaxed selection:bg-primary-container selection:text-on-primary-fixed">
+      <div className="scroll-region p-4 text-sm font-mono leading-relaxed selection:bg-primary-container selection:text-on-primary-fixed" tabIndex={0}>
         <pre tabIndex={0}>
           <code>{textToCopy || children}</code>
         </pre>

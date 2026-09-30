@@ -7,6 +7,20 @@ import { usePathname } from "next/navigation";
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const menuButtonRef = React.useRef<HTMLButtonElement>(null);
+  const menuId = React.useId();
+
+  React.useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { href: "/guias", label: "Guías" },
@@ -25,18 +39,18 @@ export function Header() {
         Saltar al contenido principal
       </a>
 
-      <header className="sticky top-0 z-40 w-full border-b border-outline-variant/60 bg-surface/95 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <header data-site-header className="sticky top-[env(safe-area-inset-top,0px)] z-40 w-full border-b border-outline-variant/60 bg-surface/95 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 min-h-16 flex items-center justify-between gap-2">
           {/* Marca / Logo */}
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <Link
               href="/"
-              className="group flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded p-1"
+              className="group flex min-w-0 items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded p-1"
             >
               <div className="w-8 h-8 rounded bg-primary text-white flex items-center justify-center font-heading font-bold text-base shadow-xs group-hover:bg-primary-container group-hover:text-on-primary-fixed transition-colors">
                 PA
               </div>
-              <div className="flex flex-col">
+              <div className="flex min-w-0 flex-col">
                 <span className="font-heading font-semibold text-base text-on-surface tracking-tight group-hover:text-primary transition-colors">
                   primer-agente
                 </span>
@@ -106,11 +120,13 @@ export function Header() {
           {/* Botón Menú Móvil */}
           <div className="flex md:hidden items-center gap-2">
             <button
+              ref={menuButtonRef}
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-on-surface-variant hover:text-on-surface rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="min-h-11 min-w-11 p-2 text-on-surface-variant hover:text-on-surface rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
               aria-expanded={mobileMenuOpen}
+              aria-controls={menuId}
             >
               <svg
                 className="w-6 h-6"
@@ -140,7 +156,7 @@ export function Header() {
 
         {/* Panel Menú Móvil */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-outline-variant bg-surface-container-lowest px-4 pt-2 pb-4 space-y-1">
+          <div id={menuId} className="md:hidden border-t border-outline-variant bg-surface-container-lowest px-4 pt-2 pb-4 space-y-1">
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.href || pathname?.startsWith(`${link.href}/`);

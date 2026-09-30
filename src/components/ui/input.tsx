@@ -59,7 +59,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             required={required}
             aria-invalid={!!error}
             aria-describedby={describedBy || undefined}
-            className={`w-full rounded h-10 px-3 bg-surface-container-lowest text-on-surface font-sans text-sm border transition-colors duration-150 outline-none
+            className={`w-full rounded min-h-11 px-3 bg-surface-container-lowest text-on-surface font-sans text-base border transition-colors duration-150 outline-none
               ${
                 error
                   ? "border-error focus:border-error focus:ring-1 focus:ring-error"

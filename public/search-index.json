@@ -408,6 +408,45 @@
     ]
   },
   {
+    "id": "qgis-mcp-con-claude-desktop",
+    "slug": "qgis-mcp-con-claude-desktop",
+    "title": "Conectar QGIS MCP con Claude Desktop",
+    "titleNormalized": "conectar qgis mcp con claude desktop",
+    "summary": "Compara cuatro proyectos QGIS MCP y configura Claude Desktop con pasos prudentes para cada ruta.",
+    "summaryNormalized": "compara cuatro proyectos qgis mcp y configura claude desktop con pasos prudentes para cada ruta.",
+    "track": "geoespacial",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "qgis",
+      "claude-desktop",
+      "mcp"
+    ],
+    "toolsNormalized": [
+      "qgis",
+      "claude-desktop",
+      "mcp"
+    ],
+    "tags": [
+      "qgis",
+      "mcp",
+      "claude-desktop",
+      "seguridad"
+    ],
+    "tagsNormalized": [
+      "qgis",
+      "mcp",
+      "claude-desktop",
+      "seguridad"
+    ],
+    "errorSymptoms": [],
+    "errorSymptomsNormalized": []
+  },
+  {
     "id": "qgis-mcp-que-es-y-como-elegir",
     "slug": "qgis-mcp-que-es-y-como-elegir",
     "title": "QGIS y MCP: qué conecta y cómo elegir",
@@ -486,6 +525,53 @@
     "errorSymptomsNormalized": [
       "el complemento figura como invalido o no se carga."
     ]
+  },
+  {
+    "id": "qgis-skills-para-agentes",
+    "slug": "qgis-skills-para-agentes",
+    "title": "Skills para QGIS: instalar las de terceros y crear una propia de uso seguro",
+    "titleNormalized": "skills para qgis: instalar las de terceros y crear una propia de uso seguro",
+    "summary": "Instala y revisa skills para QGIS, comprueba qué enseñan y crea un procedimiento seguro para agentes conectados por MCP.",
+    "summaryNormalized": "instala y revisa skills para qgis, comprueba que ensenan y crea un procedimiento seguro para agentes conectados por mcp.",
+    "track": "geoespacial",
+    "level": "intermedio",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "qgis",
+      "claude-code",
+      "codex",
+      "node",
+      "git"
+    ],
+    "toolsNormalized": [
+      "qgis",
+      "claude-code",
+      "codex",
+      "node",
+      "git"
+    ],
+    "tags": [
+      "qgis",
+      "skills",
+      "skill-md",
+      "pyqgis",
+      "seguridad",
+      "agent-skills"
+    ],
+    "tagsNormalized": [
+      "qgis",
+      "skills",
+      "skill-md",
+      "pyqgis",
+      "seguridad",
+      "agent-skills"
+    ],
+    "errorSymptoms": [],
+    "errorSymptomsNormalized": []
   },
   {
     "id": "instalar-git",

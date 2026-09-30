@@ -101,7 +101,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
           </span>
         </div>
 
-        <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface tracking-tight leading-tight">
+        <h1 className="fluid-heading font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-on-surface tracking-tight leading-tight">
           {frontmatter.title}
         </h1>
 
@@ -232,7 +232,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
           <h2 className="font-heading text-xl font-bold text-on-surface">
             Guías Relacionadas Siguientes
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {relatedGuides.map((rel) => (
               <Card key={rel.frontmatter.slug} className="hover:border-primary-container transition-colors">
                 <CardHeader>
@@ -255,7 +255,7 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
       )}
 
       {/* Pie de Guía: Fuentes oficiales y enlace para reportar error */}
-      <footer className="pt-6 border-t border-outline-variant/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-on-surface-variant">
+      <footer className="pt-6 border-t border-outline-variant/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs font-mono text-on-surface-variant">
         <div>
           <span className="font-semibold block mb-1">Fuentes oficiales consultadas:</span>
           <ul className="list-disc pl-4 space-y-0.5">

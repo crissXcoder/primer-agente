@@ -53,6 +53,7 @@ export function RouteProgress({
             className="h-full bg-primary-container transition-all duration-300 rounded-full"
             style={{ width: `${percent}%` }}
             role="progressbar"
+            aria-label="Progreso de la ruta"
             aria-valuenow={percent}
             aria-valuemin={0}
             aria-valuemax={100}
@@ -89,10 +90,10 @@ export function RouteProgress({
                   : "bg-surface-container-lowest"
               }`}
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-2">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2">
                 <div className="flex items-start gap-4">
                   {/* Checkbox accesible */}
-                  <label className="flex items-center gap-2 cursor-pointer mt-1 sm:mt-0 select-none">
+                  <label className="flex items-center gap-2 cursor-pointer mt-1 md:mt-0 select-none">
                     <input
                       type="checkbox"
                       checked={isDone}
@@ -125,7 +126,7 @@ export function RouteProgress({
                   </div>
                 </div>
 
-                <div className="shrink-0 flex items-center justify-end sm:pl-4">
+                <div className="shrink-0 flex items-center justify-end md:pl-4">
                   <Link href={`/guias/${guide.slug}`}>
                     <Button variant={isDone ? "outline" : "primary"} size="sm">
                       {isDone ? "Repasar Guía →" : "Iniciar Guía →"}
