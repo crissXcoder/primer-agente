@@ -153,6 +153,63 @@
     ]
   },
   {
+    "id": "obsidian-claude-md-skills-memoria",
+    "slug": "obsidian-claude-md-skills-memoria",
+    "title": "Enséñale a tu agente a usar tu bóveda: CLAUDE.md, skills y memoria",
+    "titleNormalized": "ensenale a tu agente a usar tu boveda: claude.md, skills y memoria",
+    "summary": "Organiza las instrucciones, la memoria y las skills para que Claude Code o Codex trabajen con tu bóveda de Obsidian con límites claros y cambios revisables.",
+    "summaryNormalized": "organiza las instrucciones, la memoria y las skills para que claude code o codex trabajen con tu boveda de obsidian con limites claros y cambios revisables.",
+    "track": "conocimiento",
+    "level": "intermedio",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "obsidian",
+      "claude-code",
+      "codex",
+      "git",
+      "node"
+    ],
+    "toolsNormalized": [
+      "obsidian",
+      "claude-code",
+      "codex",
+      "git",
+      "node"
+    ],
+    "tags": [
+      "obsidian",
+      "claude-md",
+      "agents-md",
+      "skills",
+      "memoria",
+      "obsidian-skills",
+      "cli"
+    ],
+    "tagsNormalized": [
+      "obsidian",
+      "claude-md",
+      "agents-md",
+      "skills",
+      "memoria",
+      "obsidian-skills",
+      "cli"
+    ],
+    "errorSymptoms": [
+      "Una skill instalada no aparece en Claude Code o Codex.",
+      "Claude Code no incluye las instrucciones de la bóveda cuando esta se añadió como carpeta adicional.",
+      "El comando obsidian no funciona después de activar el CLI."
+    ],
+    "errorSymptomsNormalized": [
+      "una skill instalada no aparece en claude code o codex.",
+      "claude code no incluye las instrucciones de la boveda cuando esta se anadio como carpeta adicional.",
+      "el comando obsidian no funciona despues de activar el cli."
+    ]
+  },
+  {
     "id": "instalar-git",
     "slug": "instalar-git",
     "title": "Instalación y Configuración Inicial de Git",
