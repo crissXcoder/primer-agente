@@ -357,6 +357,49 @@
     "errorSymptomsNormalized": []
   },
   {
+    "id": "qgis-plugins-instalar-y-gestionar",
+    "slug": "qgis-plugins-instalar-y-gestionar",
+    "title": "Plugins de QGIS: instalar, actualizar, quitar y confiar bien",
+    "titleNormalized": "plugins de qgis: instalar, actualizar, quitar y confiar bien",
+    "summary": "Aprende a instalar plugins de QGIS desde el repositorio o un ZIP, comprobar compatibilidad y gestionarlos con criterio de seguridad.",
+    "summaryNormalized": "aprende a instalar plugins de qgis desde el repositorio o un zip, comprobar compatibilidad y gestionarlos con criterio de seguridad.",
+    "track": "geoespacial",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "qgis"
+    ],
+    "toolsNormalized": [
+      "qgis"
+    ],
+    "tags": [
+      "qgis",
+      "plugins",
+      "plugin-manager",
+      "zip",
+      "perfil",
+      "seguridad"
+    ],
+    "tagsNormalized": [
+      "qgis",
+      "plugins",
+      "plugin-manager",
+      "zip",
+      "perfil",
+      "seguridad"
+    ],
+    "errorSymptoms": [
+      "El complemento figura como inválido o no se carga."
+    ],
+    "errorSymptomsNormalized": [
+      "el complemento figura como invalido o no se carga."
+    ]
+  },
+  {
     "id": "instalar-git",
     "slug": "instalar-git",
     "title": "Instalación y Configuración Inicial de Git",

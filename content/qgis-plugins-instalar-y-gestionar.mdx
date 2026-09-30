@@ -1,0 +1,180 @@
+---
+title: "Plugins de QGIS: instalar, actualizar, quitar y confiar bien"
+slug: "qgis-plugins-instalar-y-gestionar"
+summary: "Aprende a instalar plugins de QGIS desde el repositorio o un ZIP, comprobar compatibilidad y gestionarlos con criterio de seguridad."
+track: "geoespacial"
+audience: "todos"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "qgis"
+tags:
+  - "qgis"
+  - "plugins"
+  - "plugin-manager"
+  - "zip"
+  - "perfil"
+  - "seguridad"
+prerequisites:
+  - "qgis-instalar-y-preparar"
+related:
+  - "qgis-instalar-y-preparar"
+timeMinutes: 30
+verifiedAt: "2026-09-29"
+appliesTo:
+  qgis: "Documentación del manual 3.44 en español y 4.2 en inglés, consultada el 2026-09-29; la interfaz puede cambiar según versión e idioma."
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://docs.qgis.org/3.44/es/docs/user_manual/plugins/plugins.html"
+  - "https://docs.qgis.org/4.2/en/docs/user_manual/plugins/plugins.html"
+  - "https://docs.qgis.org/4.2/en/docs/user_manual/introduction/qgis_gui.html"
+  - "https://docs.qgis.org/3.44/es/docs/pyqgis_developer_cookbook/plugins/ide_debugging.html"
+  - "https://docs.qgis.org/4.2/en/docs/server_manual/plugins.html"
+  - "https://github.com/3liz/qgis-plugin-manager"
+  - "https://docs.qgis.org/3.34/en/docs/user_manual/auth_system/auth_considerations.html"
+  - "https://plugins.qgis.org/"
+  - "https://plugins.qgis.org/publish/"
+  - "https://plugins.qgis.org/docs/approval"
+  - "https://plugins.qgis.org/docs/migrate-qgis4"
+errors:
+  - symptom: "El complemento figura como inválido o no se carga."
+    cause: "La documentación indica que puede faltar una dependencia, haber un error de carga o existir funciones incompatibles con esa versión de QGIS."
+    fix: "Revisa la pestaña Inválido y los mensajes del registro; confirma las dependencias y versiones compatibles en la ficha y documentación del complemento."
+---
+
+Esta guía enseña a instalar, actualizar, desactivar y quitar complementos de QGIS. Está pensada para quienes empiezan con SIG, no solo para quienes usan herramientas de inteligencia artificial. Antes, completá [Instalar QGIS y dejarlo listo para trabajar con un agente](/guias/qgis-instalar-y-preparar). En unos 30 minutos vas a instalar un complemento de práctica que elijás, comprobar que QGIS lo reconoce y aprender a evaluar riesgos antes de confiarle tus archivos.
+
+## Qué es un plugin y cómo se instala
+
+Un plugin (complemento) agrega funciones a QGIS. Hay complementos incluidos con QGIS y complementos externos mantenidos por sus autores. La mayoría de los externos están escritos en Python y se instalan en el perfil activo de la persona usuaria.
+
+Podés instalarlos de tres maneras:
+
+| Método | Cuándo conviene |
+| --- | --- |
+| Repositorio oficial, desde QGIS | Opción recomendada para empezar: permite buscar, revisar la ficha y actualizar desde el administrador. |
+| Archivo ZIP | Cuando el autor te comparte un paquete o necesitás una versión descargada de una fuente que verificaste. |
+| Copia manual en `python/plugins` | Para desarrollo o una instalación que el autor documenta expresamente. Requiere cuidar la estructura de carpetas. |
+
+Los nombres de menús y pestañas pueden variar ligeramente según la versión de QGIS y el idioma. En la documentación actual consultada en español se llama **Complementos → Administrar e instalar complementos…**; en inglés, **Plugins → Manage and Install Plugins…**.
+
+## Instalar desde el repositorio oficial
+
+1. Abrí QGIS y seleccioná **Complementos → Administrar e instalar complementos…**.
+2. En **Todo**, buscá el nombre exacto del complemento que querés usar. Si tu traducción muestra **Todos**, es la misma vista.
+3. Seleccionalo y leé la descripción, autor, enlaces y compatibilidad. Si decidís instalarlo, usá el botón **Instalar complemento** (en inglés, *Install Plugin*).
+4. Abrí la pestaña **Instalado** y confirmá que aparece marcado. Cerrá el administrador y buscá su entrada en el menú **Complementos** o en el menú que indique la ficha.
+
+**¿Cómo sé que funcionó?** El complemento aparece en **Instalado** con su casilla activa y podés abrir su herramienta desde el menú indicado por su documentación. Si no aparece en el menú, revisá que la casilla esté marcada y consultá la propia ficha: algunos complementos se integran en otro menú o panel.
+
+## Instalar desde ZIP o copiar manualmente
+
+### Desde un ZIP
+
+Usá únicamente un ZIP obtenido de la página del autor o de una fuente en la que confiés. Abrí **Administrar e instalar complementos… → Instalar desde ZIP**, seleccioná el archivo y confirmá la instalación si QGIS lo solicita. Luego buscá el complemento en **Instalado**, activá su casilla si está desmarcada y reiniciá QGIS si la documentación del complemento lo recomienda.
+
+**Comprobación:** aparece en **Instalado** y, una vez activo, en el menú o panel que indique su documentación.
+
+### Copia manual de la carpeta
+
+La carpeta de destino es `python/plugins` dentro del perfil de usuario activo. Abrila desde QGIS mediante **Configuración → Perfiles de usuario → Abrir carpeta del perfil activo** y entrá en `python/plugins`. Si esa subcarpeta todavía no existe, podés crearla. Copiá la carpeta propia del complemento y reiniciá QGIS; después activalo desde **Administrar e instalar complementos… → Instalado**.
+
+La carpeta del plugin debe contener los archivos del complemento, por ejemplo `metadata.txt` y `__init__.py`. No copiés una carpeta exterior que contenga otra carpeta con esos archivos:
+
+```text
+Correcto
+perfil/
+└── python/plugins/
+    └── nombre_plugin/
+        ├── metadata.txt
+        └── __init__.py
+
+Incorrecto: carpeta duplicada
+perfil/
+└── python/plugins/
+    └── nombre_plugin/
+        └── nombre_plugin-main/
+            ├── metadata.txt
+            └── __init__.py
+```
+
+QGIS espera que cada complemento tenga su propio directorio directamente dentro de `python/plugins`. Si no aparece, confirmá que `metadata.txt` está en el nivel correcto, que copiaste al perfil activo y que reiniciaste QGIS.
+
+## Cómo decidir si confiar en un complemento
+
+Antes de instalarlo, pasá por estos seis puntos:
+
+1. **Autor:** ¿se identifica una persona, universidad, institución u organización responsable?
+2. **Código y documentación:** ¿la ficha lleva a un repositorio de código, una página que explique el uso y un canal para reportar problemas? Abrí los enlaces y comprobá que correspondan al complemento.
+3. **Mantenimiento:** revisá la fecha de actualización y el historial de cambios. Descargas y valoraciones dan contexto, pero no demuestran que el código sea seguro.
+4. **Compatibilidad:** compará las versiones mínima y máxima de QGIS con la que tenés instalada. Leé también si el autor confirma soporte para Qt6/QGIS 4.
+5. **Acceso que implica:** un plugin de Python corre dentro de QGIS. Como el programa se ejecuta con tu cuenta, el plugin puede operar sobre los archivos y recursos a los que esa cuenta ya tiene acceso. Consideralo antes de cargar proyectos, datos personales o credenciales.
+6. **Necesidad:** ¿resuelve una tarea concreta que realmente ocupás? Si no podés explicar para qué lo vas a usar, esperá antes de instalarlo.
+
+| Señal para detenerse y revisar | Por qué importa |
+| --- | --- |
+| No hay autor identificable ni documentación útil. | Cuesta saber quién mantiene el código o cómo reportar un problema. |
+| El repositorio de código no existe, no coincide con la ficha o no permite inspeccionar el código. | No podés contrastar el paquete con su origen. |
+| La versión no indica compatibilidad con tu QGIS o el autor informa que está obsoleta. | Puede no cargar o fallar durante el trabajo. |
+| Solicita instalar dependencias externas sin explicar cuáles ni cómo. | Añade código fuera del complemento que también tendrías que evaluar. |
+| La ficha está marcada como experimental, o aparece una versión experimental seleccionada. | QGIS indica que estas versiones están en etapa temprana y generalmente no son apropiadas para producción. |
+| Lo encontraste en un repositorio externo que no reconocés. | Al agregarlo, autorizás a QGIS a mostrar e instalar paquetes de esa fuente. |
+
+<Callout type="peligro" title="El repositorio oficial no es una garantía total">
+  Los plugins pueden ejecutar código y acceder a los recursos disponibles para QGIS con tu cuenta. El repositorio oficial aplica validaciones automáticas y un proceso de aprobación, pero sus propias reglas describen comprobaciones automatizadas, revisión voluntaria y pruebas aleatorias; no una auditoría exhaustiva de cada versión. Una aprobación no reemplaza revisar al autor, el código y los permisos que implica. Si un plugin de control remoto conecta QGIS con un agente, como en algunas integraciones MCP, estás abriendo un canal para que instrucciones externas actúen sobre QGIS. Las guías de MCP explican ese flujo con más detalle.
+</Callout>
+
+### Qué información muestra la ficha
+
+El administrador puede mostrar descripción, autor, etiquetas, valoración, versión y enlaces a la página principal, rastreador de errores y repositorio de código. En el portal también podés revisar fecha de actualización, descargas y metadatos de compatibilidad. Esos datos ayudan a investigar, pero popularidad y frecuencia de actualización no prueban que un plugin sea seguro.
+
+La ficha y el metadato del complemento pueden declarar las versiones mínima y máxima de QGIS (`qgisMinimumVersion` y `qgisMaximumVersion`). No confundás ese rango con una certificación funcional. En particular, `supportsQt6=True` era una marca temporal para la transición a QGIS 4 y la documentación actual del portal dice que ya no se reconoce. El portal ejecuta una comprobación automática de compatibilidad Qt6 y la presenta como informativa, no como garantía de que el plugin funcione en todos los equipos.
+
+## Actualizar, desactivar y desinstalar
+
+- **Actualizar:** abrí la pestaña **Actualizable** (en inglés, *Upgradeable*), seleccioná el complemento y usá la acción de actualización. Revisá los cambios del autor si el plugin es importante para tu trabajo.
+- **Desactivar temporalmente:** en **Instalado**, quitá la marca de su casilla. El complemento queda instalado, pero no debería cargarse como activo.
+- **Desinstalar:** desde **Instalado**, seleccioná el plugin y elegí **Desinstalar complemento**. QGIS elimina el plugin del perfil de usuario.
+
+Los ajustes del complemento pueden vivir separados de sus archivos de programa. La documentación no promete que desinstalar borre todas esas preferencias. Si querés empezar de nuevo, consultá las instrucciones del autor antes de borrar archivos del perfil; no elimines a mano una carpeta hasta identificar qué contiene.
+
+## Compatibilidad entre versiones de QGIS y Qt
+
+La versión de QGIS importa: el complemento declara el rango de versiones que su autor admite. Si el administrador lo marca como incompatible o lo muestra en **Inválido**, no forcés la instalación para un trabajo importante. Consultá la página del autor para ver si publicó una versión compatible, si falta una dependencia o si el complemento dejó de mantenerse.
+
+Qt también influye en QGIS 4, que usa Qt6. La marca histórica `supportsQt6` ya no es un campo fiable. La herramienta automática Qt6 del portal sirve como indicio para revisar, pero sus resultados son informativos: buscá una versión del plugin que indique soporte para QGIS 4 y confirmalo con la documentación del autor. Si dependés de un plugin que solo funciona en QGIS 3, consultá primero la guía de instalación para elegir una versión compatible antes de actualizar QGIS.
+
+Si el complemento aparece en gris o como inválido, anotá el nombre y la versión de QGIS, revisá sus requisitos, la pestaña **Inválido** y los mensajes de registro. No existe una sola causa: la documentación menciona dependencias faltantes, errores al cargar o funciones incompatibles.
+
+## Diagnosticar un plugin que falla
+
+1. Abrí **Ver → Paneles → Mensajes de registro** (en inglés, **View → Panels → Log Messages**). El panel registra procesos de QGIS, incluida la carga de plugins; puede variar la traducción exacta.
+2. Revisá la pestaña o categoría relacionada con plugins y buscá el momento en que QGIS intentó cargarlo. Anotá el texto y la versión del plugin/QGIS para reportarlo al autor.
+3. Si QGIS sigue abriendo, desactivá el plugin desde **Instalado** y reiniciá para comprobar si el problema desaparece.
+
+No incluyo un método de arranque con una tecla especial: no encontré esa instrucción confirmada en el manual oficial consultado. Si QGIS no abre, usá las opciones de inicio documentadas para tu instalación o pedí apoyo técnico antes de modificar el perfil.
+
+## Buenas prácticas
+
+- Instalá solo lo que necesitás y agregá un plugin por vez; así es más fácil identificar cuál introdujo un fallo.
+- Llevá una nota con el nombre, versión, fuente y fecha de instalación de cada plugin importante.
+- Probá las herramientas primero con un proyecto de práctica y copias de los datos.
+- Antes de instalar muchos plugins, copiar carpetas o actualizar QGIS, hacé una copia del perfil activo desde la ubicación indicada por el menú de QGIS.
+- Si agregás un repositorio adicional, verificá que sea del autor que buscás; deshabilitalo o quitalo cuando ya no lo ocupés.
+- No compartás un perfil sin revisar su contenido: puede guardar configuraciones de plugins y conexiones de QGIS.
+
+Para desarrollo, QGIS documenta **Plugin Reloader**, que permite recargar cambios del plugin sin reiniciar la aplicación. Es una herramienta para quienes están escribiendo o depurando plugins, no un requisito para usarlos. La utilidad de línea de comandos `qgis-plugin-manager`, mantenida por 3Liz, se documenta en la guía de **QGIS Server** para administrar plugins del servidor; no es el método recomendado para gestionar plugins de QGIS Desktop.
+
+## ¿Cómo sé que funcionó?
+
+- [ ] Instalaste el complemento desde la fuente que elegiste y aparece en **Instalado**.
+- [ ] Lo activaste y encontraste la herramienta en el menú o panel que indica su documentación.
+- [ ] Confirmaste que su versión de QGIS compatible incluye la que usás.
+- [ ] Sabés dónde ver los mensajes de registro si falla.
+- [ ] Anotaste el nombre y versión del plugin, y conservaste una copia del perfil antes de cambios importantes.
