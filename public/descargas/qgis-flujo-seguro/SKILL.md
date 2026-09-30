@@ -1,6 +1,6 @@
 ---
 name: qgis-flujo-seguro
-description: Reglas de trabajo seguro para operar QGIS mediante un servidor MCP. Úsala cuando el usuario pida crear, modificar, analizar, reproyectar, recortar, estilizar o exportar proyectos, capas, geoprocesos o mapas en QGIS mediante MCP.
+description: Reglas de trabajo seguro para operar QGIS mediante un servidor MCP. Úsala siempre que el usuario pida crear, modificar, analizar, reproyectar, recortar, estilizar o exportar algo en QGIS (proyectos, capas, geoprocesos, mapas), o mencione QGIS, PyQGIS, shapefile, GeoPackage, raster, CRS o mapa.
 ---
 
 # Flujo seguro para QGIS por MCP

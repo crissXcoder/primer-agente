@@ -56,7 +56,12 @@ export function Verify({
         <span className="font-mono text-xs text-on-surface-variant font-medium">
           Salida esperada (o similar):
         </span>
-        <div className="rounded border border-outline-variant bg-surface-container-lowest p-3 font-mono text-xs text-on-surface leading-relaxed overflow-x-auto">
+        <div
+          className="scroll-region rounded border border-outline-variant bg-surface-container-lowest p-3 font-mono text-xs text-on-surface leading-relaxed"
+          tabIndex={0}
+          role="region"
+          aria-label="Salida esperada de verificación"
+        >
           <pre>{safeOutput}</pre>
         </div>
       </div>

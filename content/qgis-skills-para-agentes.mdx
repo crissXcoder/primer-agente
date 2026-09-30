@@ -61,11 +61,34 @@ Una **skill** es una carpeta con un archivo `SKILL.md` que enseña a un agente c
 
 Una analogía: el plugin y el MCP ponen las **manos** del agente cerca de QGIS; la skill es su **manual de procedimiento**. El modelo aún puede equivocarse: ni las instrucciones ni el protocolo garantizan que una operación sea correcta.
 
-| Pieza | Qué aporta | Ejemplo en QGIS |
-| --- | --- | --- |
-| Skill (`SKILL.md`) | Procedimiento, criterios y cuándo usarlos. | Revisar CRS, trabajar sobre una copia y comprobar el resultado. |
-| Servidor MCP | Herramientas para consultar o accionar sobre un QGIS abierto. | Consultar capas, CRS o ejecutar un algoritmo que el servidor exponga. |
-| Plugin de QGIS | Código que se ejecuta dentro de QGIS e integra el servidor con la aplicación. | Ofrecer datos y acciones de la sesión abierta al servidor MCP. |
+<div className="my-5 overflow-x-auto rounded-md border border-outline-variant">
+  <table className="w-full border-collapse text-left text-sm">
+    <thead className="bg-surface-container text-on-surface">
+      <tr>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Pieza</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Qué aporta</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Ejemplo en QGIS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Skill (`SKILL.md`)</td>
+        <td className="border-t border-outline-variant px-3 py-2">Procedimiento, criterios y cuándo usarlos.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Revisar CRS, trabajar sobre una copia y comprobar el resultado.</td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Servidor MCP</td>
+        <td className="border-t border-outline-variant px-3 py-2">Herramientas para consultar o accionar sobre un QGIS abierto.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Consultar capas, CRS o ejecutar un algoritmo que el servidor exponga.</td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Plugin de QGIS</td>
+        <td className="border-t border-outline-variant px-3 py-2">Código que se ejecuta dentro de QGIS e integra el servidor con la aplicación.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Ofrecer datos y acciones de la sesión abierta al servidor MCP.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 Los tres componentes pueden vivir separados. Una skill puede enseñar PyQGIS sin MCP, y un MCP puede ofrecer herramientas aunque el agente no tenga una skill especializada. Revisá qué hace cada componente por separado antes de conectarlos.
 
@@ -91,13 +114,44 @@ El repositorio que el README atribuye a **OpenAEC Foundation** se pidió como `O
 
 Al revisar el README y los archivos del repositorio el **2026-09-30**, el autor declaraba 19 skills y la carpeta contenía 19 archivos `SKILL.md`. El proyecto declara QGIS 3.44 LTR como objetivo y notas para QGIS 4/Qt6; eso no significa que hayamos probado esas combinaciones. El inventario comprobado fue:
 
-| Grupo | Qué cubre | Nombres encontrados |
-| --- | --- | --- |
-| Fundamentos | Arquitectura, proveedores de datos y sistemas de coordenadas. | `qgis-core-architecture`, `qgis-core-data-providers`, `qgis-core-coordinate-systems` |
-| Sintaxis PyQGIS | API, expresiones, scripts de Processing y plugins. | `qgis-syntax-pyqgis-api`, `qgis-syntax-expressions`, `qgis-syntax-processing-scripts`, `qgis-syntax-plugins` |
-| Flujos GIS | Análisis vectorial/raster, PostGIS, impresión, servicios web, 3D, georreferenciación y redes. | `qgis-impl-vector-analysis`, `qgis-impl-raster-analysis`, `qgis-impl-postgis`, `qgis-impl-print-layouts`, `qgis-impl-web-services`, `qgis-impl-3d-visualization`, `qgis-impl-georeferencing`, `qgis-impl-network-analysis` |
-| Diagnóstico | Proyecciones y carga de datos. | `qgis-errors-projections`, `qgis-errors-data-loading` |
-| Orquestación | Planear análisis y producir mapas. | `qgis-agents-analysis-orchestrator`, `qgis-agents-map-generator` |
+<div className="my-5 overflow-x-auto rounded-md border border-outline-variant">
+  <table className="w-full border-collapse text-left text-sm">
+    <thead className="bg-surface-container text-on-surface">
+      <tr>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Grupo</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Qué cubre</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Nombres encontrados</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Fundamentos</td>
+        <td className="border-t border-outline-variant px-3 py-2">Arquitectura, proveedores de datos y sistemas de coordenadas.</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>qgis-core-architecture</code>, <code>qgis-core-data-providers</code>, <code>qgis-core-coordinate-systems</code></td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Sintaxis PyQGIS</td>
+        <td className="border-t border-outline-variant px-3 py-2">API, expresiones, scripts de Processing y plugins.</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>qgis-syntax-pyqgis-api</code>, <code>qgis-syntax-expressions</code>, <code>qgis-syntax-processing-scripts</code>, <code>qgis-syntax-plugins</code></td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Flujos GIS</td>
+        <td className="border-t border-outline-variant px-3 py-2">Análisis vectorial/raster, PostGIS, impresión, servicios web, 3D, georreferenciación y redes.</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>qgis-impl-vector-analysis</code>, <code>qgis-impl-raster-analysis</code>, <code>qgis-impl-postgis</code>, <code>qgis-impl-print-layouts</code>, <code>qgis-impl-web-services</code>, <code>qgis-impl-3d-visualization</code>, <code>qgis-impl-georeferencing</code>, <code>qgis-impl-network-analysis</code></td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Diagnóstico</td>
+        <td className="border-t border-outline-variant px-3 py-2">Proyecciones y carga de datos.</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>qgis-errors-projections</code>, <code>qgis-errors-data-loading</code></td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Orquestación</td>
+        <td className="border-t border-outline-variant px-3 py-2">Planear análisis y producir mapas.</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>qgis-agents-analysis-orchestrator</code>, <code>qgis-agents-map-generator</code></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 En este clon, cada carpeta de skill contenía `SKILL.md` y `references/`; no encontré directorios `scripts/` dentro de `skills/source/`. El README describe métodos, ejemplos y antipatrón como material de referencia; inspeccioná igualmente la versión exacta que vayas a instalar. Las promesas de “determinismo” y calidad del README son afirmaciones del autor, no resultados de una evaluación independiente.
 
@@ -117,12 +171,39 @@ Si la lista coincide con el repositorio que revisaste, ejecutá el comando sin `
 
 El `package.json` del clon indica las carpetas concretas en `skills/source/<categoría>/<nombre>/`. Copiá la carpeta completa de cada skill elegida, incluidas sus referencias; no copies solo el archivo y dejes atrás material que `SKILL.md` enlace.
 
-| Uso | Windows | macOS / Linux |
-| --- | --- | --- |
-| Claude Code, solo este proyecto | `<raíz>\\.claude\\skills\\<nombre>\\SKILL.md` | `<raíz>/.claude/skills/<nombre>/SKILL.md` |
-| Claude Code, personal | `%USERPROFILE%\\.claude\\skills\\<nombre>\\SKILL.md` | `~/.claude/skills/<nombre>/SKILL.md` |
-| Codex, solo este proyecto | `<raíz>\\.agents\\skills\\<nombre>\\SKILL.md` | `<raíz>/.agents/skills/<nombre>/SKILL.md` |
-| Codex, personal | `%USERPROFILE%\\.agents\\skills\\<nombre>\\SKILL.md` | `~/.agents/skills/<nombre>/SKILL.md` |
+<div className="my-5 overflow-x-auto rounded-md border border-outline-variant">
+  <table className="w-full border-collapse text-left text-sm">
+    <thead className="bg-surface-container text-on-surface">
+      <tr>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Uso</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Windows</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">macOS / Linux</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Claude Code, solo este proyecto</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>&lt;raíz&gt;\.claude\skills\&lt;nombre&gt;\SKILL.md</code></td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>&lt;raíz&gt;/.claude/skills/&lt;nombre&gt;/SKILL.md</code></td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Claude Code, personal</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>%USERPROFILE%\.claude\skills\&lt;nombre&gt;\SKILL.md</code></td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>~/.claude/skills/&lt;nombre&gt;/SKILL.md</code></td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Codex, solo este proyecto</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>&lt;raíz&gt;\.agents\skills\&lt;nombre&gt;\SKILL.md</code></td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>&lt;raíz&gt;/.agents/skills/&lt;nombre&gt;/SKILL.md</code></td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Codex, personal</td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>%USERPROFILE%\.agents\skills\&lt;nombre&gt;\SKILL.md</code></td>
+        <td className="border-t border-outline-variant px-3 py-2"><code>~/.agents/skills/&lt;nombre&gt;/SKILL.md</code></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 En Claude Code, una skill de proyecto va dentro de `.claude/skills/`; una personal dentro de `~/.claude/skills/`. Para Codex, la documentación oficial actual indica `.agents/skills/` en el proyecto y `~/.agents/skills/` para el usuario. El README de `kepano/obsidian-skills` todavía dice `~/.codex/skills`; seguí la documentación actual de Codex, que describe sus rutas de descubrimiento vigentes. En Windows, `%USERPROFILE%` representa tu carpeta de usuario.
 
@@ -159,7 +240,7 @@ Su `name` coincide con la carpeta y la descripción indica qué hace y cuándo u
 ```markdown
 ---
 name: qgis-flujo-seguro
-description: Reglas de trabajo seguro para operar QGIS mediante un servidor MCP. Úsala cuando el usuario pida crear, modificar, analizar, reproyectar, recortar, estilizar o exportar proyectos, capas, geoprocesos o mapas en QGIS mediante MCP.
+description: Reglas de trabajo seguro para operar QGIS mediante un servidor MCP. Úsala siempre que el usuario pida crear, modificar, analizar, reproyectar, recortar, estilizar o exportar algo en QGIS (proyectos, capas, geoprocesos, mapas), o mencione QGIS, PyQGIS, shapefile, GeoPackage, raster, CRS o mapa.
 ---
 
 # Flujo seguro para QGIS por MCP

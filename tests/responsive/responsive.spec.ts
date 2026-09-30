@@ -68,8 +68,16 @@ async function expectNoOverflow(page: Page) {
   expect(result.clippedText, `text clipped by overflow:hidden: ${JSON.stringify(result.clippedText)}`).toEqual([]);
 }
 
-test("layout stays within viewport across routes and viewport matrix", async ({ browser }) => {
-  test.setTimeout(10 * 60 * 1000);
+async function expectNoSeriousAxeViolations(page: Page, route: string) {
+  const results = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  const severe = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""));
+  expect(severe, `${route}: ${JSON.stringify(severe.map(({ id, nodes }) => ({ id, nodes: nodes.length })))}`).toEqual([]);
+}
+
+test("layout and axe stay clean across routes and viewport matrix", async ({ browser }) => {
+  test.setTimeout(15 * 60 * 1000);
   for (const [width, height, deviceScaleFactor] of viewports) {
     const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor });
     const page = await context.newPage();
@@ -79,6 +87,7 @@ test("layout stays within viewport across routes and viewport matrix", async ({ 
     for (const route of routes) {
       await page.goto(route);
       await expectNoOverflow(page);
+      await expectNoSeriousAxeViolations(page, `${width}x${height} ${route}`);
     }
     await context.close();
   }
@@ -95,16 +104,6 @@ test("stress page exercises long content, tabs, table and card grids", async ({ 
   await expectNoOverflow(page);
   await page.setViewportSize({ width: 844, height: 390 });
   await expectNoOverflow(page);
-});
-
-test("axe reports no serious or critical violations on representative routes", async ({ page }) => {
-  for (const route of ["/", "/guias", "/guias/instalar-git", "/errores", "/rutas/primeros-pasos", "/taller", "/_estres"]) {
-    await page.setViewportSize({ width: 360, height: 844 });
-    await page.goto(route);
-    const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
-    const severe = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""));
-    expect(severe, `${route}: ${JSON.stringify(severe.map(({ id, nodes }) => ({ id, nodes: nodes.length })))}`).toEqual([]);
-  }
 });
 
 test("reflow works at 320px with WCAG text spacing and 200% root font", async ({ page }) => {

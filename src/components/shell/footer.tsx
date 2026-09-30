@@ -106,7 +106,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-outline-variant/60 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-on-surface-variant">
-          <p>© 2026 Cristian Araya · Universidad Nacional de Costa Rica (UNA)</p>
+          <p>© 2026 Cristhian Altamirano Montes · Universidad Nacional de Costa Rica (UNA)</p>
           <div className="flex items-center gap-4">
             <a
               href="https://github.com/crissXcoder/primer-agente"
