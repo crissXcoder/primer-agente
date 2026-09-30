@@ -11,7 +11,10 @@ export const metadata: Metadata = {
 
 export default function GuiasPage() {
   const guides = getAllGuides();
-  const frontmatters = guides.map((g) => g.frontmatter);
+  const levelPriority = { principiante: 0, intermedio: 1 };
+  const frontmatters = guides
+    .map((g) => g.frontmatter)
+    .sort((a, b) => levelPriority[a.level] - levelPriority[b.level]);
 
   return (
     <div className="space-y-6">

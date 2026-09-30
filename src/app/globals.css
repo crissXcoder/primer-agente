@@ -200,3 +200,45 @@ video {
     scroll-behavior: auto !important;
   }
 }
+
+.qr-artwork {
+  width: min(70vw, 80vh, 42rem);
+}
+
+.qr-artwork > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media print {
+  body:has(.qr-page) [data-site-header],
+  body:has(.qr-page) footer,
+  body:has(.qr-page) .qr-downloads {
+    display: none !important;
+  }
+
+  body:has(.qr-page) main#main-content {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .qr-page {
+    gap: 0.15in;
+    background: #ffffff;
+    color: #171c1f;
+  }
+
+  .qr-artwork {
+    width: min(6in, 80vw);
+    padding: 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .qr-url {
+    max-width: 95%;
+    font-size: 18pt;
+  }
+}

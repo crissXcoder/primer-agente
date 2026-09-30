@@ -1,0 +1,179 @@
+---
+title: "El contexto de tu agente: qué es, cómo se llena y cómo cuidarlo"
+slug: "contexto-que-es-y-como-cuidarlo"
+summary: "Aprende qué ve un agente durante una sesión, qué llena su contexto y cómo medirlo y mantener solo la información útil."
+track: "entender"
+kind: "concepto"
+audience: "todos"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "claude-code"
+  - "codex"
+tags:
+  - "contexto"
+  - "ventana"
+  - "context-rot"
+  - "compactacion"
+  - "memoria"
+  - "clear"
+  - "compact"
+prerequisites: []
+related:
+  - "que-es-un-agente-de-ia"
+  - "obsidian-claude-md-skills-memoria"
+timeMinutes: 30
+verifiedAt: "2026-09-30"
+appliesTo:
+  claude-code: "Conceptos y comandos consultados en documentación oficial el 2026-09-30; disponibilidad y detalle pueden variar con la versión e interfaz."
+  codex: "Comandos CLI consultados en documentación oficial el 2026-09-30; disponibilidad y detalle pueden variar con la versión e interfaz."
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+  - "https://code.claude.com/docs/en/context-window"
+  - "https://code.claude.com/docs/en/best-practices"
+  - "https://code.claude.com/docs/en/how-claude-code-works"
+  - "https://code.claude.com/docs/en/glossary"
+  - "https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools"
+  - "https://platform.claude.com/docs/en/about-claude/pricing"
+  - "https://learn.chatgpt.com/docs/developer-commands"
+  - "https://learn.chatgpt.com/docs/agent-configuration/agents-md"
+  - "https://openai.com/index/why-language-models-hallucinate/"
+errors: []
+---
+
+# El contexto de tu agente: qué es, cómo se llena y cómo cuidarlo
+
+## Qué vas a lograr
+
+En unos 30 minutos vas a entender qué información tiene a la vista un agente mientras trabaja y cómo observar el efecto de agregarle una cosa más. No hace falta programar: vas a comparar lo que muestra la propia herramienta y anotarlo en papel.
+
+Imaginá el escritorio de una persona que acaba de entrar a trabajar. Si lo llenamos de impresiones, historiales, manuales y notas repetidas, la información importante puede quedar enterrada. El **contexto** es el escritorio de trabajo del modelo: la información disponible para responder y decidir en este momento. Para que el agente se oriente, importa seleccionar lo que necesita, no amontonar todo lo que existe.
+
+## Ventana de contexto y tokens
+
+La **ventana de contexto** es el espacio de trabajo de una sesión: incluye la conversación y otra información que la aplicación le presenta al modelo. No es toda la computadora ni necesariamente todo el historial de todas tus sesiones. En Claude Code, por ejemplo, puede incluir archivos leídos, resultados de comandos, instrucciones del proyecto, memoria cargada, skills y definiciones de herramientas. La mezcla exacta depende de la herramienta y su configuración. [Claude Code enumera lo que entra en la ventana y permite inspeccionarla con `/context`](https://code.claude.com/docs/en/how-claude-code-works).
+
+Un **token** es un fragmento de texto que procesa el modelo. Puede corresponder a parte de una palabra, una palabra u otra secuencia; no es una unidad fija que siempre equivale a una palabra. No necesitás contarlos a mano: observá el indicador de la aplicación, si está disponible. [Anthropic describe los tokens como piezas de texto que procesa un modelo](https://platform.claude.com/docs/en/about-claude/pricing).
+
+Pensalo así: en cada turno el modelo ve una mesa de trabajo preparada por la herramienta. Algunas cosas ya están ahí; otras se agregan cuando leés un archivo, invocás una skill o recibís el resultado de una herramienta. La lista visible en una pantalla no siempre muestra todos los elementos internos.
+
+## Qué llena la ventana
+
+La siguiente tabla describe el comportamiento documentado de Claude Code como ejemplo. Otras herramientas pueden cargar estas piezas en momentos diferentes. “¿Se puede quitar?” significa qué alternativa existe para reducir o dejar fuera el contenido; no siempre se puede borrar de una sesión ya iniciada.
+
+| Elemento | Cuándo entra | ¿Siempre o a demanda? | ¿Se puede quitar o reducir? |
+|---|---|---|---|
+| Instrucciones del sistema y de la aplicación | Al preparar la sesión | Parte siempre; varía según la herramienta | No suelen ser controlables por quien usa la herramienta. |
+| Conversación e instrucciones que escribís | Al enviar mensajes | Se acumulan durante la sesión | Empezá otra sesión para cambiar de tarea; resumir puede conservar solo lo esencial. |
+| Archivos leídos y resultados de herramientas | Cuando el agente los consulta o recibe | A demanda | Pedí lecturas acotadas, por partes, y resultados breves. |
+| `CLAUDE.md`, `AGENTS.md` y otros archivos de instrucciones | Según la herramienta, el proyecto y la ubicación | Algunos cargan al inicio; otros al visitar ciertas rutas | Dejá solo reglas generales y útiles; mové material de consulta a archivos que se lean cuando hagan falta. |
+| Memoria automática | Al inicio, si la función está habilitada | Según herramienta y configuración | Revisá su contenido o desactivá esa función en los ajustes disponibles. |
+| Skills | Las descripciones pueden entrar al inicio; su contenido completo puede cargarse cuando se usan | Mixto: parte al inicio, parte a demanda | Usá solo la que ayude en esta tarea y evitá activar varias por costumbre. |
+| Definiciones de herramientas y servidores MCP | Nombres o descripciones pueden cargarse al inicio; detalles al usar la herramienta | Mixto, según el cliente | Desconectá o deshabilitá herramientas que no necesitás; el mecanismo depende del cliente. |
+| Resumen de compactación | Cuando la herramienta compacta la conversación | Automático o solicitado | No es una copia íntegra: indicá qué decisiones, archivos y dudas debe conservar. |
+| Resultados que vuelve a traer un subagente | Cuando termina una exploración delegada | A demanda | Pedí una síntesis centrada en hallazgos, fuentes y rutas relevantes. |
+
+Anthropic recomienda elegir el conjunto más pequeño de información útil para la tarea. Cada lectura puede aportar datos valiosos, pero también suma material que el modelo debe atender. [Su artículo sobre ingeniería de contexto](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) desarrolla este principio.
+
+## Qué significa “context rot”
+
+**Context rot** describe una degradación en la capacidad de recuperar detalles conforme crece el contenido de una ventana. La información puede seguir escrita ahí y, aun así, ser más difícil de recordar con precisión. Anthropic lo explica como un recurso finito con rendimientos decrecientes y un presupuesto limitado de atención; [su artículo](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) también aclara que no es necesariamente un corte repentino.
+
+En el trabajo cotidiano podrías notar que el agente pasa por alto una regla anterior, vuelve a una solución que ya descartaste o tarda más en procesar una conversación extensa. Puede generar una afirmación falsa con seguridad; los modelos de lenguaje también pueden alucinar, pero eso no prueba que la causa sea el contexto. Si ves uno de estos síntomas, revisá el contenido disponible y verificá el resultado antes de diagnosticar el problema. [OpenAI explica que las alucinaciones son afirmaciones plausibles pero falsas](https://openai.com/index/why-language-models-hallucinate/).
+
+Una ventana de mayor tamaño permite conservar más contenido, pero no vuelve todo ese contenido igual de relevante ni elimina el desgaste o el tiempo necesario para procesarlo. El [Cookbook de Anthropic](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools) describe cómo la recuperación y la latencia pueden verse afectadas por lo que hay dentro de la ventana, independientemente del máximo admitido. Por eso se mide la sesión real, no se adivina el costo a partir del nombre de la herramienta.
+
+## Qué hace la compactación
+
+Cuando la conversación se acerca al límite, Claude Code puede resumir parte del historial y continuar con un contexto más reducido. También podés pedir la compactación antes de que ocurra. La documentación actual muestra esta sintaxis: `/compact` seguido de instrucciones de enfoque, por ejemplo `/compact focus on the decisions and files for this task`. Si le pedís que preserve decisiones, archivos relevantes, pendientes y verificaciones, el resumen tiene una pauta más clara. [La documentación explica qué ocurre durante y después de compactar](https://code.claude.com/docs/en/context-window).
+
+No todo se conserva de la misma forma:
+
+- El `CLAUDE.md` en la raíz del proyecto y la memoria automática se vuelven a cargar desde sus archivos después de compactar, si corresponden a la sesión.
+- El historial se resume; un detalle expresado solo en la conversación puede quedar fuera del resumen o perder precisión.
+- Algunos archivos se vuelven a leer, y las skills usadas se pueden reincorporar con límites internos que dependen de la herramienta.
+- Las reglas que aplican solo a ciertas rutas pueden requerir que el agente vuelva a leer un archivo de esa ruta.
+
+En Claude Code, las instrucciones del `CLAUDE.md` de raíz se vuelven a leer tras compactar; por eso las reglas duraderas que apliquen en cada tarea van mejor en ese archivo que escondidas en el chat. En Codex, guarda la orientación duradera en `AGENTS.md` o documentación del proyecto, según su [guía oficial de archivos de instrucciones](https://learn.chatgpt.com/docs/agent-configuration/agents-md). La compactación no convierte el historial en memoria perfecta ni garantiza que cada instrucción conversada sobreviva.
+
+## Hábitos de higiene
+
+1. **Una tarea por sesión.** Terminá el objetivo y empezá otra conversación cuando el nuevo trabajo no tenga relación. Así, una discusión ajena no compite con los archivos relevantes.
+2. **Limpiá cuando cambie el trabajo.** En Claude Code, `/clear` inicia una conversación nueva. En Codex CLI, `/new` inicia un chat nuevo; `/clear` también reinicia el chat y limpia la vista del terminal. No confundás `Ctrl+L` en Codex con reiniciar el contexto: solo limpia la vista del terminal. Estos comandos se verificaron en la documentación oficial de [Claude Code](https://code.claude.com/docs/en/best-practices) y [Codex CLI](https://learn.chatgpt.com/docs/developer-commands).
+3. **Compactá con intención.** En Claude Code podés adelantar el resumen con `/compact` y decir qué conservar. Codex CLI también ofrece `/compact` para resumir el chat; la documentación de Codex no especifica el mismo argumento de enfoque, así que no asumas que la sintaxis de Claude aplica allí.
+4. **Pedí resúmenes útiles.** Si hace falta continuar luego, pedí decisiones tomadas, archivos relevantes, preguntas abiertas y siguiente paso. Guardá acuerdos duraderos en un archivo del proyecto, no solo en la conversación.
+5. **No pegues historiales enormes si basta un fragmento.** Compartí el error y unas líneas alrededor; si el agente necesita más, que busque el resto con un alcance definido.
+6. **Lee archivos por partes.** Pedí una sección, tabla o pregunta concreta. El Cookbook de Anthropic muestra cómo dar al agente herramientas que devuelvan solo la información relevante.
+7. **Delegá exploraciones grandes cuando puedas.** En Claude Code los subagentes tienen su propio contexto; el agente principal recibe el resultado devuelto, no todo lo que el subagente leyó. Confirmá que la tarea requiere delegación y que el informe sea breve.
+8. **Dejá `CLAUDE.md` conciso.** La guía oficial dice que debe ser corto y humano-legible, con comandos que el agente no puede inferir, reglas de estilo propias, convenciones y decisiones del proyecto. No hay una cantidad de líneas universal en la documentación vigente. Si te ayuda, podés usar menos de 200 líneas como meta interna, no como límite oficial ni garantía de buen comportamiento. Poné el detalle que solo necesitás a veces en una skill o documento que se lea a demanda. [Anthropic enumera qué incluir y qué dejar fuera](https://code.claude.com/docs/en/best-practices).
+
+Si vas a sumar una skill, conectar un servidor MCP o instalar una extensión solo para “arreglar” el contexto, evaluá primero si realmente hace falta:
+
+<AntesDeInstalar que="una skill, servidor MCP o extensión para manejar el contexto" />
+
+## Mide tu mismo: el costo de una sola pieza
+
+Esta actividad compara dos lecturas de contexto. Hacela solo si ya tenés disponible una skill que podás invocar; no instalés ni conectés nada nuevo solo para completar el ejercicio. Usá la misma aplicación y el mismo modelo en ambas mediciones, anotá lo que aparece y no compartás datos privados.
+
+<MideTuMismo comando="Claude Code CLI: /context · Codex CLI: /new → /status → /skills → /status" queMirar="En Claude Code, comienza una sesión nueva, anota lo que muestra /context, invoca una skill disponible y consulta /context otra vez. En Codex CLI, usa /new para empezar el chat, apunta el uso que muestra /status, elige una skill disponible con /skills, úsala en una tarea pequeña y vuelve a consultar /status. Si no tienes una skill, pide leer un solo archivo largo de práctica. Anota qué categorías cambiaron. Los totales varían por herramienta, modelo, configuración y tarea: describen solo esas sesiones, no un costo universal de la skill." />
+
+Anotá en la plantilla: la fecha, la aplicación, el modelo tal como lo presenta la pantalla, el total base, la única pieza que agregaste y el total posterior. Si la interfaz no muestra un total comparable, anotalo como “no disponible” en vez de inventar una cifra. `/context` y `/status` son comandos documentados; **no los ejecuté en esta guía** porque requieren una sesión interactiva iniciada por vos. Fuente de los comandos: documentación vigente de [Claude Code](https://code.claude.com/docs/en/how-claude-code-works) y [Codex CLI](https://learn.chatgpt.com/docs/developer-commands). Evidencia del procedimiento en tu sesión: pendiente de ejecutar por el lector.
+
+## Equivalentes en Claude Code y Codex
+
+| Qué querés observar o hacer | Claude Code CLI | Codex CLI | Evidencia |
+|---|---|---|---|
+| Ver el contexto actual | `/context` muestra qué está usando espacio. | `/status` muestra datos de sesión y uso de contexto; la línea de estado puede mostrar estadísticas si están habilitadas. | Docs-oficiales; no ejecutada en esta guía. |
+| Empezar una tarea aparte | `/clear` inicia una conversación nueva. | `/new` inicia un chat nuevo. `/clear` también reinicia el chat y limpia la vista del terminal. | Docs-oficiales; no ejecutada en esta guía. |
+| Reducir el historial de una sesión larga | `/compact` puede recibir instrucciones sobre qué enfocar o preservar. | `/compact` resume el chat para liberar contexto. No se verificó en la documentación una opción para pasarle las mismas instrucciones que en Claude Code. | Docs-oficiales; detalle de argumento Codex: no-verificado. |
+| Revisar qué está ocupando contexto | Usá `/context` y observá las categorías que reporta esa sesión. | Usá `/status`; la vista de detalle depende del cliente y configuración. | Docs-oficiales; no se ejecutó. |
+
+La guía de contexto describe funciones que pueden cambiar. Antes de apoyarte en un comando, confirmá que aparece en la ayuda de tu versión. No tomés la salida de Claude como evidencia de lo que hace Codex, ni al revés.
+
+## Qué guardar en CLAUDE.md o AGENTS.md
+
+Usá estos archivos para información estable que cambia lo que el agente debe hacer en casi todas las tareas de ese proyecto:
+
+- comandos particulares que no puede deducir leyendo el código;
+- decisiones de arquitectura propias del proyecto;
+- reglas de estilo que difieren de lo habitual;
+- cómo correr una verificación y qué resultado esperar;
+- restricciones de trabajo que deben estar a la vista en cada sesión.
+
+Evitá repetir convenciones evidentes en el código, copiar manuales completos o guardar allí instrucciones de una tarea que harás una sola vez. La documentación oficial de Claude recomienda mantener `CLAUDE.md` corto y usar skills para conocimiento o procedimientos ocasionales. No existe una regla oficial de 200 líneas; si adoptás esa cifra, tratala como una meta editorial de tu equipo. Codex también recomienda mantener las instrucciones necesarias en `AGENTS.md` o documentación versionada del proyecto, no depender solo de recuerdos entre sesiones.
+
+## Fuentes consultadas
+
+Consulta de documentación oficial: 2026-09-30. Los comandos y detalles de carga dependen de la versión, el modelo y la configuración.
+
+- [Effective context engineering for AI agents, Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — atención, contexto rot y curación de contexto. Evidencia: docs-oficiales.
+- [Explore the context window, Claude Code](https://code.claude.com/docs/en/context-window) — contenido, compactación y elementos que se reincorporan. Evidencia: docs-oficiales.
+- [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices) — `/clear`, `/compact`, lecturas acotadas y pautas para `CLAUDE.md`. Evidencia: docs-oficiales.
+- [How Claude Code works](https://code.claude.com/docs/en/how-claude-code-works) y [glosario](https://code.claude.com/docs/en/glossary) — `/context`, sesión y conceptos. Evidencia: docs-oficiales.
+- [Context engineering: memory, compaction, and tool clearing, Anthropic Cookbook](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools) — latencia y recuperación a medida que crece lo que se mantiene en la ventana. Evidencia: docs-oficiales.
+- [Tokens, Claude Platform Docs](https://platform.claude.com/docs/en/about-claude/pricing) — explicación de token como pieza de texto procesada. Evidencia: docs-oficiales; no se copian precios ni cifras de consumo.
+- [Developer commands, Codex](https://learn.chatgpt.com/docs/developer-commands) y [AGENTS.md, Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md) — `/status`, `/skills`, `/new`, `/clear`, `/compact` e instrucciones persistentes de proyecto. Evidencia: docs-oficiales.
+- [Why language models hallucinate, OpenAI](https://openai.com/index/why-language-models-hallucinate/) — las respuestas plausibles pueden ser falsas. Evidencia: docs-oficiales.
+
+## Mitos frecuentes
+
+<MitoRealidad mito="Con una ventana enorme ya no importa cuidar el contexto." realidad="Una ventana amplia permite retener más contenido, pero la recuperación de detalles y el procesamiento pueden degradarse conforme el contexto crece. Conservá lo útil y medí la sesión real." fuente="Anthropic, Effective context engineering for AI agents y Claude Cookbook: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" />
+
+<MitoRealidad mito="Mientras más instrucciones le doy, mejor obedece." realidad="Instrucciones útiles y claras ayudan; repetir reglas y agregar material que no aplica puede esconder lo importante. Guardá solo lo que cambia el trabajo y usá contexto a demanda para lo ocasional." fuente="Anthropic, Best practices for Claude Code: https://code.claude.com/docs/en/best-practices" />
+
+<MitoRealidad mito="Si el agente lo olvidó, es tonto." realidad="Puede haber perdido el detalle durante un resumen o no encontrarlo entre mucho contenido, pero también puede ser un error del modelo u otra causa. Revisá la sesión, vuelve a dar la fuente necesaria y verificá la respuesta." fuente="Claude Code, Context window; Anthropic, Effective context engineering: https://code.claude.com/docs/en/context-window" />
+
+<MitoRealidad mito="Instalar más herramientas siempre lo hace más capaz." realidad="Las herramientas pueden habilitar acciones nuevas, pero sus descripciones y resultados también son información para procesar. Agregá solo las que resuelven una necesidad concreta y revisá qué datos y permisos requieren." fuente="Anthropic, Effective context engineering for AI agents: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" />
+
+## Qué deberías poder hacer ahora
+
+- Explicar con tus palabras qué incluye el contexto de una sesión y qué es un token.
+- Medir el contexto base de una sesión nueva y observar el cambio tras agregar una sola pieza, o identificar que tu interfaz no muestra una medida comparable.
+- Elegir una regla que debería quedar en `CLAUDE.md` o `AGENTS.md` y distinguirla de información que solo necesitás para una tarea.

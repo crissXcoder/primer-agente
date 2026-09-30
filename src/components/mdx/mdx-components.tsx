@@ -8,6 +8,10 @@ import { Callout } from "@/components/ui/callout";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Badge } from "@/components/ui/badge";
 import { RutaArchivos } from "./ruta-archivos";
+import { AntesDeInstalar } from "./antes-de-instalar";
+import { MitoRealidad } from "./mito-realidad";
+import { MideTuMismo } from "./mide-tu-mismo";
+import { TablaCostos } from "./tabla-costos";
 
 export const mdxComponents = {
   // Componentes de Guía
@@ -22,6 +26,10 @@ export const mdxComponents = {
   Callout,
   CodeBlock,
   Badge,
+  AntesDeInstalar,
+  MitoRealidad,
+  MideTuMismo,
+  TablaCostos,
 
   // Sobrescritura de elementos HTML estándar
   h1: ({ className = "", ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (

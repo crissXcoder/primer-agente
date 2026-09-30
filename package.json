@@ -10,6 +10,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "qr": "node scripts/generar-qr.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {
@@ -30,6 +31,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.7",
+    "pngjs": "7.0.0",
+    "qr": "0.7.2",
+    "qrcode": "1.5.4",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5",

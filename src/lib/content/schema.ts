@@ -6,7 +6,7 @@ export type OsType = z.infer<typeof OsEnum>;
 export const LevelEnum = z.enum(["principiante", "intermedio"]);
 export type LevelType = z.infer<typeof LevelEnum>;
 
-export const TrackEnum = z.enum(["git", "nodejs", "python", "conocimiento", "geoespacial"]);
+export const TrackEnum = z.enum(["git", "nodejs", "python", "conocimiento", "geoespacial", "entender"]);
 export type TrackType = z.infer<typeof TrackEnum>;
 export const TRACK_LABELS: Record<TrackType, string> = {
   git: "Git",
@@ -14,6 +14,7 @@ export const TRACK_LABELS: Record<TrackType, string> = {
   python: "Python",
   conocimiento: "Bóveda y conocimiento",
   geoespacial: "QGIS y datos geoespaciales",
+  entender: "Entender los agentes",
 };
 
 export const AudienceEnum = z.enum(["todos", "programadores", "no-programadores"]);
@@ -24,8 +25,11 @@ export const AUDIENCE_LABELS: Record<AudienceType, string> = {
   "no-programadores": "No programadores",
 };
 
-export const EvidenceEnum = z.enum(["docs-oficiales", "ejecutada"]);
+export const EvidenceEnum = z.enum(["docs-oficiales", "ejecutada", "reportada", "no-verificada"]);
 export type EvidenceType = z.infer<typeof EvidenceEnum>;
+
+export const KindEnum = z.enum(["concepto", "instalacion", "checklist", "referencia"]);
+export type KindType = z.infer<typeof KindEnum>;
 
 export const GuideErrorSchema = z.object({
   symptom: z.string().min(1, "El síntoma del error no puede estar vacío"),
@@ -41,6 +45,7 @@ export const GuideFrontmatterSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "El slug debe estar en formato kebab-case (ej. instalar-git)"),
   summary: z.string().min(10, "El resumen debe tener al menos 10 caracteres"),
   track: TrackEnum,
+  kind: KindEnum.default("instalacion"),
   audience: AudienceEnum,
   level: LevelEnum,
   os: z.array(OsEnum).min(1, "Debe soportar al menos un sistema operativo"),

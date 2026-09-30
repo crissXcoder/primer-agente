@@ -1,5 +1,9 @@
 # Registro de Decisiones de Arquitectura (ADR)
 
+## 5. Colección conceptual de guías de agentes
+
+La guía introductoria requiere clasificar contenido como concepto y distinguirlo de instalación, checklist y referencia. Se agrega `kind` opcional al frontmatter con valor predeterminado `instalacion` para que los documentos existentes sigan siendo válidos. También se añade el track `entender` y se amplía el vocabulario de evidencia con `reportada` y `no-verificada`, preservando los valores previos. Los componentes MDX `AntesDeInstalar`, `MitoRealidad` y `MideTuMismo` se implementan localmente para cumplir las pautas de evaluación, fuentes y medición manual, sin sumar dependencias.
+
 Este documento registra las decisiones técnicas clave tomadas para el proyecto **primer-agente**, evaluando opciones, ventajas, desventajas y la justificación según los requerimientos de [`docs/SPEC.md`](file:///c:/Users/crisa/Chambas/primer-agente/docs/SPEC.md).
 
 ---
@@ -143,3 +147,15 @@ Las pruebas responsive quedan en `tests/responsive/`, y las capturas se guardan 
 Tailwind conserva dos cortes de ancho: `md` en 768 px y `lg` en 1201 px; las variantes `sm`, `xl` y `2xl` se eliminan para alinear el sitio con los tres rangos del diseño. El corte CSS de 767 px separa el móvil y el rango de 768–1200 px se trata como tablet. Las tarjetas y sus cuadrículas usan padding y separación fluidos; los artículos limitan sus bloques de lectura a unas 70 letras por línea.
 
 La simulación Chromium no cubre Safari real, barras dinámicas, teclado en pantalla ni safe areas de hardware; queda un checklist manual para esos casos.
+
+## 9. Mapa conceptual del entorno de agentes
+
+### Decisión (2026-09-30)
+
+La guía `content/mapa-del-entorno-de-un-agente.mdx` presenta instrucciones, skills, MCP, hooks, subagentes, plugins y permisos como piezas distintas, con comparación expresa entre Claude Code y Codex. Las afirmaciones variables llevan nivel/origen de evidencia y fecha de consulta; las salidas de CLI se limitan a la máquina observada. No se incluyen cifras de contexto ni costos numéricos.
+
+Se añade el componente MDX estático y accesible `<TablaCostos>` con columnas y filas fijas. No requiere dependencias nuevas. La guía emplea `<AntesDeInstalar>` antes de tratar paquetes opcionales y enlaza la guía de evaluación, que puede incorporarse después.
+
+### Justificación
+
+Una tabla común permite al lector comparar activación, contexto y riesgo sin convertir el texto en una recomendación de instalar componentes. Se omite un comando de inspección universal para hooks/memoria de Codex porque no se confirmó uno en la ayuda local; la guía lo etiqueta como no verificado.
