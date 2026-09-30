@@ -50,3 +50,24 @@ Búsqueda y filtrado rápido en el cliente sobre el contenido de las guías sin 
 ### Decisión
 Adoptar **`minisearch`** con un índice generado durante el proceso de build.
 * Justificación: Proporciona la mejor combinación de velocidad de respuesta, ligereza de carga en el cliente, soporte de prefijos/tolerancia a errores, y cero costo de infraestructura externa.
+
+---
+
+## 3. Resolución de Contradicciones en DESIGN.md y Primitivas Accesibles
+
+### Contexto y Requerimientos
+`DESIGN.md` establece una estética *Industrial Electromechanical B2B UI*, pero contiene contradicciones entre la sección de frontmatter YAML y la prosa descriptiva, particularmente en torno al contraste tipográfico y la accesibilidad WCAG AA.
+
+### Desviaciones Registradas y Justificación
+
+1. **Tipografía Principal (`Neutral Light #CAF0F8` descartado para texto)**:
+   * *Contradicción*: La prosa indica *"Neutral Light (#CAF0F8): Pale sky tone for primary typography..."*. Sobre la superficie clara por defecto (`#f5fafd`), esto produce un ratio de contraste de ~1.06:1, resultando ininteligible e incumpliendo el estándar WCAG AA (mínimo 4.5:1).
+   * *Resolución*: Se descarta `#CAF0F8` para texto. Se adoptan rigurosamente los roles semánticos del frontmatter: `on-surface` (`#171c1f`, contraste 15.8:1) para cuerpo y encabezados, y `on-surface-variant` (`#3d494d`, contraste 8.46:1) para metadatos secundarios.
+2. **Contraste del Botón Primario**:
+   * *Contradicción*: El botón primario usa el cian conductivo de alta visibilidad (`primary-container: #00B4D8`). Colocar texto blanco sobre este color arroja un ratio deficiente de ~2.1:1.
+   * *Resolución*: Se establece el botón primario con fondo cian `#00B4D8` y tipografía técnica oscura `on-primary-fixed` (`#001f27` / `#00414f`), alcanzando un ratio de 7.43:1 (nivel AAA).
+3. **Modo Claro Estricto y Bloques de Código en Terminal**:
+   * *Decisión*: Todo el shell, páginas y tarjetas operan en modo claro (`surface: #f5fafd`, `surface-container-lowest: #ffffff`). Sin embargo, los bloques de código y telemetría adoptan un estilo de terminal industrial oscura utilizando `inverse-surface: #2b3134` con texto `inverse-on-surface: #ecf2f4`, logrando un contraste de 11.7:1 (AAA) sin forzar un modo oscuro en el resto del sitio.
+4. **Implementación de Componentes sin Dependencias Pesadas**:
+   * *Decisión*: Se implementan `Button`, `Badge/Chip`, `Card`, `Input`, `Callout`, `CodeBlock` y `Tabs` utilizando primitivas accesibles nativas en React 19 + TypeScript + Tailwind v4 con atributos ARIA completos (`role="tablist"`, `aria-selected`, `aria-live`, etc.), en lugar de instalar librerías externas que añadan peso al bundle o causen conflictos de dependencias con React 19.
+

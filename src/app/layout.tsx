@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
+import { Header } from "@/components/shell/header";
+import { Footer } from "@/components/shell/footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -38,7 +40,14 @@ export default function RootLayout({
       className={`${inter.variable} ${ibmPlexSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-surface text-on-surface">
-        {children}
+        <Header />
+        <main
+          id="main-content"
+          className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8"
+        >
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
