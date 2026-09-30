@@ -1,0 +1,7 @@
+Propósito: base de conocimiento estática, buscable y filtrable, con guías de instalación/configuración verificables.
+No-objetivos (MVP): cuentas, CMS, base de datos, comentarios, analítica, anuncios, modo oscuro, i18n, TanStack.
+Stack: Next.js (última estable que instale create-next-app; verifica compatibilidad con Vercel), App Router, TypeScript strict con cero `any`, Tailwind v4, pnpm, Zod, shadcn/ui solo como primitivas accesibles tematizadas con los tokens de DESIGN.md, MDX para contenido, búsqueda cliente sobre índice generado en build. Elige la librería MDX y la de búsqueda justificando en docs/DECISIONS.md.
+Rutas: /, /guias, /guias/[slug], /rutas/[slug], /errores, /taller.
+Modelo de guía (frontmatter, validado con Zod): title, slug, summary, track, level (principiante|intermedio), os[] (windows|macos|linux), tools[], tags[], prerequisites[] (slugs), related[] (slugs), timeMinutes, verifiedAt (fecha), appliesTo (herramienta→rango de versión), evidence (por sistema operativo: docs-oficiales | ejecutada), sources[] (URLs oficiales), errors[] ({symptom, cause, fix}).
+Reglas de contenido: ningún comando se escribe de memoria; se lee de la documentación oficial y se cita en sources. Cada paso termina con verificación observable. Cada guía tiene "Cómo sé que funcionó".
+Calidad: WCAG AA, texto de error de la interfaz en español de Costa Rica, sin peticiones a terceros salvo lo estrictamente necesario, sin secretos en el repo.

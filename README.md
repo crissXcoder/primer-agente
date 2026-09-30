@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# primer-agente
 
-## Getting Started
+> Guías paso a paso, verificables y accesibles para instalar y configurar agentes de IA y sus herramientas base (terminal, Git, Node.js, Python, uv, MCP, skills). Diseñado para principiantes absolutos: participantes del taller de agentes de IA de la Semana U (Universidad Nacional de Costa Rica - UNA, Campus Nicoya) y público general.
 
-First, run the development server:
+Sitio 100% estático, rápido y accesible, pensado para ser desplegado en Vercel (Plan Hobby, uso no comercial).
+
+---
+
+## 🛠️ Stack Tecnológico
+
+* **Framework**: [Next.js](https://nextjs.org/) 16 (App Router) + [React](https://react.dev/) 19
+* **Lenguaje**: [TypeScript](https://www.typescriptlang.org/) en modo estricto (`strict: true`, cero `any`)
+* **Estilos**: [Tailwind CSS v4](https://tailwindcss.com/)
+* **Validación**: [Zod](https://zod.dev/) para esquemas de frontmatter de guías
+* **Contenido**: MDX (`next-mdx-remote/rsc` + `gray-matter`)
+* **Búsqueda**: Índice estático generado en build con `minisearch` en cliente
+* **Gestor de paquetes**: `pnpm`
+
+---
+
+## 📋 Prerrequisitos
+
+* **Node.js**: `v20.x` o superior (probado en Node `v24.x`)
+* **pnpm**: `v10.x` o superior
+* **Git**: `v2.x`
+
+---
+
+## 🚀 Inicio Rápido
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/crissXcoder/primer-agente.git
+   cd primer-agente
+   ```
+
+2. **Instalar dependencias:**
+   ```bash
+   pnpm install
+   ```
+
+3. **Iniciar el servidor de desarrollo:**
+   ```bash
+   pnpm dev
+   ```
+   Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver el resultado.
+
+---
+
+## 🧪 Comandos de Calidad y Verificación
+
+Antes de enviar cambios o crear ramas de despliegue, verifica que todo esté en verde:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Verificación estricta de tipos TypeScript
+pnpm typecheck
+
+# Análisis estático y formateo con ESLint
+pnpm lint
+
+# Compilación estática de producción (Turbopack)
+pnpm build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Estructura del Proyecto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+├── docs/
+│   ├── SPEC.md           # Especificación completa y modelo de datos
+│   └── DECISIONS.md      # Registro de decisiones de arquitectura (ADR)
+├── src/
+│   └── app/              # Rutas y páginas de Next.js App Router
+├── AGENTS.md             # Reglas operativas para asistentes de IA y desarrollo
+├── CLAUDE.md             # Reglas y atajos para Claude Code
+├── LICENSE               # Licencia dual (MIT para código, CC BY 4.0 para contenido)
+└── package.json          # Scripts y dependencias del proyecto
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 Licencia
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* **Código fuente**: Licencia [MIT](./LICENSE).
+* **Contenido educativo y guías**: [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
