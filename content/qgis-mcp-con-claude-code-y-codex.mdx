@@ -1,0 +1,279 @@
+---
+title: "Conectar QGIS MCP con Claude Code y Codex CLI"
+slug: "qgis-mcp-con-claude-code-y-codex"
+summary: "Configura una conexión MCP entre QGIS y Claude Code o Codex CLI, revisa permisos y aprende a diagnosticarla sin arriesgar tus datos."
+track: "geoespacial"
+audience: "todos"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "qgis"
+  - "mcp"
+  - "claude-code"
+  - "codex-cli"
+tags:
+  - "qgis"
+  - "mcp"
+  - "claude-code"
+  - "codex"
+  - "seguridad"
+prerequisites:
+  - "qgis-instalar-y-preparar"
+  - "qgis-plugins-instalar-y-gestionar"
+  - "qgis-mcp-que-es-y-como-elegir"
+  - "instalar-uv"
+related:
+  - "qgis-mcp-que-es-y-como-elegir"
+  - "qgis-plugins-instalar-y-gestionar"
+timeMinutes: 35
+verifiedAt: "2026-09-29"
+appliesTo:
+  qgis: "QGIS 3.28+ según los README consultados; verifica siempre la compatibilidad de la versión del plugin y servidor que instales."
+  mcp: "Claude Code y Codex CLI; los nombres de menús y opciones pueden variar con sus versiones."
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://github.com/nkarasiak/qgis-mcp"
+  - "https://github.com/nkarasiak/qgis-mcp/tags"
+  - "https://github.com/wiseman/qgis_mcp"
+  - "https://plugins.qgis.org/plugins/qgis_mcp_plugin/"
+  - "https://code.claude.com/docs/en/mcp"
+  - "https://learn.chatgpt.com/docs/extend/mcp?surface=cli"
+  - "https://docs.astral.sh/uv/guides/tools/"
+  - "https://nodejs.org/en/download"
+  - "https://modelcontextprotocol.io/docs/2026-07-28/concepts/security"
+errors:
+  - symptom: "Claude Code muestra el servidor como Failed to connect o no aparecen las herramientas."
+    cause: "QGIS o el servidor del plugin no está activo, el ejecutable uvx no está disponible para el cliente o el puerto local no responde."
+    fix: "Abre QGIS, inicia el servidor del plugin, revisa el diagnóstico del plugin y vuelve a comprobar con claude mcp list y /mcp."
+  - symptom: "La herramienta ping falla cuando QGIS está cerrado."
+    cause: "El puente que atiende el servidor MCP vive en el plugin cargado dentro de QGIS."
+    fix: "Inicia QGIS y el servidor del plugin antes de usar ping; esta observación proviene de una prueba previa y no de una ejecución de esta guía."
+  - symptom: "uv se queja de un entorno Python administrado externamente (PEP 668)."
+    cause: "Se intentó instalar paquetes con pip en el Python administrado por el sistema."
+    fix: "No uses pip para instalar este servidor; uvx crea y ejecuta un entorno aislado. El aviso PEP 668 se observó en pruebas previas, no durante esta guía."
+---
+
+Esta guía enlaza un agente local con QGIS mediante MCP. Está escrita para principiantes y separa las instrucciones de **Claude Code** y **Codex CLI**. Seguí los pasos de preparación antes de continuar: [instalar QGIS](/guias/qgis-instalar-y-preparar), [gestionar plugins](/guias/qgis-plugins-instalar-y-gestionar), [entender QGIS MCP](/guias/qgis-mcp-que-es-y-como-elegir) y [preparar uv](/guias/instalar-uv). Claude Code y Codex CLI se instalan siguiendo sus propias instrucciones oficiales; todavía no hay una guía de instalación local para esos clientes.
+
+## 1. Qué vas a conectar
+
+La ruta principal usa el plugin **QGIS MCP** de `nkarasiak/qgis-mcp` y su servidor Python iniciado por `uvx`. El agente abre un proceso MCP por `stdio`; ese proceso se comunica por un socket local con el plugin que ya está corriendo dentro de QGIS.
+
+```text
+Claude Code o Codex CLI
+          │ MCP por stdio
+          ▼
+  servidor qgis-mcp (uvx)
+          │ socket local
+          ▼
+ plugin QGIS MCP → QGIS
+```
+
+La alternativa es **WAI QGIS MCP** (`wiseman/qgis_mcp`), que usa un servidor Node.js arrancado por `npx` y un plugin diferente. No instales ambos plugins esperando que sean intercambiables. La alternativa puede usar el mismo nombre MCP `qgis`, así que revisa y quita la entrada anterior antes de cambiar.
+
+Que el servidor y QGIS estén en tu computadora no significa que el modelo procese localmente los datos: si el cliente usa un proveedor remoto, los mensajes y resultados enviados al modelo pueden salir del equipo. Revisá las condiciones de privacidad del proveedor y no uses datos sensibles en un proyecto de práctica.
+
+<Callout type="peligro" title="El agente puede modificar tu proyecto">
+  El servidor principal expone herramientas de edición y una herramienta `execute_code` que ejecuta código PyQGIS arbitrario. Empezá con una copia del proyecto y datos de muestra. Leé cada solicitud de aprobación antes de aceptarla y conservá una copia de respaldo.
+</Callout>
+
+## 2. Requisitos previos
+
+- QGIS instalado, abierto y con un proyecto descartable o una copia.
+- El plugin QGIS MCP instalado y su servidor iniciado. En QGIS, revisá **Complementos → Administrar e instalar complementos**; el README indica buscar **QGIS MCP**, reiniciar QGIS y pulsar **Start Server** en su panel.
+- Una de estas parejas: Claude Code + `uv`/`uvx`, o Codex CLI + `uv`/`uvx`.
+- Para probar la variante WAI: Node.js 18 o posterior, con `node` y `npx` disponibles en la terminal.
+
+Los clientes Claude Code y Codex se instalan por separado. Antes de continuar, sus comandos de versión deben responder:
+
+```bash
+claude --version
+codex --version
+uv --version
+```
+
+No hace falta que ambos clientes estén instalados: ejecutá solo el comando del cliente que vas a configurar. En Windows, la terminal del cliente debe encontrar `uvx`; comprobalo con `uvx --version`. Esta guía no afirma que una combinación QGIS/plugin haya sido probada aquí en Windows, macOS o Linux.
+
+## 3. Instalar y arrancar el plugin del servidor principal
+
+En QGIS, instalá el complemento llamado **QGIS MCP** desde el administrador de complementos. Confirmá que el autor y el enlace correspondan a [`nkarasiak/qgis-mcp`](https://github.com/nkarasiak/qgis-mcp). Reiniciá QGIS si lo solicita, abrí el panel de QGIS MCP y seleccioná **Start Server**.
+
+**Comprobación observable:** el panel indica que el servidor está iniciado. El README señala QGIS 3.28 o posterior como requisito, pero el rango declarado no certifica cada versión de plugin, sistema operativo y QGIS: verificá la ficha del plugin y usa `diagnose` en la etapa de verificación.
+
+### Servidor fijado o seguimiento de la rama principal
+
+Para que los arranques sean reproducibles, preferí fijar el servidor a un tag que figure en el [listado de tags](https://github.com/nkarasiak/qgis-mcp/tags). El README consultado muestra `main.zip`, que sigue cambios de la rama. El tag `v0.9.2` mencionado en un plan anterior no quedó confirmado en el listado consultado, así que no lo uses como valor verificado. Cuando elijas un tag existente, reemplazá `<TAG_VERIFICADO>` en estos ejemplos:
+
+```text
+https://github.com/nkarasiak/qgis-mcp/archive/refs/tags/<TAG_VERIFICADO>.zip
+```
+
+Si decidís seguir el README actual, estos son los comandos con rama móvil:
+
+```text
+uvx --from https://github.com/nkarasiak/qgis-mcp/archive/refs/heads/main.zip qgis-mcp-server
+```
+
+Con `uvx`, el servidor se ejecuta en un entorno temporal. El plugin de QGIS se actualiza por separado; no supongas que actualizar uno actualiza el otro. Tras actualizar cualquiera, reiniciá QGIS y ejecutá `diagnose` para revisar comunicación y compatibilidad.
+
+## 4. Configurar Claude Code
+
+Elegí **una** instalación por CLI. El ejemplo usa alcance `local`: Claude Code guarda la configuración en `~/.claude.json`, es privada para tu usuario y solo aplica al proyecto actual. `--scope user` la habilita en tus proyectos; `--scope project` escribe `.mcp.json` para compartir con el equipo, por lo que no conviene incluir secretos allí.
+
+Para seguir `main`, ejecutá:
+
+```bash
+claude mcp add --transport stdio --scope local qgis -- uvx --from https://github.com/nkarasiak/qgis-mcp/archive/refs/heads/main.zip qgis-mcp-server
+```
+
+Para usar una versión fijada, sustituí el URL por uno de tag que confirmaste en el listado. En Windows, si Claude Code no encuentra `uvx`, usá la ruta completa a `uvx.exe` después de `--`, obtenida con `where.exe uvx`.
+
+Comprobá la configuración y conexión:
+
+```bash
+claude mcp list
+claude mcp get qgis
+```
+
+Dentro de Claude Code, ejecutá `/mcp`; revisá que `qgis` aparezca conectado y que muestre herramientas. `Added` solo confirma que se guardó la configuración; el estado conectado es la verificación del transporte.
+
+### Aprobación de operaciones en Claude Code
+
+El cliente solicita permiso para herramientas. Conservá las solicitudes de aprobación activas. La herramienta `execute_code` tiene especial impacto: según el protocolo de permisos MCP de Claude Code, la configuración de servidor no garantiza un permiso especial por nombre. No uses `--dangerously-skip-permissions` para esta práctica. Si un prompt permite recordar una aprobación, elegí aprobar solo esa vez mientras estés aprendiendo.
+
+## 5. Configurar Codex CLI
+
+Codex puede sobrescribir silenciosamente una entrada existente con el mismo nombre `qgis`. Primero revisá:
+
+```bash
+codex mcp list
+```
+
+Si `qgis` ya corresponde a otra variante, decidí cuál mantener antes de agregar esta. Configuración de la rama principal:
+
+```bash
+codex mcp add qgis -- uvx --from https://github.com/nkarasiak/qgis-mcp/archive/refs/heads/main.zip qgis-mcp-server
+codex mcp list
+```
+
+También podés editar `~/.codex/config.toml` manualmente:
+
+```toml
+[mcp_servers.qgis]
+command = "uvx"
+args = ["--from", "https://github.com/nkarasiak/qgis-mcp/archive/refs/heads/main.zip", "qgis-mcp-server"]
+default_tools_approval_mode = "prompt"
+
+[mcp_servers.qgis.tools.execute_code]
+approval_mode = "prompt"
+```
+
+En una versión fijada, usá el URL con `<TAG_VERIFICADO>` que ya comprobaste. En la terminal interactiva de Codex, ejecutá `/mcp` y confirmá el estado del servidor. La documentación de Codex permite `default_tools_approval_mode = "prompt"` y una regla `approval_mode` por herramienta; dejá `execute_code` en `prompt`.
+
+## 6. Token opcional para el socket QGIS
+
+El README del servidor explica que el socket no usa autenticación por defecto y queda ligado a localhost; otro proceso de la misma máquina podría controlarlo. Un token compartido eleva la barrera, pero no crea un sandbox: un proceso ejecutado con tu misma cuenta podría leer la configuración. El token debe estar disponible **tanto para QGIS antes de iniciarlo como para el servidor MCP**.
+
+Generá un valor largo y aleatorio en un gestor de contraseñas. No pegues el secreto en el historial de comandos, repositorios compartidos ni capturas. En Windows PowerShell, una forma de definirlo solo en esa ventana es:
+
+```powershell
+$env:QGIS_MCP_TOKEN = "<TOKEN_ALEATORIO>"
+```
+
+Iniciá QGIS desde esa misma ventana para que herede la variable. Cerralo y volvelo a abrir si ya estaba en marcha; luego detené e iniciá el servidor del panel. Para macOS/Linux, definí la variable en el entorno desde el cual lanzás QGIS, antes de abrirlo. La forma de iniciar aplicaciones gráficas desde ese entorno depende de la distribución y no se verifica en esta guía.
+
+En Claude Code, agregá el mismo valor de forma local a la configuración (no lo compartas en `.mcp.json`):
+
+```bash
+claude mcp add --transport stdio --scope local qgis --env QGIS_MCP_TOKEN=<TOKEN_ALEATORIO> -- uvx --from https://github.com/nkarasiak/qgis-mcp/archive/refs/heads/main.zip qgis-mcp-server
+```
+
+Si ya existe `qgis`, quitá esa entrada primero con `claude mcp remove qgis --scope local`; después vuelve a agregarla con `--env`. Para Codex, incluí el valor solo en el bloque privado de `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.qgis.env]
+QGIS_MCP_TOKEN = "<TOKEN_ALEATORIO>"
+```
+
+La configuración del servidor principal dice que el registro de QGIS debe mostrar **Token authentication ENABLED** después de reiniciar el servidor. Si el token no coincide o falta en uno de los dos procesos, la conexión no debe funcionar. La configuración del cliente puede guardar el secreto en texto plano; restringí el acceso a tu cuenta y no compartas ese archivo.
+
+## 7. Variante alternativa: WAI QGIS MCP (`npx`)
+
+Esta es otra implementación y requiere Node.js 18+ con npm/npx. En QGIS instalá el plugin exacto **WAI QGIS MCP**. El README indica activar **Show also Experimental Plugins**, buscar el nombre en **All**, instalarlo, abrir su panel y pulsar **Start Server**. Es un plugin experimental según esas instrucciones: valorá el riesgo antes de usarlo con datos reales.
+
+Claude Code:
+
+```bash
+claude mcp add --transport stdio --scope user qgis -- npx -y qgis-mcp@latest
+```
+
+Codex CLI:
+
+```bash
+codex mcp add qgis -- npx -y qgis-mcp@latest
+```
+
+`@latest` resuelve la versión actual al iniciar el proceso, así que puede cambiar entre sesiones. Para repetir una instalación, fijá una versión publicada de npm tras comprobarla en su registro. En Windows, si no inicia con `npx`, el README recomienda `npx.cmd`; para clientes que no lo ejecuten directamente, configurá `cmd` con argumentos `/c`, `npx`, `-y`, `qgis-mcp@latest`. El README declara que Windows no está probado.
+
+La variante usa el puerto local del plugin (por defecto 9876), no una URL HTTP MCP. No mezcles el plugin WAI con el servidor Python principal: compara README, plugin y servidor. En Codex la configuración de cliente es compartida con algunas superficies del mismo equipo; configurar dos veces `qgis` puede reemplazar la entrada.
+
+## 8. Confirmar conexión con solicitudes de solo lectura
+
+Con QGIS abierto, el proyecto de muestra cargado, el plugin activo y el cliente conectado, probá estas peticiones una por una. No solicitan cambios:
+
+1. “Usá `ping` y `diagnose` para comprobar la conexión con QGIS. No modifiques nada.”
+2. “Enumerá las capas del proyecto actual e indicá sus nombres y tipos. No cambies visibilidad ni datos.”
+3. “Resumí el sistema de coordenadas del proyecto y la extensión visible del mapa. No guardes cambios.”
+
+### ¿Cómo sé que funcionó?
+
+- El panel del plugin informa que el servidor está iniciado.
+- `claude mcp list` o `codex mcp list` reconoce la entrada; `/mcp` en el cliente muestra `qgis` conectado.
+- `ping` responde y `diagnose` no reporta que el plugin o el socket estén ausentes.
+- Las solicitudes de lectura describen el proyecto que está abierto y el agente no hizo cambios.
+
+El `ping` con QGIS cerrado falló en una prueba previa; no es una prueba ejecutada durante esta guía. Tampoco se ejecutaron aquí QGIS real, `diagnose`, Codex CLI ni un flujo en macOS/Linux. Las instrucciones de compatibilidad son lectura de documentación y README, no validación funcional de cada sistema.
+
+## 9. Versiones, actualización y desinstalación
+
+Mantené coordinados el plugin de QGIS y el servidor MCP del mismo proyecto. Antes de actualizar, anotá ambas versiones y guardá una copia del proyecto. Actualizá el plugin desde el administrador de QGIS o como indique el proyecto. Para `uvx` con `main.zip`, el siguiente inicio puede traer cambios; si fijaste un tag, cambia solo después de elegir otro tag existente. En ambos casos reiniciá el plugin y servidor y repetí `diagnose` y las solicitudes de solo lectura.
+
+Para desconectar la configuración CLI:
+
+```bash
+claude mcp remove qgis --scope local
+claude mcp remove qgis --scope user
+codex mcp remove qgis
+```
+
+Usá solo el comando y alcance que configuraste. En QGIS, primero detené el servidor y luego desinstalá el plugin desde **Complementos → Administrar e instalar complementos → Instalado**. En la variante WAI, el README también permite quitar el plugin de Claude Code con `/plugin uninstall qgis-mcp@qgis-mcp` si instalaste su marketplace plugin; la ruta de esta guía usa el comando CLI. No borres configuraciones completas de Claude o Codex porque pueden contener otros servidores.
+
+## 10. Diagnóstico de problemas
+
+| Síntoma | Qué comprobar |
+| --- | --- |
+| `claude mcp list` o `codex mcp list` dice que no conecta. | Confirma QGIS abierto, plugin correcto instalado, **Start Server** activo, mismo host/puerto y el binario (`uvx` o `npx`) disponible para el cliente. Revisa `claude mcp get qgis` o `/mcp`. |
+| `ping` falla con QGIS cerrado. | El puente no está disponible hasta abrir QGIS y arrancar el plugin. Este caso se observó en una ejecución previa; no implica por sí solo una instalación defectuosa. |
+| Claude indica que `qgis` ya existe. | Inspeccioná `claude mcp get qgis` y quita o renombra la entrada en el alcance correcto antes de agregar otra. Claude rechaza colisiones. |
+| Codex reemplaza el servidor existente. | `codex mcp add` reemplaza entradas del mismo nombre según el README WAI. Ejecutá `codex mcp list` antes de añadir y conserva la configuración correcta. |
+| `execute_code` propone cambios o código que no entendés. | Rechazá la llamada, pedí una explicación y probá con una copia. No des permiso general ni saltees las confirmaciones. |
+| El token no autentica. | Verifica que QGIS y el servidor MCP reciban el mismo valor, reinicia QGIS y luego detén/inicia el servidor del panel. Busca `Token authentication ENABLED` en el registro de QGIS. |
+| `uvx` no se encuentra o aparece un aviso PEP 668. | Comprueba `uv --version` y `uvx --version` desde la misma terminal del cliente. No instales el servidor con `pip` en el Python del sistema; usa `uvx`. El aviso PEP 668 procede de una ejecución previa, no de esta guía. |
+| La variante WAI no inicia en Windows. | Probá `npx.cmd` o el lanzador `cmd /c npx -y qgis-mcp@latest`; el README declara que Windows no está probado. |
+
+## Fuentes consultadas
+
+Consultadas el **2026-09-29**. Las instrucciones marcadas como documentadas proceden de la documentación oficial del cliente o del README del proyecto. La configuración Claude Code fue añadida, inspeccionada y retirada en una prueba CLI previa en Windows con `claude` 2.1.285; el proceso de prueba cerró el transporte, por lo que esa ejecución valida el ciclo de alta/listado/baja, no una conexión funcional a QGIS. No se ejecutaron QGIS ni Codex CLI en esta tarea.
+
+- [README de QGIS MCP principal](https://github.com/nkarasiak/qgis-mcp), [tags](https://github.com/nkarasiak/qgis-mcp/tags) y [ficha del plugin](https://plugins.qgis.org/plugins/qgis_mcp_plugin/).
+- [README de WAI QGIS MCP](https://github.com/wiseman/qgis_mcp).
+- [Documentación oficial de Claude Code MCP](https://code.claude.com/docs/en/mcp).
+- [Documentación oficial de MCP en Codex CLI](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+- [Guía oficial de uv para ejecutar herramientas](https://docs.astral.sh/uv/guides/tools/) y [descargas oficiales de Node.js](https://nodejs.org/en/download).
+- [Consideraciones de seguridad de MCP](https://modelcontextprotocol.io/docs/2026-07-28/concepts/security).

@@ -357,6 +357,57 @@
     "errorSymptomsNormalized": []
   },
   {
+    "id": "qgis-mcp-con-claude-code-y-codex",
+    "slug": "qgis-mcp-con-claude-code-y-codex",
+    "title": "Conectar QGIS MCP con Claude Code y Codex CLI",
+    "titleNormalized": "conectar qgis mcp con claude code y codex cli",
+    "summary": "Configura una conexión MCP entre QGIS y Claude Code o Codex CLI, revisa permisos y aprende a diagnosticarla sin arriesgar tus datos.",
+    "summaryNormalized": "configura una conexion mcp entre qgis y claude code o codex cli, revisa permisos y aprende a diagnosticarla sin arriesgar tus datos.",
+    "track": "geoespacial",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "qgis",
+      "mcp",
+      "claude-code",
+      "codex-cli"
+    ],
+    "toolsNormalized": [
+      "qgis",
+      "mcp",
+      "claude-code",
+      "codex-cli"
+    ],
+    "tags": [
+      "qgis",
+      "mcp",
+      "claude-code",
+      "codex",
+      "seguridad"
+    ],
+    "tagsNormalized": [
+      "qgis",
+      "mcp",
+      "claude-code",
+      "codex",
+      "seguridad"
+    ],
+    "errorSymptoms": [
+      "Claude Code muestra el servidor como Failed to connect o no aparecen las herramientas.",
+      "La herramienta ping falla cuando QGIS está cerrado.",
+      "uv se queja de un entorno Python administrado externamente (PEP 668)."
+    ],
+    "errorSymptomsNormalized": [
+      "claude code muestra el servidor como failed to connect o no aparecen las herramientas.",
+      "la herramienta ping falla cuando qgis esta cerrado.",
+      "uv se queja de un entorno python administrado externamente (pep 668)."
+    ]
+  },
+  {
     "id": "qgis-mcp-que-es-y-como-elegir",
     "slug": "qgis-mcp-que-es-y-como-elegir",
     "title": "QGIS y MCP: quÃ© conecta y cÃ³mo elegir",
