@@ -82,5 +82,93 @@
     "errorSymptomsNormalized": [
       "'node' o 'pnpm' no se reconoce como un comando ejecutable"
     ]
+  },
+  {
+    "id": "instalar-python",
+    "slug": "instalar-python",
+    "title": "Instalación de Python 3 y Configuración de Entorno",
+    "titleNormalized": "instalacion de python 3 y configuracion de entorno",
+    "summary": "Instala el intérprete de Python 3, configura la variable de entorno PATH y deja tu terminal lista para ejecutar herramientas y agentes de IA.",
+    "summaryNormalized": "instala el interprete de python 3, configura la variable de entorno path y deja tu terminal lista para ejecutar herramientas y agentes de ia.",
+    "track": "python",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "python",
+      "pip"
+    ],
+    "toolsNormalized": [
+      "python",
+      "pip"
+    ],
+    "tags": [
+      "python",
+      "runtime",
+      "inteligencia-artificial",
+      "herramientas-base"
+    ],
+    "tagsNormalized": [
+      "python",
+      "runtime",
+      "inteligencia-artificial",
+      "herramientas-base"
+    ],
+    "errorSymptoms": [
+      "'python' no se reconoce como un comando interno o externo, o se abre la Microsoft Store",
+      "command not found: python (en macOS o Linux)"
+    ],
+    "errorSymptomsNormalized": [
+      "'python' no se reconoce como un comando interno o externo, o se abre la microsoft store",
+      "command not found: python (en macos o linux)"
+    ]
+  },
+  {
+    "id": "instalar-uv",
+    "slug": "instalar-uv",
+    "title": "Instalación de uv y Manejo de Entornos Virtuales",
+    "titleNormalized": "instalacion de uv y manejo de entornos virtuales",
+    "summary": "Instala uv, el gestor de paquetes y proyectos Python ultrarrápido desarrollado en Rust por Astral, y aprende a crear tu primer entorno virtual aislado.",
+    "summaryNormalized": "instala uv, el gestor de paquetes y proyectos python ultrarrapido desarrollado en rust por astral, y aprende a crear tu primer entorno virtual aislado.",
+    "track": "python",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "uv",
+      "python"
+    ],
+    "toolsNormalized": [
+      "uv",
+      "python"
+    ],
+    "tags": [
+      "uv",
+      "entornos-virtuales",
+      "astral",
+      "python",
+      "agentes"
+    ],
+    "tagsNormalized": [
+      "uv",
+      "entornos-virtuales",
+      "astral",
+      "python",
+      "agentes"
+    ],
+    "errorSymptoms": [
+      "'uv' no se reconoce como un comando interno o externo",
+      "File ... cannot be loaded because running scripts is disabled on this system (al activar un entorno en PowerShell)"
+    ],
+    "errorSymptomsNormalized": [
+      "'uv' no se reconoce como un comando interno o externo",
+      "file ... cannot be loaded because running scripts is disabled on this system (al activar un entorno en powershell)"
+    ]
   }
 ]

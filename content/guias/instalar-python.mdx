@@ -1,0 +1,99 @@
+---
+title: "Instalación de Python 3 y Configuración de Entorno"
+slug: "instalar-python"
+summary: "Instala el intérprete de Python 3, configura la variable de entorno PATH y deja tu terminal lista para ejecutar herramientas y agentes de IA."
+track: "python"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "python"
+  - "pip"
+tags:
+  - "python"
+  - "runtime"
+  - "inteligencia-artificial"
+  - "herramientas-base"
+prerequisites:
+  - "instalar-git"
+related:
+  - "instalar-uv"
+  - "instalar-nodejs"
+timeMinutes: 10
+verifiedAt: "2026-09-29"
+appliesTo:
+  python: ">=3.12.0"
+evidence:
+  windows: "ejecutada"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://www.python.org/downloads/"
+  - "https://docs.python.org/3/using/windows.html"
+  - "https://docs.python.org/3/using/mac.html"
+  - "https://docs.python.org/3/using/unix.html"
+errors:
+  - symptom: "'python' no se reconoce como un comando interno o externo, o se abre la Microsoft Store"
+    cause: "El instalador no agregó los ejecutables a la variable PATH de Windows o los alias de ejecución de aplicaciones están interfiriendo."
+    fix: "Desactiva los alias de Python en Configuración de Windows > Aplicaciones > Alias de ejecución de aplicaciones. Si persiste, reinstala Python asegurándote de marcar la casilla 'Add python.exe to PATH'."
+  - symptom: "command not found: python (en macOS o Linux)"
+    cause: "En sistemas tipo Unix modernos, el comando predeterminado se nombra 'python3' para evitar conflictos con versiones históricas."
+    fix: "Prueba ejecutando 'python3 --version'. Si responde con la versión, puedes usar 'python3' o configurar un alias en tu archivo .bashrc o .zshrc."
+---
+
+Python es el lenguaje de programación por excelencia en el ecosistema de la Inteligencia Artificial. La gran mayoría de librerías, marcos de trabajo (como LangChain o CrewAI) y agentes autónomos modernos se ejecutan sobre su motor.
+
+### Conceptos clave antes de empezar
+
+Si nunca has usado una terminal, estos términos te acompañarán a lo largo de tu viaje técnico:
+
+* **¿Qué es el intérprete de Python?**: Es el programa que lee las instrucciones escritas en archivos `.py` y las traduce al instante para que el procesador de tu computadora las entienda.
+* **¿Qué es una variable de entorno y qué es el `PATH`?**: Imagina el `PATH` como una libreta de direcciones secreta que tiene tu sistema operativo. Cuando escribes `python` en la terminal, el sistema consulta esa libreta para saber en qué carpeta exacta del disco duro está guardado el programa. Si la carpeta no está en la libreta, el sistema te dirá que "el comando no existe".
+* **¿Por qué hay que cerrar y reabrir la terminal?**: Cuando abres una ventana de terminal, esta lee la libreta de direcciones (`PATH`) en ese instante. Si instalas un programa nuevo mientras la consola está abierta, esa ventana no se entera de la actualización hasta que la cierras y abres una nueva sesión fresca.
+
+<Steps>
+  <Step number="1" title="Instala Python 3 según tu Sistema Operativo">
+    Elige la pestaña de tu sistema operativo y corre el comando recomendado en tu consola:
+
+    <OsTabs
+      windowsCmd="winget install --id Python.Python.3.12 -e --source winget"
+      windowsDesc="En PowerShell de Windows (instala Python 3.12 estable y oficial):"
+      macosCmd="brew install python@3.12"
+      macosDesc="En macOS usando el gestor Homebrew:"
+      linuxCmd="sudo apt update && sudo apt install -y python3 python3-pip python3-venv"
+      linuxDesc="En Ubuntu/Debian mediante el gestor oficial APT:"
+    />
+  </Step>
+
+  <Step number="2" title="Cierra y Reabre tu Terminal">
+    Para asegurar que el sistema operativo registre la nueva ubicación de Python en su variable `PATH`, cierra completamente tu ventana de terminal (PowerShell, Terminal de Windows, iTerm2 o Bash) y abre una nueva ventana limpia.
+  </Step>
+
+  <Step number="3" title="Comprueba el Acceso a Python">
+    En tu nueva terminal, ejecuta el comando de verificación. En Windows, si instalaste con el instalador oficial, también dispones del comando lanzador `py`:
+
+    <CodeBlock
+      filename="comprobar-python.sh"
+      language="bash"
+      code="python --version || python3 --version"
+    />
+  </Step>
+</Steps>
+
+<Verify
+  command="python --version"
+  expectedOutput="Python 3.12.9"
+  description="Abre una terminal nueva y ejecuta el siguiente comando para comprobar que Python responde con su versión instalada:"
+>
+  Cualquier versión igual o superior a `Python 3.12.0` es ideal para el desarrollo de agentes de IA y servidores MCP. En Windows, si `python` no responde pero `py --version` muestra tu versión, tu instalación es válida.
+</Verify>
+
+<Callout type="peligro" title="Seguridad: Ojo con privilegios de administrador">
+  Nunca ejecutes comandos de instalación de librerías ni scripts de Python utilizando permisos de Administrador o <code>sudo</code>. Hacerlo puede sobreescribir archivos críticos del sistema operativo. En el siguiente paso aprenderemos a crear entornos virtuales aislados con <code>uv</code> para proteger tu sistema.
+</Callout>
+
+<Callout type="tip" title="Siguiente paso formativo">
+  ¡Excelente! Con Python instalado, estás listo para instalar <code>uv</code>, la herramienta moderna que te permitirá crear entornos de trabajo aislados en milisegundos. Continúa con la guía de <a href="/guias/instalar-uv">Instalación de uv</a>.
+</Callout>

@@ -1,0 +1,99 @@
+---
+title: "Instalación de uv y Manejo de Entornos Virtuales"
+slug: "instalar-uv"
+summary: "Instala uv, el gestor de paquetes y proyectos Python ultrarrápido desarrollado en Rust por Astral, y aprende a crear tu primer entorno virtual aislado."
+track: "python"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "uv"
+  - "python"
+tags:
+  - "uv"
+  - "entornos-virtuales"
+  - "astral"
+  - "python"
+  - "agentes"
+prerequisites:
+  - "instalar-python"
+related:
+  - "instalar-python"
+  - "instalar-nodejs"
+timeMinutes: 8
+verifiedAt: "2026-09-29"
+appliesTo:
+  uv: ">=0.5.0"
+evidence:
+  windows: "ejecutada"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://docs.astral.sh/uv/"
+  - "https://docs.astral.sh/uv/getting-started/installation/"
+  - "https://docs.astral.sh/uv/pip/environments/"
+errors:
+  - symptom: "'uv' no se reconoce como un comando interno o externo"
+    cause: "La ruta de instalación de uv ($HOME/.local/bin o %USERPROFILE%\\.local\\bin) no ha sido cargada por la sesión activa de la consola."
+    fix: "Cierra todas las ventanas de tu terminal y abre una nueva. Si el inconveniente persiste en Windows, comprueba que la carpeta C:\\Users\\TuUsuario\\.local\\bin aparezca en las Variables de Entorno de tu usuario."
+  - symptom: "File ... cannot be loaded because running scripts is disabled on this system (al activar un entorno en PowerShell)"
+    cause: "La directiva de seguridad de ejecución de scripts de Windows (ExecutionPolicy) bloquea por defecto la activación de entornos virtuales en PowerShell."
+    fix: "En PowerShell, ejecuta: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned, confirma escribiendo 'S' (Sí) y presiona Enter. Luego intenta activar tu entorno nuevamente."
+---
+
+En el mundo de los agentes de Inteligencia Artificial, las librerías evolucionan a diario. Para evitar conflictos entre versiones de paquetes y trabajar a una velocidad impresionante, utilizaremos **uv**, una herramienta moderna desarrollada en Rust por la empresa Astral.
+
+### Conceptos clave que debes conocer
+
+* **¿Por qué usamos `uv` en vez de `pip` tradicional?**: Tradicionalmente, Python utiliza una herramienta llamada `pip`. Sin embargo, `pip` suele ser lento resolviendo dependencias y a veces genera conflictos. `uv` realiza las mismas tareas entre 10 y 100 veces más rápido y gestiona las versiones de Python automáticamente sin complicaciones.
+* **¿Qué es un entorno virtual (`venv`)?**: Imagina que estás construyendo dos agentes de IA distintos: el "Agente A" necesita una versión específica de una librería, pero el "Agente B" necesita otra más nueva. Si instalas todo en tu computadora sin aislar, uno de los dos va a fallar. Un entorno virtual es una "caja de arena" o carpeta privada (usualmente llamada `.venv`) donde viven las librerías exclusivas de ese proyecto.
+* **¿Qué es la política de ejecución (`ExecutionPolicy`) de PowerShell?**: Es un escudo de protección que Windows activa por defecto para que ningún script descargado de internet se ejecute a escondidas en tu máquina. Al cambiarlo a `RemoteSigned` para tu usuario, permites que los scripts de activación de entornos creados en tu propia computadora se ejecuten sin peligro.
+
+<Steps>
+  <Step number="1" title="Instala uv con el Instalador Oficial Standalone">
+    Selecciona la pestaña de tu sistema operativo y corre el comando oficial recomendado por Astral:
+
+    <OsTabs
+      windowsCmd="powershell -ExecutionPolicy ByPass -c &#34;irm https://astral.sh/uv/install.ps1 | iex&#34;"
+      windowsDesc="En Windows mediante el instalador oficial de PowerShell:"
+      macosCmd="curl -LsSf https://astral.sh/uv/install.sh | sh"
+      macosDesc="En macOS con el script oficial (o mediante 'brew install uv'):"
+      linuxCmd="curl -LsSf https://astral.sh/uv/install.sh | sh"
+      linuxDesc="En Linux mediante el script de instalación oficial standalone:"
+    />
+  </Step>
+
+  <Step number="2" title="Cierra y Vuelve a Abrir tu Terminal">
+    El instalador colocó el ejecutable de `uv` en la carpeta `.local/bin` de tu usuario. Cierra la terminal abierta y abre una nueva para que reconozca el comando de forma global.
+  </Step>
+
+  <Step number="3" title="Crea tu Primer Entorno Virtual">
+    Abre tu terminal en cualquier carpeta de práctica y crea un entorno virtual con el siguiente comando:
+
+    <CodeBlock
+      filename="crear-entorno.sh"
+      language="bash"
+      code="uv venv"
+    />
+
+    Observarás que `uv` crea una carpeta llamada `.venv` en cuestión de milisegundos.
+  </Step>
+</Steps>
+
+<Verify
+  command="uv --version"
+  expectedOutput="uv 0.12.20 (o superior)"
+  description="Ejecuta el siguiente comando en tu nueva ventana de terminal para verificar la instalación:"
+>
+  Si ves en pantalla un mensaje similar a <code>uv 0.12.x (x86_64-pc-windows-msvc)</code>, ¡todo está perfecto! Ya tienes listo el motor de ejecución para tus proyectos de IA.
+</Verify>
+
+<Callout type="peligro" title="Seguridad: Cuidado con dependencias de terceros">
+  Cuando comiences a desarrollar agentes de IA y a instalar paquetes de Python, revisa siempre el nombre exacto de la librería en PyPI. Nunca instales paquetes recomendados por scripts desconocidos en tu entorno global de sistema; trabaja siempre dentro de un entorno virtual aislado (<code>.venv</code>).
+</Callout>
+
+<Callout type="tip" title="Comando útil: uvx">
+  <code>uv</code> incluye una utilidad llamada <code>uvx</code> (similar a <code>npx</code> en Node.js), la cual te permite ejecutar herramientas y servidores MCP escritos en Python temporalmente sin tener que instalarlos de forma permanente en tu máquina.
+</Callout>

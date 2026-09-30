@@ -34,6 +34,13 @@ const CHECKLIST_ITEMS: ChecklistItem[] = [
     guideText: "Ver guía de Node.js →",
   },
   {
+    id: "python-setup",
+    title: "Python 3.12+ y uv listos",
+    desc: "Python instalado con PATH configurado y el gestor de paquetes uv disponible.",
+    guideLink: "/guias/instalar-python",
+    guideText: "Ver guía de Python →",
+  },
+  {
     id: "code-editor",
     title: "Editor de código o IDE listo",
     desc: "Tener instalado VS Code, Cursor u otro editor con el que te sientas cómodo trabajando.",
