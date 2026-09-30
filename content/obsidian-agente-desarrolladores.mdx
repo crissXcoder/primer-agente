@@ -1,0 +1,349 @@
+---
+title: "Bóveda de Obsidian separada del proyecto: usar --add-dir con tu agente"
+slug: "obsidian-agente-desarrolladores"
+summary: "Usa una bóveda de Obsidian fuera del repositorio como contexto adicional de Claude Code o Codex, y conserva claro cuál carpeta dirige cada sesión."
+track: "conocimiento"
+audience: "programadores"
+level: "intermedio"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "obsidian"
+  - "claude-code"
+  - "codex"
+  - "git"
+  - "vscode"
+tags:
+  - "obsidian"
+  - "add-dir"
+  - "claude-md"
+  - "boveda"
+  - "repo"
+  - "ide"
+prerequisites:
+  - "obsidian-boveda-primeros-pasos"
+  - "instalar-git"
+related:
+  - "obsidian-agente-sin-programar"
+timeMinutes: 30
+verifiedAt: "2026-09-29"
+appliesTo:
+  claude-code: "Claude Code CLI y extensión de VS Code"
+  codex: "Codex CLI"
+  obsidian: "Obsidian Desktop"
+  vscode: "VS Code con workspace de una o varias carpetas"
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://code.claude.com/docs/en/memory"
+  - "https://code.claude.com/docs/en/cli-reference"
+  - "https://code.claude.com/docs/en/settings"
+  - "https://code.claude.com/docs/en/skills"
+  - "https://code.claude.com/docs/en/permissions"
+  - "https://developers.openai.com/codex/cli/features"
+  - "https://learn.chatgpt.com/docs/developer-commands"
+  - "https://learn.chatgpt.com/docs/agent-configuration/agents-md"
+  - "https://learn.chatgpt.com/docs/agent-approvals-security"
+  - "https://learn.chatgpt.com/docs/config-file/config-advanced"
+  - "https://learn.chatgpt.com/docs/build-skills"
+  - "https://learn.chatgpt.com/docs/windows/wsl"
+  - "https://obsidian.md/help/data-storage"
+  - "https://obsidian.md/help/configuration-folder"
+  - "https://obsidian.md/help/plugins/graph"
+  - "https://obsidian.md/help/plugins/backlinks"
+  - "https://obsidian.md/help/backup"
+  - "https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces"
+  - "https://git-scm.com/docs/gitignore"
+  - "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.6"
+  - "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/set_1"
+  - "https://www.gnu.org/software/bash/manual/bash.html"
+  - "https://github.com/anthropics/claude-code/issues/21138"
+  - "https://github.com/anthropics/claude-code/issues/79489"
+  - "https://www.anthropic.com/legal/consumer-terms"
+  - "https://openai.com/policies/privacy-policy/"
+errors:
+  - symptom: "El CLAUDE.md de una carpeta añadida no aparece en el contexto de Claude Code."
+    cause: "Por defecto Claude Code da acceso a la carpeta adicional, pero no carga allí las instrucciones CLAUDE.md."
+    fix: "Define CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1 antes de iniciar Claude Code con --add-dir y confirma en /context que la memoria de esa carpeta aparece."
+  - symptom: "En un workspace de varias carpetas de VS Code, Claude Code no aplica el CLAUDE.md de una carpeta secundaria."
+    cause: "Un reporte de issue describe ese comportamiento cuando la extensión convierte las carpetas secundarias en directorios adicionales."
+    fix: "Comprueba /context. Si necesitas ese CLAUDE.md, habilita CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1 y vuelve a iniciar la sesión. Este reporte describe una configuración concreta, no todas las versiones o workspaces."
+  - symptom: "El agente puede escribir en la bóveda aunque el repositorio sea su carpeta principal."
+    cause: "Codex documenta que --add-dir concede acceso de escritura a la carpeta adicional; el sandbox y la política de aprobación determinan cómo se ejecutan las acciones."
+    fix: "Usa lectura solamente durante la exploración, revisa /permissions y /status, y agrega permisos de escritura solo cuando los necesites."
+  - symptom: "Codex se siente lento al trabajar en una carpeta de Windows desde WSL."
+    cause: "La documentación de Codex advierte que las rutas montadas bajo /mnt/c pueden ser más lentas que el sistema de archivos de Linux."
+    fix: "Guarda el repositorio dentro del sistema de archivos de WSL si quieres optimizar I/O; si la bóveda sigue en Windows, añade solo esa carpeta y ten presente la diferencia de rendimiento documentada."
+---
+
+# Bóveda de Obsidian separada del proyecto
+
+<Badge status="verified" label="Guía técnica revisada en documentación oficial" />
+
+## Qué vas a lograr y por qué separar las carpetas
+
+Vas a dejar el código en su repositorio Git y mantener tus notas de trabajo en otra carpeta. En cada sesión eliges cuál carpeta es la principal y cuál se añade como contexto adicional.
+
+Separarlas mantiene distintos los historiales de Git y reduce el riesgo de incluir notas privadas en un commit del código. También evita que el agente mezcle bitácoras y notas personales con los archivos que necesita para programar. Añadir una carpeta al agente puede darle capacidad de lectura o escritura, así que la separación de rutas ayuda a decidir permisos con intención.
+
+Hay una excepción práctica: si la documentación pertenece al proyecto y quieres navegarla en Obsidian, puedes abrir `docs/` como una bóveda. En ese caso, ignorá `.obsidian/` en el Git del proyecto si no querés versionar preferencias de la bóveda. Obsidian también permite conservar la configuración y excluir solo los archivos de layout que cambian a menudo.
+
+## Elige dónde vivirán el repo y la bóveda
+
+Una disposición clara puede verse así:
+
+**Repositorio:**
+
+<RutaArchivos relativePath="codigo/mi-proyecto" userName="ana" />
+
+**Bóveda:**
+
+<RutaArchivos relativePath="Obsidian/Conocimiento" userName="ana" />
+
+Estas rutas son ejemplos. Escoge carpetas distintas, preferiblemente fuera de OneDrive, iCloud o Dropbox si no necesitas que esas carpetas se sincronicen. No agregues la carpeta personal completa (`C:\Users\ana`, `/Users/ana` o `/home/ana`) ni la raíz de un disco (`C:\` o `/`) como carpeta adicional. Añade la carpeta concreta que necesitas y revisa su ruta antes de iniciar.
+
+Si usas Git para versionar la bóveda, Obsidian indica que `.obsidian/workspace.json` y `.obsidian/workspaces.json` guardan el layout actual y suelen cambiar al abrir archivos. Puedes añadir esta regla al `.gitignore` de la bóveda:
+
+```gitignore
+.obsidian/workspace*.json
+```
+
+Eso conserva otras preferencias de `.obsidian/`. Revisa `git status --short` antes de hacer el commit inicial para confirmar que vas a versionar las notas correctas y que no incluiste secretos.
+
+## Opción A: inicia desde el repo y añade la bóveda
+
+Esta es la opción recomendada para programar. El repositorio sigue siendo la carpeta principal y, por tanto, el punto de partida para sus instrucciones y operaciones habituales de Git. Claude Code permite añadir una o más carpetas de trabajo con `--add-dir`; Codex permite repetir `--add-dir` para añadir rutas con acceso de escritura.
+
+Usa la sintaxis del shell que realmente abriste. Pon cada ruta entre comillas para que los espacios no la separen en argumentos distintos.
+
+**Windows — PowerShell:**
+
+```powershell
+Set-Location "C:\Users\ana\codigo\mi-proyecto"
+claude --add-dir "C:\Users\ana\Obsidian\Conocimiento" "C:\Users\ana\Obsidian\Proyecto"
+```
+
+**Windows — Símbolo del sistema (cmd):**
+
+```bat
+cd /d "C:\Users\ana\codigo\mi-proyecto"
+claude --add-dir "C:\Users\ana\Obsidian\Conocimiento" "C:\Users\ana\Obsidian\Proyecto"
+```
+
+**macOS — Terminal con Zsh:**
+
+```zsh
+cd "/Users/ana/codigo/mi-proyecto"
+claude --add-dir "/Users/ana/Obsidian/Conocimiento" "/Users/ana/Obsidian/Proyecto"
+```
+
+**Linux — Terminal con Bash:**
+
+```bash
+cd "/home/ana/codigo/mi-proyecto"
+claude --add-dir "/home/ana/Obsidian/Conocimiento" "/home/ana/Obsidian/Proyecto"
+```
+
+La carpeta adicional permite que Claude Code lea archivos; las escrituras siguen el modo de permisos activo. Dentro de una sesión puedes usar `/add-dir` para añadir una carpeta. El ajuste persistente es `permissions.additionalDirectories` en settings de Claude Code. Ese ajuste concede acceso a archivos, pero no carga automáticamente skills ni otras configuraciones de `.claude/`.
+
+Para Codex, establece explícitamente la carpeta principal con `--cd` y añade la bóveda. El ejemplo usa el sandbox de escritura del workspace y aprobación bajo demanda; no uses el modo de acceso total para este flujo.
+
+```powershell
+codex --cd "C:\Users\ana\codigo\mi-proyecto" --add-dir "C:\Users\ana\Obsidian\Conocimiento" --sandbox workspace-write --ask-for-approval on-request
+```
+
+```bash
+codex --cd "/Users/ana/codigo/mi-proyecto" --add-dir "/Users/ana/Obsidian/Conocimiento" --sandbox workspace-write --ask-for-approval on-request
+```
+
+En Linux, conserva el mismo orden de carpetas y usa las rutas Linux:
+
+```bash
+codex --cd "/home/ana/codigo/mi-proyecto" --add-dir "/home/ana/Obsidian/Conocimiento" --sandbox workspace-write --ask-for-approval on-request
+```
+
+Codex acepta más de una carpeta; repite `--add-dir` cuando realmente haga falta, por ejemplo `--add-dir "/ruta/a/la/boveda" --add-dir "/ruta/a/otra-carpeta"`. Cada ruta nueva amplía el acceso, así que agrega solo las que use la tarea.
+
+En Codex, `--add-dir` da acceso de escritura a las carpetas agregadas. La aprobación bajo demanda no cambia el límite del sandbox: lee cada solicitud y confirma el alcance antes de aceptarla.
+
+**Comprobación:** en Claude Code ejecuta `/context` y confirma qué instrucciones se cargaron. Luego pide: “Resume `STATE.md` de la bóveda y cita la ruta que leíste. No modifiques ningún archivo.” Si no tienes una nota con ese nombre, sustituíla por una nota de estado existente. En Codex usa `/status` o `/permissions` para revisar las carpetas y el sandbox, y pide el mismo resumen sin cambios.
+
+<Badge status="verified" label="Prueba parcial ejecutada en Windows" />
+
+En una prueba temporal, Claude Code con `--add-dir` pudo invocar una skill guardada en la carpeta adicional. La prueba usó marcadores desechables: no demuestra el comportamiento de otras versiones, shells o sistemas operativos.
+
+## Carga el CLAUDE.md de la bóveda
+
+Si inicias Claude Code en el repo, `CLAUDE.md` de la bóveda no se carga automáticamente solo por añadir esa carpeta. Es un motivo común para que el agente no siga instrucciones que sí están en una nota de la bóveda.
+
+<Badge status="review" label="Reporte de issue; el comportamiento actual está documentado" />
+
+El issue [#21138](https://github.com/anthropics/claude-code/issues/21138) señaló que esta opción y su variable no aparecían en la documentación cuando se abrió el reporte. La documentación actual sí explica la carga desde carpetas añadidas; usa esa guía como referencia vigente y el issue como historial del problema documental.
+
+Para cargar las instrucciones de directorios adicionales, define `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` antes de iniciar la sesión con `--add-dir`:
+
+**PowerShell:**
+
+```powershell
+$env:CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD = "1"
+claude --add-dir "C:\Users\ana\Obsidian\Conocimiento"
+```
+
+**cmd:**
+
+```bat
+set CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1
+claude --add-dir "C:\Users\ana\Obsidian\Conocimiento"
+```
+
+**Bash o Zsh:**
+
+```bash
+CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1 claude --add-dir "/Users/ana/Obsidian/Conocimiento"
+```
+
+En PowerShell, la variable se aplica a la ventana actual y a los procesos que se inician desde ella. En `cmd`, `set` se aplica a esa ventana. En Bash/Zsh, la forma anterior establece la variable para ese comando. Para dejarlo configurado en todas las sesiones de Claude Code, la documentación permite ponerlo en el bloque `env` de `~/.claude/settings.json` —en Windows ese directorio corresponde a `%USERPROFILE%\.claude`—:
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1"
+  },
+  "permissions": {
+    "additionalDirectories": [
+      "/Users/ana/Obsidian/Conocimiento"
+    ]
+  }
+}
+```
+
+Usa en `additionalDirectories` la ruta real de tu equipo. Este ajuste persistente agrega acceso a archivos; si también quieres que Claude cargue skills desde la bóveda, inicia con `--add-dir` o añade la carpeta con `/add-dir`.
+
+Con la variable activa, Claude Code puede cargar desde una carpeta añadida `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/*.md` y `CLAUDE.local.md`. El `CLAUDE.md` del directorio principal y sus carpetas ascendentes se carga al iniciar; los archivos de instrucciones en subcarpetas se incorporan cuando Claude trabaja en ellas. Confirma la lista en `/context`; `/memory` muestra las ubicaciones de memoria conocidas.
+
+Los archivos `CLAUDE.md` son contexto para el modelo, no una barrera técnica obligatoria. Mantén cada uno breve —la guía recomienda menos de 200 líneas— y usa hooks o permisos para reglas que deban bloquear acciones. Por defecto, Claude lee `AGENTS.md` si no encuentra `CLAUDE.md`, `.claude/CLAUDE.md` ni `CLAUDE.local.md` en la carpeta principal o sus ancestros. Si necesitas cargar ambos, abre `/config` y elige `claude-md-and-agents-md` en Project instructions, o añade `@AGENTS.md` al `CLAUDE.md`; en Windows la documentación recomienda la importación en lugar de un enlace simbólico. La variable de directorios adicionales no carga `AGENTS.md` que esté en la bóveda.
+
+## Skills de la bóveda
+
+<Badge status="verified" label="Documentado oficialmente" />
+
+Claude Code documenta skills en `.claude/skills/<nombre>/SKILL.md` dentro de un directorio añadido con `--add-dir` o `/add-dir`. Revisa `/skills` para confirmar que aparece una skill de la bóveda. Si quieres una skill disponible en todos tus repositorios, una alternativa es instalarla en `~/.claude/skills/`.
+
+**No confundas mecanismos:** una ruta agregada mediante el ajuste `permissions.additionalDirectories` recibe acceso a archivos, pero la documentación dice que no carga skills desde esa ruta. Para las skills de la bóveda, usa el flag o el comando de sesión.
+
+Codex usa otro formato y otras ubicaciones. Sus skills locales se descubren en `.agents/skills/` desde la carpeta donde inicia Codex hacia arriba hasta la raíz del repo, y también puede usar skills globales de `~/.agents/skills/`. No asumas que una skill dentro de una carpeta externa añadida con `--add-dir` se va a descubrir automáticamente.
+
+## Opción B: inicia desde la bóveda y añade el repo
+
+Este modo sirve para escribir bitácoras, preparar ADR o resumir el estado del proyecto. La bóveda pasa a ser el directorio principal; el repo queda como carpeta adicional.
+
+**PowerShell:**
+
+```powershell
+Set-Location "C:\Users\ana\Obsidian\Conocimiento"
+claude --add-dir "C:\Users\ana\codigo\mi-proyecto"
+```
+
+**macOS:**
+
+```bash
+cd "/Users/ana/Obsidian/Conocimiento"
+claude --add-dir "/Users/ana/codigo/mi-proyecto"
+```
+
+**Linux:**
+
+```bash
+cd "/home/ana/Obsidian/Conocimiento"
+claude --add-dir "/home/ana/codigo/mi-proyecto"
+```
+
+Para Codex, pon la bóveda en `--cd` y agrega el repo:
+
+```bash
+codex --cd "/Users/ana/Obsidian/Conocimiento" --add-dir "/Users/ana/codigo/mi-proyecto" --sandbox workspace-write --ask-for-approval on-request
+```
+
+En Linux, usa la ruta de la bóveda y del repo dentro del sistema de archivos Linux:
+
+```bash
+codex --cd "/home/ana/Obsidian/Conocimiento" --add-dir "/home/ana/codigo/mi-proyecto" --sandbox workspace-write --ask-for-approval on-request
+```
+
+Ahora las instrucciones principales se buscan desde la bóveda. Codex descubre `AGENTS.md` desde el proyecto correspondiente a `--cd`; no cuentes con que cargue el `AGENTS.md` del repo solo porque el repo está añadido. Para operaciones de Git, comprueba primero la carpeta objetivo y usa `git -C "/ruta/al/mi-proyecto" status` cuando quieras operar explícitamente sobre el repo. En Claude Code, los comandos de terminal parten de la ubicación actual de la sesión salvo que indiques otra ruta.
+
+**Comprobación:** en Claude usa `/context`; en Codex revisa el espacio de trabajo con `/status`. En ambos pide una lectura de `STATE.md` sin editar y confirma que la ruta pertenece a la bóveda.
+
+## Obsidian, VS Code y el agente son herramientas distintas
+
+Obsidian es un lector y editor de notas Markdown con funciones para seguir enlaces, ver backlinks y explorar un grafo de relaciones. No sustituye al IDE ni es necesario abrir ahí el repositorio de código.
+
+Puedes tener Obsidian abierto con la bóveda, VS Code abierto con el repo y Claude Code o Codex trabajando en una sesión. También puedes abrir la bóveda como carpeta en VS Code. Si necesitas ver repo y bóveda juntos, abre el repo y usa **File → Add Folder to Workspace** para agregar la bóveda; los nombres de menú pueden variar según idioma y versión. VS Code permite un workspace con varias carpetas, pero añadir dos carpetas al editor no significa que cada agente las trate igual ni garantiza que sus instrucciones se carguen.
+
+<Badge status="review" label="Reporte de issue, no garantía general" />
+
+En un issue, una persona reportó que la extensión de Claude Code en Windows convirtió las carpetas secundarias de un workspace multi-carpeta en directorios adicionales y no cargó su `CLAUDE.md` secundario sin la variable mencionada antes. Usa `/context` para inspeccionar lo que sí se cargó; no infieras la carga a partir de que la carpeta aparezca en el Explorer de VS Code.
+
+No edites la misma nota a la vez desde Obsidian y desde el agente. Al terminar una escritura, confirma el archivo en el sistema de archivos y vuelve a abrirlo en Obsidian si no se actualiza.
+
+## Codex: directorio principal, archivos AGENTS.md y permisos
+
+<Badge status="verified" label="Documentado oficialmente" />
+
+En Codex, `--cd` define el directorio de trabajo; `--add-dir` otorga escritura adicional a otras carpetas. Los archivos `AGENTS.md` se buscan desde la raíz del proyecto hacia el directorio de trabajo actual, y la configuración de proyecto también se resuelve desde el árbol de trabajo. Para que las instrucciones y configuración de la bóveda sean las principales, inicia Codex con `--cd` apuntando a la bóveda; si la bóveda solo está como carpeta adicional, Codex no documenta cargar desde ella instrucciones, skills o configuración como si fuese parte del árbol del repo.
+
+Confirma con `/status` qué directorios están en el workspace y con `/permissions` qué sandbox está activo. Para una primera lectura usa `--sandbox read-only --ask-for-approval on-request`. Cuando necesites escritura, cambia deliberadamente a `workspace-write` y conserva la aprobación bajo demanda. Nunca uses `--dangerously-bypass-approvals-and-sandbox` para este flujo.
+
+En Claude Code, las reglas `permissions.deny` pueden bloquear lecturas como `Read(./.env)` o `Read(./secrets/**)` en relación con la carpeta de trabajo. Recuerda que esas reglas no equivalen al aislamiento del sistema operativo y revisa su alcance en la documentación antes de copiar rutas. Para Codex, prefiere los límites del sandbox y las solicitudes de permiso documentadas en lugar de asumir que una carpeta adicional es solo de lectura.
+
+<Callout type="peligro">
+  Aunque la bóveda y sus archivos permanezcan en tu computadora, el texto que el agente lea para responder se envía al proveedor del modelo. No guardés contraseñas, tokens, archivos `.env`, datos de clientes ni información confidencial en una carpeta que vayas a añadir a la sesión. La carpeta adicional también puede permitir escritura: mantené un commit de respaldo y revisá cada cambio.
+</Callout>
+
+## Qué guardar en el repo y qué guardar en la bóveda
+
+| Repo de código | Bóveda de conocimiento |
+| --- | --- |
+| ADR aceptadas, README y documentación de API vigente | Exploración, notas de investigación y bitácoras de sesiones |
+| Instrucciones compartidas que el equipo necesita para mantener el proyecto | Contexto personal o notas que todavía no forman parte de una decisión aceptada |
+| Código y pruebas que deben revisarse y publicarse junto al producto | `STATE.md` y notas de trabajo del agente, respaldadas en un repositorio separado si corresponde |
+
+Si una conclusión de la bóveda se convierte en una decisión acordada del equipo, pásala al repo mediante revisión normal de código y documentación. La bóveda no debería convertirse en el único lugar donde se conservan decisiones necesarias para mantener el proyecto.
+
+## Flujo de una sesión
+
+**Inicio:** comprueba la carpeta principal, revisa `/context` o `/status` y pide una lectura sin modificaciones.
+
+> Lee `STATE.md` de la bóveda y la nota del proyecto relacionada con esta tarea. Resume el estado, cita las rutas consultadas y enumera dudas. No cambies archivos.
+
+**Trabajo:** pide un plan para una nota o tarea concreta. Si necesita leer ambas carpetas, especifica los archivos o temas pertinentes y revisa cada permiso. Para escritura, pide una propuesta antes de aplicarla.
+
+> Trabaja en la tarea acordada usando el repo como fuente de código y la bóveda como contexto. Antes de guardar nada, enséñame los archivos afectados y un diff propuesto. No borres archivos ni amplíes el acceso a otras carpetas.
+
+**Cierre:** revisa primero la propuesta de cambios a `STATE.md` y la nueva nota de sesión; luego verifica diffs y estado Git por separado.
+
+> Prepara una actualización de `STATE.md` y una nota de sesión con lo realizado, decisiones y pendientes. Antes de escribir, muéstrame el diff propuesto de ambos archivos. No borres nada ni hagas commit. Espera mi aprobación.
+
+Si el repo y la bóveda tienen repositorios Git distintos, revisa ambos explícitamente, por ejemplo con `git -C "/ruta/al/mi-proyecto" status --short` y `git -C "/ruta/a/mi-boveda" status --short`.
+
+## Errores frecuentes
+
+- **Ruta mal escrita o inexistente:** Claude Code valida que `--add-dir` apunte a una carpeta existente. Copia la ruta desde el explorador y confirma el resultado antes de abrir el agente.
+- **Comillas o separadores en Windows:** usa comillas dobles cuando la ruta contiene espacios. PowerShell acepta rutas con barras invertidas; no pegues una ruta de Windows en una sesión que realmente corre dentro de WSL.
+- **Variable con sintaxis de otro shell:** en Bash/Zsh sirve `NOMBRE=valor comando`; PowerShell usa `$env:NOMBRE = "valor"`; en `cmd`, usa `set NOMBRE=valor` en la misma ventana antes del comando. No reutilices literalmente la forma de Bash en PowerShell.
+- **El CLAUDE.md adicional no aparece:** es el comportamiento predeterminado. Activa la variable, reinicia la sesión y revisa `/context`.
+- **WSL y una bóveda en Windows:** una ruta de Windows puede mostrarse como `/mnt/c/...`. Codex documenta que trabajar bajo `/mnt/c` puede ser más lento que guardar el repo dentro del sistema de archivos de WSL. Mantén cada ruta dentro del entorno donde la vas a usar y no confundas `/mnt/c` con una ruta Linux independiente.
+- **Directorio adicional demasiado amplio:** detén la sesión, quita el acceso y vuelve a iniciarla con la carpeta específica que necesitas. Nunca agregues la raíz del disco ni todo tu home.
+- **Permiso que no entiendes:** no lo apruebes todavía. Comprueba qué herramienta lo solicita, qué ruta toca y si hace una lectura, escritura o comando; luego decide.
+
+## ¿Cómo sé que funcionó?
+
+- En la opción A, el directorio principal es el repo y el listado de contexto incluye la bóveda como carpeta adicional.
+- En la opción B, el directorio principal es la bóveda; cuando necesites Git en el proyecto, indicas la ruta del repo de forma explícita.
+- En Claude Code, `/context` confirma las instrucciones cargadas; `/skills` muestra las skills disponibles. En Codex, `/status` y `/permissions` confirman el workspace y el sandbox.
+- La primera solicitud resume una nota de estado con su ruta y no modifica archivos.
+- `git status --short` confirma que los cambios del repo y los cambios de la bóveda siguen separados.

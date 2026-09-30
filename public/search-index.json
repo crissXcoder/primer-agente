@@ -1,5 +1,62 @@
 [
   {
+    "id": "obsidian-agente-desarrolladores",
+    "slug": "obsidian-agente-desarrolladores",
+    "title": "Bóveda de Obsidian separada del proyecto: usar --add-dir con tu agente",
+    "titleNormalized": "boveda de obsidian separada del proyecto: usar --add-dir con tu agente",
+    "summary": "Usa una bóveda de Obsidian fuera del repositorio como contexto adicional de Claude Code o Codex, y conserva claro cuál carpeta dirige cada sesión.",
+    "summaryNormalized": "usa una boveda de obsidian fuera del repositorio como contexto adicional de claude code o codex, y conserva claro cual carpeta dirige cada sesion.",
+    "track": "conocimiento",
+    "level": "intermedio",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "obsidian",
+      "claude-code",
+      "codex",
+      "git",
+      "vscode"
+    ],
+    "toolsNormalized": [
+      "obsidian",
+      "claude-code",
+      "codex",
+      "git",
+      "vscode"
+    ],
+    "tags": [
+      "obsidian",
+      "add-dir",
+      "claude-md",
+      "boveda",
+      "repo",
+      "ide"
+    ],
+    "tagsNormalized": [
+      "obsidian",
+      "add-dir",
+      "claude-md",
+      "boveda",
+      "repo",
+      "ide"
+    ],
+    "errorSymptoms": [
+      "El CLAUDE.md de una carpeta añadida no aparece en el contexto de Claude Code.",
+      "En un workspace de varias carpetas de VS Code, Claude Code no aplica el CLAUDE.md de una carpeta secundaria.",
+      "El agente puede escribir en la bóveda aunque el repositorio sea su carpeta principal.",
+      "Codex se siente lento al trabajar en una carpeta de Windows desde WSL."
+    ],
+    "errorSymptomsNormalized": [
+      "el claude.md de una carpeta anadida no aparece en el contexto de claude code.",
+      "en un workspace de varias carpetas de vs code, claude code no aplica el claude.md de una carpeta secundaria.",
+      "el agente puede escribir en la boveda aunque el repositorio sea su carpeta principal.",
+      "codex se siente lento al trabajar en una carpeta de windows desde wsl."
+    ]
+  },
+  {
     "id": "obsidian-agente-sin-programar",
     "slug": "obsidian-agente-sin-programar",
     "title": "Trabaja con un agente dentro de tu bóveda de Obsidian (sin programar)",
