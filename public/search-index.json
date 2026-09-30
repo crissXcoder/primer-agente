@@ -1,5 +1,56 @@
 [
   {
+    "id": "obsidian-agente-sin-programar",
+    "slug": "obsidian-agente-sin-programar",
+    "title": "Trabaja con un agente dentro de tu bóveda de Obsidian (sin programar)",
+    "titleNormalized": "trabaja con un agente dentro de tu boveda de obsidian (sin programar)",
+    "summary": "Abre Claude Code o Codex en la carpeta correcta de tu bóveda, comprueba qué puede ver y practica con instrucciones seguras, sin necesidad de programar.",
+    "summaryNormalized": "abre claude code o codex en la carpeta correcta de tu boveda, comprueba que puede ver y practica con instrucciones seguras, sin necesidad de programar.",
+    "track": "conocimiento",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "obsidian",
+      "claude-code",
+      "codex"
+    ],
+    "toolsNormalized": [
+      "obsidian",
+      "claude-code",
+      "codex"
+    ],
+    "tags": [
+      "obsidian",
+      "agente",
+      "terminal",
+      "boveda",
+      "ruta"
+    ],
+    "tagsNormalized": [
+      "obsidian",
+      "agente",
+      "terminal",
+      "boveda",
+      "ruta"
+    ],
+    "errorSymptoms": [
+      "El comando para iniciar el agente no se encuentra en la terminal.",
+      "PowerShell bloquea el inicio de un comando instalado mediante npm.",
+      "El agente o la terminal no encuentra una carpeta cuya ruta tiene espacios.",
+      "Una nota abierta en Obsidian no muestra de inmediato un cambio hecho por otro programa."
+    ],
+    "errorSymptomsNormalized": [
+      "el comando para iniciar el agente no se encuentra en la terminal.",
+      "powershell bloquea el inicio de un comando instalado mediante npm.",
+      "el agente o la terminal no encuentra una carpeta cuya ruta tiene espacios.",
+      "una nota abierta en obsidian no muestra de inmediato un cambio hecho por otro programa."
+    ]
+  },
+  {
     "id": "obsidian-boveda-primeros-pasos",
     "slug": "obsidian-boveda-primeros-pasos",
     "title": "Obsidian desde cero: crea tu bóveda y encuentra su ruta",

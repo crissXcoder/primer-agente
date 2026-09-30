@@ -1,0 +1,169 @@
+---
+title: "Trabaja con un agente dentro de tu bóveda de Obsidian (sin programar)"
+slug: "obsidian-agente-sin-programar"
+summary: "Abre Claude Code o Codex en la carpeta correcta de tu bóveda, comprueba qué puede ver y practica con instrucciones seguras, sin necesidad de programar."
+track: "conocimiento"
+audience: "no-programadores"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "obsidian"
+  - "claude-code"
+  - "codex"
+tags:
+  - "obsidian"
+  - "agente"
+  - "terminal"
+  - "boveda"
+  - "ruta"
+prerequisites:
+  - "obsidian-boveda-primeros-pasos"
+related: []
+timeMinutes: 25
+verifiedAt: "2026-09-29"
+appliesTo:
+  obsidian: "Obsidian Desktop"
+  claude-code: "Claude Code CLI y Claude Desktop Code"
+  codex: "Codex CLI y aplicación de ChatGPT con proyectos locales"
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://code.claude.com/docs/en/quickstart"
+  - "https://code.claude.com/docs/en/memory"
+  - "https://code.claude.com/docs/en/permissions"
+  - "https://code.claude.com/docs/en/desktop"
+  - "https://developers.openai.com/codex/cli/features"
+  - "https://learn.chatgpt.com/docs/developer-commands"
+  - "https://learn.chatgpt.com/docs/agent-approvals-security"
+  - "https://learn.chatgpt.com/docs/projects?surface=app"
+  - "https://obsidian.md/help/cli"
+  - "https://obsidian.md/help/data-storage"
+  - "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/set-location?view=powershell-5.1"
+  - "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-childitem?view=powershell-7.5"
+  - "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_quoting_rules?view=powershell-7.6"
+  - "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5"
+  - "https://learn.microsoft.com/en-us/windows/terminal/distributions"
+  - "https://support.apple.com/en-mo/guide/terminal/trmlb20c7888/mac"
+  - "https://support.apple.com/en-il/guide/mac-help/mchlp1012"
+  - "https://support.apple.com/en-om/guide/terminal/trml106/mac"
+  - "https://www.gnu.org/software/bash/manual/bash.html"
+  - "https://www.gnu.org/software/coreutils/manual/html_node/Which-files-are-listed.html"
+  - "https://github.com/openai/codex/issues/15"
+  - "https://forum.obsidian.md/t/monitoring-for-external-changes/51660"
+  - "https://openai.com/policies/privacy-policy/"
+  - "https://www.anthropic.com/legal/consumer-terms"
+errors:
+  - symptom: "El comando para iniciar el agente no se encuentra en la terminal."
+    cause: "Puede que la instalación no haya terminado o que la terminal abierta todavía no tenga actualizada la ruta de comandos (PATH)."
+    fix: "Cierra la terminal, abre una nueva y prueba de nuevo. Si continúa, sigue el diagnóstico de instalación de la documentación oficial del agente."
+  - symptom: "PowerShell bloquea el inicio de un comando instalado mediante npm."
+    cause: "La política de ejecución de PowerShell puede impedir ejecutar archivos de script."
+    fix: "No cambies la política del equipo para continuar esta guía. Usa el lanzador para Command Prompt si la instalación lo ofrece, o consulta a soporte para revisar una solución aprobada para tu equipo."
+  - symptom: "El agente o la terminal no encuentra una carpeta cuya ruta tiene espacios."
+    cause: "PowerShell interpreta los espacios como separadores cuando la ruta no está entre comillas."
+    fix: "Escribe la ruta entre comillas dobles, por ejemplo: cd \"C:\\Users\\Ana Perez\\Obsidian\\Mi bóveda\"."
+  - symptom: "Una nota abierta en Obsidian no muestra de inmediato un cambio hecho por otro programa."
+    cause: "Obsidian normalmente actualiza cambios externos, pero hay al menos un caso reportado en el foro donde una nota abierta quedó desactualizada; la causa no quedó establecida."
+    fix: "Comprueba primero el archivo en la carpeta de la bóveda. Si no estás editándolo al mismo tiempo, cierra y vuelve a abrir la nota. Es una incidencia reportada, no un fallo general confirmado."
+---
+
+# Trabaja con un agente dentro de tu bóveda de Obsidian
+
+## Qué vas a lograr
+
+En unos 25 minutos vas a abrir una terminal en la carpeta de tu bóveda, iniciar Claude Code o Codex y comprobar que el agente está mirando el lugar correcto. No hace falta saber programar: una terminal es una ventana donde escribís órdenes breves para la computadora.
+
+Imaginá que contrataste a una persona nueva para ordenar documentos. La bóveda es el taller donde la sentás a trabajar; si la sentás en la carpeta de tu bóveda, esa es su carpeta de trabajo inicial. Obsidian y el agente usan los mismos archivos: si el agente crea una nota allí, Obsidian puede mostrarla.
+
+La carpeta inicial no es una pared de seguridad. El agente puede tener permisos para acceder a otras ubicaciones y cada herramienta aplica sus propias reglas. Por eso vamos a revisar la carpeta actual y cada solicitud de permiso.
+
+## Antes de empezar
+
+- Tené una bóveda de Obsidian creada. Si todavía no, seguí [Obsidian desde cero: crea tu bóveda y encuentra su ruta](/guias/obsidian-boveda-primeros-pasos).
+- Tené a mano la ruta de esa carpeta.
+- Hacé una copia de respaldo de la carpeta antes de permitir cambios. Podés duplicarla desde el explorador de archivos o configurar Git si ya sabés usarlo.
+- Instalá Claude Code o Codex siguiendo la guía oficial del producto. La guía interna para instalarlos todavía está pendiente.
+
+<Callout type="peligro">
+  Aunque los archivos originales estén guardados en tu computadora, el texto que el agente lee para responder se envía al proveedor del modelo. No incluyás contraseñas, datos de otras personas ni información confidencial en la bóveda que vas a compartir con el agente. Revisá las condiciones y controles de datos de tu proveedor antes de usarlo.
+</Callout>
+
+## Abre una terminal dentro de la bóveda
+
+Una terminal puede empezar en una carpeta distinta de tu bóveda. Primero abrila en la carpeta correcta y luego comprobá su ubicación. Si una ruta contiene espacios, escribila entre comillas.
+
+<OsInstructions
+  windows="Abrí PowerShell desde el menú Inicio y escribí cd seguido de la ruta de tu bóveda entre comillas dobles; si la ruta tiene espacios, conservá esas comillas. También podés usar Abrir en Terminal si esa opción aparece en el menú del Explorador; su disponibilidad depende de la instalación de Windows. Comprobá la carpeta con Get-Location y los archivos ocultos con Get-ChildItem -Force."
+  macos="En Finder, mostrá la barra de ruta si hace falta; hacé Control-clic sobre el componente de la ruta que representa la carpeta y elegí el servicio para abrir una terminal allí. También podés arrastrar la carpeta a Terminal después de escribir cd y un espacio. Si el servicio no aparece, activalo en Ajustes del Sistema → Teclado → Funciones rápidas de teclado → Servicios; los nombres pueden variar por versión. Comprobá la carpeta con pwd y los archivos ocultos con ls -a."
+  linux="Abrí Terminal desde tu sistema, escribí cd seguido de la ruta de la bóveda entre comillas dobles; conservá las comillas si la ruta tiene espacios. Comprobá la carpeta con pwd y los archivos ocultos con ls -a. No hay un menú universal para abrir terminal desde el administrador de archivos: esa opción depende del entorno Linux."
+/>
+
+En el listado tiene que aparecer `.obsidian`, la carpeta de ajustes de Obsidian. Si no aparece, revisá que usaste el comando de archivos ocultos y que la ruta corresponde a tu bóveda.
+
+**No sigás todavía** si `Get-Location` o `pwd` muestra tu carpeta personal completa u otra ubicación. Salí de esa terminal y repetí el paso con la ruta de la bóveda. Un agente iniciado en la carpeta equivocada podría tener acceso a más archivos de los que querías mostrarle.
+
+## Inicia el agente y comprueba la carpeta
+
+En la misma terminal, ejecutá solo el comando del producto instalado:
+
+- Claude Code: `claude`
+- Codex: `codex --sandbox read-only`
+
+La primera vez puede aparecer una pantalla de confianza para la carpeta. Leela y comprobá que muestra la ruta de tu bóveda. Aceptar esa carpeta confirma el espacio de trabajo para la herramienta; no equivale a revisar ni aprobar cada operación futura. Si la ruta no es la bóveda, no la aceptés: salí y volvé a abrir la terminal en la carpeta correcta.
+
+En Claude Code, revisá el modo de permisos que muestra la interfaz. Cambialo a **Plan** antes de pedir una tarea que proponga cambios; la documentación indica que el modo inicial puede variar. En Codex, el ejemplo anterior inicia en solo lectura. No ampliés el acceso ni aceptés una operación sin entender qué hará.
+
+Como primera petición, pegá esto:
+
+> Lista los archivos de la carpeta actual y dime cuántas notas Markdown (.md) hay. No modifiques nada.
+
+La respuesta debería describir archivos de tu bóveda y terminar sin cambios. Si menciona carpetas que no reconocés, detené la sesión y verificá de nuevo la ruta.
+
+## Primeras sesiones con cuidado
+
+- Pedile un plan antes de una tarea que vaya a escribir, mover o renombrar notas.
+- Leé cada permiso que solicita: qué acción hará y sobre qué archivo o carpeta.
+- Rechazá lo que no entendás. No activés opciones para aprobar todo automáticamente.
+- Revisá en Obsidian las notas que el agente haya cambiado antes de seguir con otra tarea.
+
+## Usa Obsidian al mismo tiempo
+
+Obsidian suele detectar los cambios que otro programa hace en los archivos de la bóveda. Para evitar que una persona y el agente sobrescriban trabajo, no editen la misma nota al mismo tiempo. Si una nota no se actualiza, revisá el archivo desde Finder o el Explorador y volvé a abrir esa nota cuando ya no la estés editando.
+
+## Cinco pedidos para empezar
+
+En cada pedido, el agente debe mostrarte primero qué archivos piensa crear o cambiar. No le des permiso para borrar notas.
+
+1. **Conocer la bóveda:** “Revisá las notas y prepará un resumen de los temas principales. Muéstrame primero qué archivos vas a crear o cambiar; si solo vas a leer, decilo. No borres nada.”
+2. **Crear una nota conectada:** “Proponé una nota breve sobre [tema] y los enlaces a notas existentes que podrían relacionarse. Muéstrame primero qué archivos vas a crear o cambiar. No borres nada.”
+3. **Revisar el Inbox:** “Mirá las notas de Inbox y proponé dónde podría ir cada una, sin moverlas todavía. Muéstrame primero qué archivos vas a crear o cambiar y espera mi permiso antes de mover. No borres nada.”
+4. **Preparar el resumen del día:** “Usá mis notas de hoy para redactar un resumen breve y sugerí dónde guardarlo. Muéstrame primero qué archivos vas a crear o cambiar. No borres nada.”
+5. **Cerrar la sesión:** “Resumí lo que hicimos y las decisiones pendientes. Muéstrame primero qué archivos vas a crear o cambiar; no guardes una nota sin enseñarme el plan. No borres nada.”
+
+## Alternativa con aplicación de escritorio
+
+Si preferís no abrir una terminal, hay aplicaciones de escritorio que permiten elegir una carpeta local como espacio de trabajo. La disponibilidad y los nombres de las opciones dependen de la versión y del sistema.
+
+- **Claude Desktop:** abrí la pestaña **Code**, elegí un entorno local y seleccioná la carpeta de la bóveda. Usá **Plan** para preparar una tarea y revisá las solicitudes de permisos antes de aceptar cambios. Esta interfaz es Claude Code en la aplicación; no es lo mismo que una conversación normal de Claude.
+- **Aplicación de ChatGPT con Codex:** agregá la carpeta local como proyecto y, si corresponde, marcala como carpeta principal. Confirmá que se seleccionó la bóveda antes de iniciar la tarea. Un proyecto local de la aplicación no es lo mismo que una conversación común ni cambia por sí solo los permisos del sistema.
+
+La prueba inicial sigue siendo la misma: pedí una lista de archivos sin cambios y comprobá que se refiere únicamente a la bóveda esperada.
+
+## ¿Cómo sé que funcionó?
+
+Se completó la comprobación si se cumplen estas tres cosas:
+
+1. `Get-Location` en PowerShell o `pwd` en macOS/Linux muestra la ruta de la bóveda.
+2. `Get-ChildItem -Force` o `ls -a` incluye `.obsidian` en el listado.
+3. El agente enumera notas de esa bóveda y confirma que no modificó nada.
+
+En una aplicación de escritorio, verificá que el proyecto o carpeta seleccionada tenga el nombre y la ruta de la bóveda, y hacé el mismo pedido de solo lectura.
+
+## Siguientes pasos
+
+Las guías internas para instalar Claude Code o Codex, preparar `CLAUDE.md` y skills, y usar MarkItDown todavía no están disponibles. Cuando se publiquen, van a aparecer aquí. Mientras tanto, consultá los enlaces oficiales de esta guía antes de cambiar permisos o configuración.
