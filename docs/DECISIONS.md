@@ -148,6 +148,16 @@ Tailwind conserva dos cortes de ancho: `md` en 768 px y `lg` en 1201 px; las var
 
 La simulación Chromium no cubre Safari real, barras dinámicas, teclado en pantalla ni safe areas de hardware; queda un checklist manual para esos casos.
 
+## 10. Pista de skills
+
+### Decisión (2026-09-30)
+
+Se agrega `skills` al catálogo de pistas y se muestra como **Skills y procedimientos**. La guía `content/skills-que-son-y-cuando-usarlas.mdx` la usa para explicar cuándo un procedimiento reutilizable merece una skill, cómo medir su utilidad y qué riesgos revisar.
+
+### Justificación
+
+Una pista propia hace que la guía sea localizable junto a futuras guías de skills sin mezclarla con instrucciones de instalación de herramientas. El cambio es aditivo y mantiene intactos los valores de pista existentes.
+
 ## 9. Mapa conceptual del entorno de agentes
 
 ### Decisión (2026-09-30)
