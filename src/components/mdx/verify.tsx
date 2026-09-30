@@ -3,18 +3,19 @@ import { CodeBlock } from "@/components/ui/code-block";
 
 export interface VerifyProps extends React.HTMLAttributes<HTMLDivElement> {
   command?: string;
-  expectedOutput: string;
+  expectedOutput?: string;
   description?: string;
 }
 
 export function Verify({
   command,
-  expectedOutput,
+  expectedOutput = "",
   description = "Ejecuta el siguiente comando en tu terminal para confirmar que la herramienta quedó instalada correctamente:",
   children,
   className = "",
   ...props
 }: VerifyProps) {
+  const safeOutput = (expectedOutput || "").trim();
   return (
     <div
       className={`rounded-lg border-2 border-primary-container/60 bg-surface-container-low/50 p-5 my-6 space-y-4 ${className}`}
@@ -56,7 +57,7 @@ export function Verify({
           Salida esperada (o similar):
         </span>
         <div className="rounded border border-outline-variant bg-surface-container-lowest p-3 font-mono text-xs text-on-surface leading-relaxed overflow-x-auto">
-          <pre>{expectedOutput.trim()}</pre>
+          <pre>{safeOutput}</pre>
         </div>
       </div>
 

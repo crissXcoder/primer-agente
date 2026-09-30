@@ -92,5 +92,24 @@ Adoptar **`minisearch`** con un índice generado durante el proceso de build.
 5. **`tsx` (^4.23.15)**:
    * *Propósito*: Ejecutor de scripts TypeScript para el paso de `prebuild` (`scripts/build-search-index.ts`).
    * *Justificación*: Permite correr validaciones previas al build de producción directamente desde TypeScript sin pasos manuales de transpilación.
+6. **`@playwright/test` (^1.63.0)**:
+   * *Propósito*: Pruebas de integración E2E de flujos de usuario (búsqueda sin tildes, filtros combinados en URL, cambio de SO en pestañas y copia al portapapeles).
+   * *Justificación*: Garantiza que la experiencia sea verificable y accesible en navegadores reales sin depender de mocks de DOM sintéticos.
+
+---
+
+## 5. Decisiones de Arquitectura de Rutas y Estado de Cliente (Fase 3)
+
+1. **Estado Persistente de Cliente con `useSyncExternalStore`**:
+   * *Decisión*: En lugar de llamadas manuales a `useState` + `useEffect` que provocan errores de cascading render en React 19 (`react-hooks/set-state-in-effect`) y desajustes de hidratación SSR, se implementó `useLocalStorage` mediante `React.useSyncExternalStore`.
+   * *Impacto*: Permite sincronizar reactivamente el sistema operativo preferido y el progreso de rutas/taller sin parpadeos visuales ni desincronización entre pestañas.
+
+2. **Sincronización Inmediata de Filtros en URL**:
+   * *Decisión*: Al cambiar filtros o buscar en `/guias`, la URL se actualiza sincrónicamente con `window.history.replaceState` y se notifica a Next.js con `router.replace({ scroll: false })`.
+   * *Impacto*: Previene que selecciones rápidas consecutivas en distintos dropdowns descarten parámetros previos debido a la naturaleza asíncrona de las transiciones del App Router, haciendo que los enlaces sean 100% compartibles de inmediato.
+
+3. **Compatibilidad de Orígenes de Desarrollo en Next.js 16 (`allowedDevOrigins`)**:
+   * *Decisión*: Se agregó `allowedDevOrigins: ["127.0.0.1", "localhost"]` en `next.config.ts`.
+   * *Impacto*: Evita que el servidor de desarrollo bloquee peticiones de automatización del navegador Playwright contra `127.0.0.1`.
 
 

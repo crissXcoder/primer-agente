@@ -3,13 +3,15 @@
 import * as React from "react";
 
 export interface CodeBlockProps extends React.HTMLAttributes<HTMLDivElement> {
-  code: string;
+  code?: string;
+  children?: React.ReactNode;
   language?: string;
   filename?: string;
 }
 
 export function CodeBlock({
   code,
+  children,
   language = "bash",
   filename,
   className = "",
@@ -17,14 +19,26 @@ export function CodeBlock({
 }: CodeBlockProps) {
   const [copied, setCopied] = React.useState(false);
 
+  // Extraer el texto de código seguro de code o children
+  const rawCode =
+    typeof code === "string"
+      ? code
+      : typeof children === "string"
+      ? children
+      : Array.isArray(children)
+      ? children.filter((c) => typeof c === "string").join("")
+      : "";
+
+  const textToCopy = rawCode.trim();
+
   const handleCopy = async () => {
     try {
       if (navigator.clipboard) {
-        await navigator.clipboard.writeText(code.trim());
+        await navigator.clipboard.writeText(textToCopy);
       } else {
         // Fallback para entornos donde clipboard API no esté disponible
         const textArea = document.createElement("textarea");
-        textArea.value = code.trim();
+        textArea.value = textToCopy;
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand("copy");
@@ -98,7 +112,7 @@ export function CodeBlock({
 
       <div className="p-4 overflow-x-auto text-sm font-mono leading-relaxed selection:bg-primary-container selection:text-on-primary-fixed">
         <pre tabIndex={0}>
-          <code>{code.trim()}</code>
+          <code>{textToCopy || children}</code>
         </pre>
       </div>
 

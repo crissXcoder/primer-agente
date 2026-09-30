@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Tabs, TabItem } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ui/code-block";
+import { useLocalStorage } from "@/lib/use-local-storage";
 
 export interface CommandProps {
   os: "windows" | "macos" | "linux";
@@ -52,6 +53,11 @@ export function OsTabs({
   macosDesc,
   linuxDesc,
 }: OsTabsProps) {
+  const [preferredOs, setPreferredOs] = useLocalStorage<"windows" | "macos" | "linux">(
+    "primer-agente-preferred-os",
+    "windows"
+  );
+
   const items: TabItem[] = [];
 
   if (windowsCmd) {
@@ -105,5 +111,16 @@ export function OsTabs({
     });
   }
 
-  return <Tabs items={items} defaultTabId="windows" />;
+  return (
+    <Tabs
+      items={items}
+      defaultTabId="windows"
+      selectedTabId={preferredOs}
+      onTabChange={(os) => {
+        if (os === "windows" || os === "macos" || os === "linux") {
+          setPreferredOs(os);
+        }
+      }}
+    />
+  );
 }

@@ -12,6 +12,7 @@ export interface TabItem {
 export interface TabsProps {
   items: TabItem[];
   defaultTabId?: string;
+  selectedTabId?: string;
   className?: string;
   onTabChange?: (tabId: string) => void;
 }
@@ -19,17 +20,20 @@ export interface TabsProps {
 export function Tabs({
   items,
   defaultTabId,
+  selectedTabId,
   className = "",
   onTabChange,
 }: TabsProps) {
-  const [activeTab, setActiveTab] = React.useState<string>(
+  const [internalTab, setInternalTab] = React.useState<string>(
     defaultTabId || (items.length > 0 ? items[0].id : "")
   );
+
+  const activeTab = selectedTabId !== undefined ? selectedTabId : internalTab;
 
   const tabListRef = React.useRef<HTMLDivElement>(null);
 
   const handleSelect = (id: string) => {
-    setActiveTab(id);
+    setInternalTab(id);
     if (onTabChange) {
       onTabChange(id);
     }
