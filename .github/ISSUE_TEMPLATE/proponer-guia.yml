@@ -1,0 +1,54 @@
+name: "Proponer una nueva guía"
+description: "Sugiere una nueva herramienta, runtime o agente de IA para incorporar al catálogo."
+title: "[Propuesta de Guía]: "
+labels: ["propuesta-guia", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Pura vida por proponer contenido! Recuerda la regla fundamental de este repositorio: **ningún comando se redacta de memoria**; todo debe fundamentarse en la documentación oficial vigente y ofrecer un paso final de verificación observable.
+  - type: input
+    id: tool-name
+    attributes:
+      label: "Herramienta o Agente propuesto"
+      description: "¿Qué herramienta se instalará o configurará?"
+      placeholder: "Ej: FastMCP, Claude Code, Ollama, Cursor..."
+    validations:
+      required: true
+  - type: input
+    id: proposed-slug
+    attributes:
+      label: "Slug propuesto (kebab-case)"
+      description: "Identificador en minúsculas separado por guiones."
+      placeholder: "instalar-fastmcp"
+    validations:
+      required: true
+  - type: dropdown
+    id: track
+    attributes:
+      label: "Pista formativa sugerida"
+      options:
+        - "git"
+        - "nodejs"
+        - "python"
+        - "mcp"
+        - "terminal"
+        - "agentes"
+    validations:
+      required: true
+  - type: textarea
+    id: official-sources
+    attributes:
+      label: "Fuentes oficiales vigentes (URLs obligatorias)"
+      description: "Enlaces a la documentación oficial donde se respaldan los pasos de instalación."
+      placeholder: "https://..."
+    validations:
+      required: true
+  - type: textarea
+    id: observable-check
+    attributes:
+      label: "Verificación observable ('¿Cómo sé que funcionó?')"
+      description: "¿Cuál es el comando de comprobación y qué salida textual exacta debe arrojar la terminal?"
+      placeholder: "Comando: herramienta --version\nSalida: vX.Y.Z"
+    validations:
+      required: true

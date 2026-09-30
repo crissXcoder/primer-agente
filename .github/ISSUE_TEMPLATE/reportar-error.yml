@@ -1,0 +1,50 @@
+name: "Reportar error en una guía"
+description: "Avisa sobre un comando que ya no funciona, cambio de versión en una herramienta o errata."
+title: "[Error en Guía]: "
+labels: ["error-guia", "revision-necesaria"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Pura vida por avisarnos! Las herramientas y comandos evolucionan constantemente. Tu reporte nos permite mantener la base de conocimiento 100% verificable.
+  - type: input
+    id: guide-url
+    attributes:
+      label: "Guía afectada (slug o enlace)"
+      description: "Indica el enlace o slug de la guía (ej. /guias/instalar-python o 'instalar-uv')."
+      placeholder: "/guias/instalar-..."
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: "Sistema Operativo donde experimentaste el problema"
+      options:
+        - "Windows 11 / 10"
+        - "macOS"
+        - "Linux (Ubuntu, Debian, Fedora, Arch u otro)"
+    validations:
+      required: true
+  - type: textarea
+    id: symptom
+    attributes:
+      label: "Mensaje de error exacto de la terminal"
+      description: "Pega el texto exacto tal como apareció en tu consola (síntoma observable)."
+      placeholder: "Error o salida textual..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "¿Qué paso estabas siguiendo y qué esperabas?"
+      placeholder: "Estaba en el Paso 2 siguiendo la instalación y esperaba que..."
+    validations:
+      required: true
+  - type: textarea
+    id: fix-suggestion
+    attributes:
+      label: "Solución sugerida o documentación oficial (opcional)"
+      description: "Si encontraste la solución en la documentación oficial, incluye las URLs de referencia."
+      placeholder: "En https://docs... indican que ahora se debe ejecutar..."
+    validations:
+      required: false

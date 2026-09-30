@@ -1,0 +1,46 @@
+name: CI Quality Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Lint, Typecheck, Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - name: Configurar Node.js (v20 LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Instalar dependencias con frozen lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: Análisis estático (ESLint)
+        run: pnpm lint
+
+      - name: Verificación estricta de tipos (TypeScript)
+        run: pnpm typecheck
+
+      - name: Pruebas unitarias de pipeline de contenido (Vitest)
+        run: pnpm test
+
+      - name: Compilación estática de producción (Next.js)
+        run: pnpm build

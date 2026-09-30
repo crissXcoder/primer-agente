@@ -26,11 +26,11 @@ export function Footer() {
             <h4 className="font-mono text-xs font-semibold text-on-surface uppercase tracking-wider">
               Navegación
             </h4>
-            <ul className="space-y-1.5 text-xs">
+            <ul className="space-y-1 text-xs">
               <li>
                 <Link
                   href="/guias"
-                  className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
+                  className="inline-block py-1.5 hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
                 >
                   Catálogo de Guías
                 </Link>
@@ -38,7 +38,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/rutas"
-                  className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
+                  className="inline-block py-1.5 hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
                 >
                   Rutas de Aprendizaje
                 </Link>
@@ -46,7 +46,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/errores"
-                  className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
+                  className="inline-block py-1.5 hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
                 >
                   Solución de Errores
                 </Link>
@@ -54,7 +54,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/taller"
-                  className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
+                  className="inline-block py-1.5 hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline"
                 >
                   Material del Taller UNA
                 </Link>
@@ -62,7 +62,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/_diseno"
-                  className="text-tertiary hover:underline transition-colors focus-visible:outline-none focus-visible:underline"
+                  className="inline-block py-1.5 text-tertiary hover:underline transition-colors focus-visible:outline-none focus-visible:underline"
                 >
                   Catálogo de Diseño (/_diseno)
                 </Link>

@@ -44,7 +44,10 @@ export default function Home() {
       </section>
 
       {/* Tarjetas de Pilares Técnicos */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6" aria-labelledby="pilares-title">
+        <h2 id="pilares-title" className="sr-only">
+          Pilares Técnicos y Metodología de Validación
+        </h2>
         <Card variant="default">
           <CardHeader>
             <div className="w-8 h-8 rounded bg-primary-container/20 text-primary flex items-center justify-center font-mono font-bold text-sm mb-2">

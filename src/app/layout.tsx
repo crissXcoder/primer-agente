@@ -23,10 +23,38 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://primer-agente.vercel.app";
+
 export const metadata: Metadata = {
-  title: "primer-agente | Base de Conocimiento de Agentes de IA",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "primer-agente | Base de Conocimiento de Agentes de IA",
+    template: "%s | primer-agente",
+  },
   description:
-    "Guías paso a paso de instalación y configuración verificables de herramientas y agentes de IA para principiantes.",
+    "Guías paso a paso, verificables y accesibles para instalar y configurar agentes de IA y sus herramientas base (terminal, Git, Node.js, Python, uv, MCP).",
+  alternates: {
+    canonical: "./",
+  },
+  openGraph: {
+    title: "primer-agente | Base de Conocimiento de Agentes de IA",
+    description:
+      "Guías paso a paso, verificables y accesibles para instalar y configurar agentes de IA y sus herramientas base.",
+    url: siteUrl,
+    siteName: "primer-agente",
+    locale: "es_CR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "primer-agente | Base de Conocimiento de Agentes de IA",
+    description:
+      "Guías paso a paso de instalación y configuración verificables de herramientas y agentes de IA para principiantes.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

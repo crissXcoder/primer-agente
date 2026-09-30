@@ -52,15 +52,34 @@ Sitio 100% estático, rápido y accesible, pensado para ser desplegado en Vercel
 Antes de enviar cambios o crear ramas de despliegue, verifica que todo esté en verde:
 
 ```bash
-# Verificación estricta de tipos TypeScript
+# 1. Pruebas unitarias de integridad y validación Zod
+pnpm test
+
+# 2. Verificación estricta de tipos TypeScript
 pnpm typecheck
 
-# Análisis estático y formateo con ESLint
+# 3. Análisis estático y formateo con ESLint
 pnpm lint
 
-# Compilación estática de producción (Turbopack)
+# 4. Compilación estática de producción (Turbopack)
 pnpm build
 ```
+
+---
+
+## ✍️ Cómo Contribuir una Guía
+
+¡Las contribuciones de la comunidad son bienvenidas! Para mantener la calidad pedagógica y técnica del sitio, cada nueva guía debe seguir estas pautas:
+
+### Checklist de Verificación de Contenido:
+- [ ] **Documentación oficial vigente**: No escribas comandos de memoria; consúltalos en la documentación oficial de la herramienta y añade los enlaces en el campo `sources`.
+- [ ] **Enfoque para principiantes**: Explica los conceptos nuevos (como qué es `PATH`, por qué reiniciar la terminal o qué es un entorno virtual) sin asumir experiencia previa en línea de comandos.
+- [ ] **Verificación observable**: Cada paso técnico debe terminar con una comprobación visible. Incluye siempre el componente `<Verify>` con la sección *"¿Cómo sé que funcionó?"* y la salida exacta que verá el usuario.
+- [ ] **Frontmatter Zod estricto**: Cumple con todos los campos requeridos en [`src/lib/content/schema.ts`](./src/lib/content/schema.ts) (`title`, `slug`, `summary`, `track`, `level`, `os`, `tools`, `tags`, `timeMinutes`, `verifiedAt`, `appliesTo`, `evidence`, `sources`, `errors`).
+- [ ] **Advertencias de seguridad**: Cualquier riesgo sobre claves de API, permisos de administrador (`sudo`) o paquetes no confiables debe advertirse en un componente `<Callout type="peligro">`.
+- [ ] **Pruebas y Build en verde**: Asegúrate de que `pnpm test`, `pnpm typecheck`, `pnpm lint` y `pnpm build` finalicen con código de salida 0 antes de abrir un Pull Request.
+
+Para más detalles, consulta la [Guía de Contribución](./CONTRIBUTING.md).
 
 ---
 
