@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
+@theme {
+  --color-surface: #f5fafd;
+  --color-surface-dim: #d5dbde;
+  --color-surface-bright: #f5fafd;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eff4f7;
+  --color-surface-container: #e9eff1;
+  --color-surface-container-high: #e3e9ec;
+  --color-surface-container-highest: #dee3e6;
+  --color-on-surface: #171c1f;
+  --color-on-surface-variant: #3d494d;
+  --color-inverse-surface: #2b3134;
+  --color-inverse-on-surface: #ecf2f4;
+  --color-outline: #6d797e;
+  --color-outline-variant: #bcc9ce;
+  --color-surface-tint: #00677d;
+  --color-primary: #00677d;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #00b4d8;
+  --color-on-primary-container: #00414f;
+  --color-inverse-primary: #4cd6fb;
+  --color-secondary: #006399;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #67bafd;
+  --color-on-secondary-container: #004972;
+  --color-tertiary: #006875;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #60b1bf;
+  --color-on-tertiary-container: #00424a;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #b3ebff;
+  --color-primary-fixed-dim: #4cd6fb;
+  --color-on-primary-fixed: #001f27;
+  --color-on-primary-fixed-variant: #004e5f;
+  --color-secondary-fixed: #cde5ff;
+  --color-secondary-fixed-dim: #94ccff;
+  --color-on-secondary-fixed: #001d32;
+  --color-on-secondary-fixed-variant: #004b74;
+  --color-tertiary-fixed: #9feffe;
+  --color-tertiary-fixed-dim: #83d3e1;
+  --color-on-tertiary-fixed: #001f24;
+  --color-on-tertiary-fixed-variant: #004f59;
+  --color-background: #f5fafd;
+  --color-on-background: #171c1f;
+  --color-surface-variant: #dee3e6;
+
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-ibm-plex-sans), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius-sm: 0.125rem;
+  --radius-DEFAULT: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f5fafd;
+  --foreground: #171c1f;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
 }

@@ -70,3 +70,22 @@ Todos los comandos deben ejecutarse con `pnpm`:
 * Accesibilidad conforme al estándar **WCAG AA**.
 * Cero secretos, tokens o credenciales expuestos en el código o historial de Git.
 * Cero peticiones o scripts a terceros que no sean estrictamente esenciales.
+
+## 7. Reglas de Diseño e Identidad Visual (DESIGN.md)
+Todo el desarrollo de interfaz, componentes y estilos debe seguir **estrictamente** lo estipulado en [`DESIGN.md`](file:///c:/Users/crisa/Chambas/primer-agente/DESIGN.md):
+1. **Estilo General**: *Industrial Electromechanical B2B UI* (híbrido de Corporate/Modern y Minimalismo Estructurado). Prioriza precisión técnica, orden, alta densidad de información y alta legibilidad.
+2. **Modo y Superficie**: Modo claro por defecto (`#f5fafd`), optimizado para claridad y contraste operativo. Sin modo oscuro forzado.
+3. **Paleta de Colores**:
+   * Primario / Acentos: Azul cian de alta visibilidad (`primary: #00677d`, `primary-container: #00b4d8`).
+   * Estructural / Contenedores: Azul industrial profundo (`secondary: #006399`).
+   * Resaltados / Estados: Azul hielo (`tertiary: #006875`, container `#60b1bf`).
+   * Superficies tonales: De `surface-container-lowest` (`#ffffff`) a `surface-container-highest` (`#dee3e6`).
+   * Alertas y errores: Rojo técnico (`error: #ba1a1a`).
+4. **Tipografía Estricta**:
+   * Encabezados (`<h1>`-`<h6>`): **IBM Plex Sans** (`font-heading`, peso 500-600).
+   * Texto de cuerpo y contenido: **Inter** (`font-sans`).
+   * Monospace (comandos, telemetría, chips de estado, códigos, etiquetas): **JetBrains Mono** (`font-mono`).
+5. **Elevación y Formas**:
+   * Sin sombras pesadas (*drop shadows*). La profundidad se logra con capas tonales de superficie y bordes de 1px sutiles (`outline-variant: #bcc9ce`).
+   * Bordes redondeados sobrios: `0.25rem` por defecto para botones e inputs, máximo `0.5rem` (`rounded-lg`) para tarjetas o modales.
+
