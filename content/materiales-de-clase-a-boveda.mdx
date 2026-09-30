@@ -1,0 +1,192 @@
+---
+title: "De tus documentos de clase a tu bóveda de Obsidian con MarkItDown"
+slug: "materiales-de-clase-a-boveda"
+summary: "Convierte una copia de tus documentos de clase a notas Markdown dentro de una bóveda de Obsidian y organízalas para estudiar con cuidado."
+track: "conocimiento"
+audience: "todos"
+level: "intermedio"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "markitdown"
+  - "obsidian"
+  - "python"
+  - "uv"
+  - "claude-code"
+  - "codex"
+tags:
+  - "markitdown"
+  - "obsidian"
+  - "materiales"
+  - "estudio"
+  - "conversion"
+  - "lotes"
+prerequisites:
+  - "obsidian-boveda-primeros-pasos"
+related:
+  - "obsidian-agente-sin-programar"
+  - "obsidian-agente-desarrolladores"
+  - "instalar-python"
+  - "instalar-uv"
+timeMinutes: 45
+verifiedAt: "2026-09-29"
+appliesTo:
+  markitdown: "CLI oficial y API local de Python; formatos admitidos dependen de sus dependencias opcionales instaladas"
+  uv: "uv run con dependencias de ejecución solicitadas mediante --with"
+  obsidian: "Obsidian Desktop con notas Markdown"
+evidence:
+  windows: "ejecutada"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://github.com/microsoft/markitdown/blob/main/README.md"
+  - "https://github.com/microsoft/markitdown/blob/main/packages/markitdown-ocr/README.md"
+  - "https://obsidian.md/help/links"
+  - "https://obsidian.md/help/manage-notes"
+  - "https://docs.python.org/3/library/venv.html"
+  - "https://docs.astral.sh/uv/guides/scripts/"
+  - "https://docs.astral.sh/uv/concepts/projects/run/"
+  - "https://www.anthropic.com/legal/consumer-terms"
+  - "https://openai.com/policies/privacy-policy/"
+errors: []
+---
+
+# De tus documentos de clase a tu bóveda de Obsidian
+
+Esta guía reúne documentos de un curso en una carpeta de la bóveda para que puedas buscarlos, enlazarlos y estudiarlos. La conversión crea copias en Markdown; tus originales se quedan en su carpeta.
+
+> [!note] Antes de empezar
+> La guía independiente `markitdown-convertir-documentos` todavía no existe en este sitio. Aquí están los pasos mínimos que ocupás para este flujo; cuando esa guía se publique, podrá ampliar la instalación y el uso general de MarkItDown.
+
+<Callout type="peligro" title="Datos y privacidad">
+  Conserva tus documentos originales en tu equipo y haz una copia de respaldo antes de convertir. Las listas de estudiantes, calificaciones, datos personales y materiales de terceros no deben subirse a un repositorio público ni enviarse a servicios externos sin permiso. Respeta los derechos de autor y usa los materiales de docentes para tu estudio personal salvo que tengas autorización para otros usos. Aunque la bóveda y los archivos convertidos estén en local, lo que un agente lea se envía al proveedor del modelo. No le pidas leer material confidencial ni información personal de otras personas.
+</Callout>
+
+## Elige carpetas separadas
+
+1. Deja los archivos originales en su carpeta de origen; no los muevas ni edites durante este proceso.
+2. Copia esa carpeta como respaldo en otra ubicación.
+3. Dentro de la bóveda, prepara una carpeta para los resultados, por ejemplo `Materiales/Historia del arte/`. La guía de Obsidian explica cómo abrir la carpeta de tu bóveda si todavía no tienes una.
+4. No uses la carpeta de origen como destino. El script rechaza destinos que estén dentro del origen para reducir el riesgo de recorrer después los Markdown que acaba de crear.
+
+Una ruta es la dirección de una carpeta en tu equipo. Si contiene espacios, ponla entre comillas en los comandos. Por ejemplo, `"C:\Users\Ana\Clases\Historia"` o `"/Users/ana/Clases/Historia"`.
+
+## Prueba MarkItDown con un archivo
+
+MarkItDown puede convertir varios formatos a Markdown. Su CLI permite indicar un archivo y una ruta de salida. El resultado puede perder parte del diseño original: revisa tablas, fórmulas, imágenes y saltos de página antes de confiar en la conversión.
+
+Si MarkItDown ya está instalado en el entorno de Python que tienes activo, abre una terminal y ejecuta lo siguiente, cambiando ambas rutas por las tuyas:
+
+```sh
+markitdown "RUTA-ORIGEN/una-lectura.pdf" -o "RUTA-BOVEDA/Materiales/Curso/prueba.md"
+```
+
+En Windows usa la misma sintaxis con rutas de Windows, por ejemplo `"C:\\Users\\Ana\\Clases\\una-lectura.pdf"`. La opción `-o` señala el archivo de salida. Abre `prueba.md` y compara títulos, tablas y contenido con el original antes de convertir un lote.
+
+<Callout type="tip" title="Ejecutar con uv sin activar un entorno">
+  La documentación de uv permite pedir dependencias para una sola ejecución. Si tienes uv instalado, esta forma descarga/prepara MarkItDown para el comando y no requiere activar primero un entorno virtual. Se necesita conexión para obtener paquetes; uv puede conservarlos en su caché. No uses esta opción para material confidencial si tu configuración instala paquetes desde una fuente que no autorizaste.
+</Callout>
+
+```sh
+uv run --no-project --with "markitdown[all]" -- markitdown "RUTA-ORIGEN/una-lectura.pdf" -o "RUTA-BOVEDA/Materiales/Curso/prueba.md"
+```
+
+`[all]` pide las dependencias opcionales que el proyecto publica para distintos formatos. Si ya tienes un entorno aislado, puedes seguir las guías de [Python](/guias/instalar-python) y [uv](/guias/instalar-uv) para trabajar dentro de él. La documentación de Python describe `venv` como un entorno independiente para paquetes.
+
+## Simula el lote
+
+Descarga [`convertir_a_boveda.py`](/descargas/convertir_a_boveda.py) en tu computadora. El script completo también está al final de esta guía. Colócalo donde puedas localizarlo desde la terminal.
+
+Antes de la conversión real, corre una simulación con el comando siguiente. Sustituye las rutas y etiqueta. No pongas la carpeta de destino dentro de la carpeta de origen:
+
+```sh
+uv run --no-project --with "markitdown[all]" -- python "convertir_a_boveda.py" --origen "RUTA-ORIGEN" --destino "RUTA-BOVEDA/Materiales/Curso" --etiqueta "material/curso" --simular
+```
+
+Si ya tienes MarkItDown instalado en el Python activo, puedes sustituir `uv run ... -- python` por `python convertir_a_boveda.py` o el comando Python que utilices en tu sistema.
+
+La simulación lista lo que el script haría y muestra un resumen en la terminal. **No escribe archivos ni genera el CSV.** Lee el resumen y confirma que el origen y el destino son los esperados. Si la ruta del destino quedó dentro del origen, el script se detiene con código de salida `2` y el aviso correspondiente.
+
+## Convierte los documentos
+
+Cuando el resumen de simulación tenga sentido, repite el comando sin `--simular`:
+
+```sh
+uv run --no-project --with "markitdown[all]" -- python "convertir_a_boveda.py" --origen "RUTA-ORIGEN" --destino "RUTA-BOVEDA/Materiales/Curso" --etiqueta "material/curso"
+```
+
+El script recorre archivos regulares que no estén dentro de carpetas ocultas. Solo intenta procesar `.pdf`, `.docx`, `.pptx`, `.xlsx`, `.xls`, `.csv`, `.html`, `.htm`, `.epub`, `.json`, `.xml` y `.txt`. Las demás extensiones se anotan como `ignorado`. El script usa `convert_local` y desactiva plugins: no convierte URLs ni activa OCR de terceros.
+
+Por cada conversión con texto, crea una nota `.md` con propiedades `fuente`, `convertido`, `herramienta`, `tags` y `revisado: false`. También crea `_informe-conversion.csv` en el destino. No sobrescribe una nota Markdown existente; cuando un nombre ya existe, anota `omitido` con detalle `ya existe`. No uses `--sobrescribir` hasta haber respaldado el destino y entendido que reemplazará una conversión anterior.
+
+El CSV se vuelve a generar en cada ejecución real y refleja esa corrida; si quieres conservar el historial, copia o renombra el informe anterior antes de volver a ejecutar.
+
+Los estados del resumen y del CSV son:
+
+- `convertido`: encontró texto y preparó una nota Markdown; en simulación solo indica lo que convertiría.
+- `omitido`: ya existía la ruta de salida y no se reemplazó.
+- `vacio`: MarkItDown no encontró texto para guardar. Un PDF escaneado es una posible causa; revisa el documento y no asumas que toda salida vacía es un escaneo.
+- `error`: ocurrió una excepción al procesar ese archivo o la salida no pudo mantenerse bajo el destino.
+- `ignorado`: la extensión no está en la lista permitida.
+
+Un lote puede tardar; comienza con una carpeta pequeña. Si ves `vacio`, la conversión estándar no recuperó texto. MarkItDown ofrece `markitdown-ocr` como plugin que usa un cliente de modelo para leer imágenes: sus instrucciones actuales envían imágenes al modelo configurado. Antes de esa alternativa revisa el aviso de privacidad, los permisos para el material y las reglas de tu institución. No lo describas como OCR local.
+
+### Nombres que se transforman y colisiones
+
+Para mantener nombres compatibles con sistemas de archivos y enlaces, el script reemplaza con guiones `\ / : * ? " < > | # ^ [ ]` en nombres y carpetas de salida. Obsidian advierte que ciertos símbolos pueden interferir con enlaces; la lista exacta de caracteres que el sistema de archivos acepta depende del sistema operativo. Este reemplazo es la regla de este script, no una afirmación de que todos esos símbolos estén prohibidos en todos los sistemas.
+
+Dos rutas distintas podrían quedar con el mismo nombre después del saneamiento. La primera crea la nota y la segunda queda como `omitido` porque la salida ya existe. El CSV conserva el nombre de origen para que puedas encontrar el caso; renombra uno de los originales y vuelve a ejecutar el lote. No borres una salida para resolverlo sin revisar primero su contenido.
+
+## Revisa el informe y abre el destino en Obsidian
+
+Abre `_informe-conversion.csv` en una hoja de cálculo o editor de texto. Revisa especialmente `vacio`, `error`, `ignorado` y `omitido`; también verifica que todas las rutas de salida correspondan al curso correcto. Si necesitas corregir el contenido, edita la nota convertida y conserva el original sin cambios.
+
+Abre la bóveda en Obsidian o cambia a ella si ya estaba abierta. Las notas nuevas viven en `Materiales/<Curso>/`; abre una y comprueba las propiedades. Si no ves la carpeta todavía, confirma primero en el explorador de archivos que el script la creó dentro de la bóveda y vuelve a abrir Obsidian o la bóveda.
+
+## Crea un índice del curso
+
+En la raíz de `Materiales/<Curso>/`, crea una nota índice, por ejemplo `Índice del curso.md`. Enlaza cada lectura o sesión con wikilinks como `[[Semana 1 (pdf)]]`; el nombre entre corchetes debe coincidir con la nota creada. Evita leer la bóveda completa con un agente: un índice del curso ayuda a elegir solo los materiales necesarios.
+
+Si pides a Claude Code o Codex que prepare el índice, solicita primero una propuesta de archivos y cambios. No le pidas que modifique las notas convertidas.
+
+Puedes añadir esta regla a las instrucciones del agente (`CLAUDE.md` o `AGENTS.md`):
+
+> `Materiales/` es una fuente de solo lectura: nunca la edites. Cuando uses información de un material, cita la nota con un wikilink. Separa lo que dice el material de lo que son mis notas. Si un archivo convertido está vacío o parece dañado, avísame.
+
+## Estudia usando las notas
+
+Usa el índice para seleccionar el material relevante y pide citas a las notas fuente. Por ejemplo:
+
+- “Resume `[[Semana 1 (pdf)]]` en cinco ideas. Cita la nota en cada idea y no inventes información que no esté en el material.”
+- “Haz preguntas de repaso basadas en `[[Sesión 2 (pptx)]]`. Pon la respuesta después de cada pregunta y cita la fuente.”
+- “Crea un glosario con términos de `[[Lectura 3 (docx)]]`. Marca como ‘no definido en el material’ cualquier término cuya definición no encuentres.”
+- “Compara `[[Semana 1 (pdf)]]` con `[[Semana 2 (pptx)]]`. Señala posibles contradicciones y cita las dos notas; si no hay evidencia suficiente, dilo.”
+
+Compara cada respuesta con el archivo convertido y el original cuando el formato o una tabla importante se haya desordenado.
+
+## Mantén el curso al día
+
+Para añadir documentos, guarda los nuevos originales en la carpeta de origen y vuelve a correr el script con el mismo destino. Al no sobrescribir por defecto, las notas que ya existen se omiten y los nuevos archivos se agregan. Mira el informe de cada ejecución.
+
+En Obsidian, busca `revisado: false` para repasar las conversiones pendientes. Después de comparar una nota con su original y confirmar que es utilizable, cambia su propiedad a `revisado: true`. No marques como revisado un documento vacío o con tablas dañadas.
+
+## ¿Cómo sé que funcionó?
+
+- La simulación mostró un resumen y no creó archivos ni CSV.
+- La ejecución real creó las notas y `_informe-conversion.csv` únicamente dentro de `Materiales/<Curso>/`.
+- Cada nota tiene las propiedades `fuente`, `convertido`, `herramienta`, `tags` y `revisado: false`.
+- Una segunda ejecución marca como `omitido` lo que ya existe y deja intacta la nota anterior.
+- Los archivos originales siguen en la carpeta de origen.
+- Obsidian muestra la carpeta y puedes abrir sus notas.
+
+## Script completo
+
+Descarga el archivo listo para usar: [convertir_a_boveda.py](/descargas/convertir_a_boveda.py).
+
+<CodeBlock language="python" filename="convertir_a_boveda.py" code="#!/usr/bin/env python3&#10;&quot;&quot;&quot;Convierte documentos de una carpeta a Markdown (MarkItDown) dentro de una b&#243;veda.&#10;&#10;Reglas de seguridad y de datos:&#10;- Solo LEE de --origen; nunca modifica ni borra los originales.&#10;- Solo escribe dentro de --destino (se valida que cada salida quede dentro).&#10;- Solo procesa extensiones de la lista blanca; ignora el resto.&#10;- No sobrescribe salidas existentes salvo que se pase --sobrescribir.&#10;- Usa convert_local (archivos locales; no acepta URLs).&#10;- Deja un informe CSV y avisa cuando una conversi&#243;n sale vac&#237;a (p. ej. PDF escaneado).&#10;&quot;&quot;&quot;&#10;from __future__ import annotations&#10;&#10;import argparse&#10;import csv&#10;import re&#10;import sys&#10;from datetime import date&#10;from importlib.metadata import version&#10;from pathlib import Path&#10;&#10;from markitdown import MarkItDown&#10;&#10;EXTENSIONES = {&quot;.pdf&quot;, &quot;.docx&quot;, &quot;.pptx&quot;, &quot;.xlsx&quot;, &quot;.xls&quot;, &quot;.csv&quot;, &quot;.html&quot;, &quot;.htm&quot;, &quot;.epub&quot;, &quot;.json&quot;, &quot;.xml&quot;, &quot;.txt&quot;}&#10;INVALIDOS = re.compile(r&#39;[\\/:*?&quot;&lt;&gt;|#^\[\]]&#39;)  # rompen archivos o wikilinks en Obsidian&#10;&#10;&#10;def limpiar_nombre(nombre: str) -&gt; str:&#10;    limpio = INVALIDOS.sub(&quot;-&quot;, nombre).strip(&quot; .&quot;)&#10;    return re.sub(r&quot;\s+&quot;, &quot; &quot;, limpio) or &quot;sin-nombre&quot;&#10;&#10;&#10;def ruta_salida(origen: Path, archivo: Path, destino: Path) -&gt; Path:&#10;    relativa = archivo.relative_to(origen)&#10;    partes = [limpiar_nombre(p) for p in relativa.parent.parts]&#10;    nombre = limpiar_nombre(archivo.stem) + f&quot; ({archivo.suffix.lstrip(&#39;.&#39;).lower()}).md&quot;&#10;    return destino.joinpath(*partes, nombre)&#10;&#10;&#10;def con_frontmatter(markdown: str, archivo: Path, origen: Path, etiqueta: str, v: str) -&gt; str:&#10;    fuente = archivo.relative_to(origen).as_posix().replace(&#39;&quot;&#39;, &quot;&#39;&quot;)&#10;    return (&#10;        &quot;---\n&quot;&#10;        f&#39;fuente: &quot;{fuente}&quot;\n&#39;&#10;        f&quot;convertido: {date.today().isoformat()}\n&quot;&#10;        f&quot;herramienta: markitdown {v}\n&quot;&#10;        f&quot;tags:\n  - {etiqueta}\n&quot;&#10;        &quot;revisado: false\n&quot;&#10;        &quot;---\n\n&quot; + markdown&#10;    )&#10;&#10;&#10;def main() -&gt; int:&#10;    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)&#10;    ap.add_argument(&quot;--origen&quot;, required=True, type=Path)&#10;    ap.add_argument(&quot;--destino&quot;, required=True, type=Path)&#10;    ap.add_argument(&quot;--etiqueta&quot;, default=&quot;material/convertido&quot;)&#10;    ap.add_argument(&quot;--sobrescribir&quot;, action=&quot;store_true&quot;)&#10;    ap.add_argument(&quot;--simular&quot;, action=&quot;store_true&quot;, help=&quot;No escribe nada; solo muestra qu&#233; har&#237;a&quot;)&#10;    a = ap.parse_args()&#10;&#10;    origen, destino = a.origen.resolve(), a.destino.resolve()&#10;    if not origen.is_dir():&#10;        print(f&quot;ERROR: la carpeta de origen no existe: {origen}&quot;, file=sys.stderr)&#10;        return 2&#10;    if destino == origen or origen in destino.parents:&#10;        print(&quot;ERROR: el destino no puede estar dentro del origen.&quot;, file=sys.stderr)&#10;        return 2&#10;&#10;    v = version(&quot;markitdown&quot;)&#10;    md = MarkItDown(enable_plugins=False)&#10;    filas, vacios, fallos = [], 0, 0&#10;&#10;    for archivo in sorted(p for p in origen.rglob(&quot;*&quot;) if p.is_file() and not p.is_symlink()):&#10;        if any(parte.startswith(&quot;.&quot;) for parte in archivo.relative_to(origen).parts):&#10;            continue&#10;        if archivo.suffix.lower() not in EXTENSIONES:&#10;            filas.append((str(archivo.relative_to(origen)), &quot;&quot;, &quot;ignorado&quot;, &quot;extensi&#243;n no incluida&quot;))&#10;            continue&#10;        salida = ruta_salida(origen, archivo, destino)&#10;        if destino not in salida.resolve().parents:&#10;            filas.append((str(archivo.relative_to(origen)), &quot;&quot;, &quot;error&quot;, &quot;salida fuera del destino&quot;))&#10;            fallos += 1&#10;            continue&#10;        if salida.exists() and not a.sobrescribir:&#10;            filas.append((str(archivo.relative_to(origen)), str(salida.relative_to(destino)), &quot;omitido&quot;, &quot;ya existe&quot;))&#10;            continue&#10;        try:&#10;            texto = md.convert_local(str(archivo)).markdown&#10;        except Exception as e:  # cada archivo falla de forma aislada&#10;            filas.append((str(archivo.relative_to(origen)), &quot;&quot;, &quot;error&quot;, f&quot;{type(e).__name__}: {e}&quot;[:200]))&#10;            fallos += 1&#10;            continue&#10;        if not texto.strip():&#10;            vacios += 1&#10;            filas.append((str(archivo.relative_to(origen)), &quot;&quot;, &quot;vacio&quot;, &quot;sin texto extra&#237;ble (&#191;PDF escaneado?)&quot;))&#10;            continue&#10;        if not a.simular:&#10;            salida.parent.mkdir(parents=True, exist_ok=True)&#10;            salida.write_text(con_frontmatter(texto, archivo, origen, a.etiqueta, v), encoding=&quot;utf-8&quot;)&#10;        filas.append((str(archivo.relative_to(origen)), str(salida.relative_to(destino)), &quot;convertido&quot;, &quot;&quot;))&#10;&#10;    if not a.simular:&#10;        destino.mkdir(parents=True, exist_ok=True)&#10;        with (destino / &quot;_informe-conversion.csv&quot;).open(&quot;w&quot;, newline=&quot;&quot;, encoding=&quot;utf-8&quot;) as f:&#10;            w = csv.writer(f)&#10;            w.writerow([&quot;origen&quot;, &quot;salida&quot;, &quot;estado&quot;, &quot;detalle&quot;])&#10;            w.writerows(filas)&#10;    resumen = {e: sum(1 for x in filas if x[2] == e) for e in (&quot;convertido&quot;, &quot;omitido&quot;, &quot;vacio&quot;, &quot;error&quot;, &quot;ignorado&quot;)}&#10;    print(resumen)&#10;    if vacios:&#10;        print(f&quot;AVISO: {vacios} archivo(s) salieron vac&#237;os (probablemente escaneados). Revisa el informe.&quot;)&#10;    return 1 if fallos else 0&#10;&#10;&#10;if __name__ == &quot;__main__&quot;:&#10;    sys.exit(main())" />
+
+## Deuda relacionada
+
+La guía de MarkItDown indicada como prerrequisito aún no existe en el repositorio. Mientras tanto, esta guía se apoya directamente en la documentación oficial enlazada arriba y en las guías internas de Python y uv.

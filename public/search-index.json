@@ -1,5 +1,54 @@
 [
   {
+    "id": "materiales-de-clase-a-boveda",
+    "slug": "materiales-de-clase-a-boveda",
+    "title": "De tus documentos de clase a tu bóveda de Obsidian con MarkItDown",
+    "titleNormalized": "de tus documentos de clase a tu boveda de obsidian con markitdown",
+    "summary": "Convierte una copia de tus documentos de clase a notas Markdown dentro de una bóveda de Obsidian y organízalas para estudiar con cuidado.",
+    "summaryNormalized": "convierte una copia de tus documentos de clase a notas markdown dentro de una boveda de obsidian y organizalas para estudiar con cuidado.",
+    "track": "conocimiento",
+    "level": "intermedio",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "markitdown",
+      "obsidian",
+      "python",
+      "uv",
+      "claude-code",
+      "codex"
+    ],
+    "toolsNormalized": [
+      "markitdown",
+      "obsidian",
+      "python",
+      "uv",
+      "claude-code",
+      "codex"
+    ],
+    "tags": [
+      "markitdown",
+      "obsidian",
+      "materiales",
+      "estudio",
+      "conversion",
+      "lotes"
+    ],
+    "tagsNormalized": [
+      "markitdown",
+      "obsidian",
+      "materiales",
+      "estudio",
+      "conversion",
+      "lotes"
+    ],
+    "errorSymptoms": [],
+    "errorSymptomsNormalized": []
+  },
+  {
     "id": "obsidian-agente-desarrolladores",
     "slug": "obsidian-agente-desarrolladores",
     "title": "Bóveda de Obsidian separada del proyecto: usar --add-dir con tu agente",
