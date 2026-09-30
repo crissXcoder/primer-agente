@@ -1,7 +1,7 @@
-﻿---
-title: "QGIS y MCP: quÃ© conecta y cÃ³mo elegir"
+---
+title: "QGIS y MCP: qué conecta y cómo elegir"
 slug: "qgis-mcp-que-es-y-como-elegir"
-summary: "Entiende cÃ³mo un agente se conecta con QGIS, compara proyectos comunitarios y elige una opciÃ³n con controles de seguridad bÃ¡sicos."
+summary: "Entiende cómo un agente se conecta con QGIS, compara proyectos comunitarios y elige una opción con controles de seguridad básicos."
 track: "geoespacial"
 audience: "todos"
 level: "principiante"
@@ -27,7 +27,7 @@ timeMinutes: 25
 verifiedAt: "2026-09-29"
 appliesTo:
   qgis: "Proyectos y versiones declaradas en README consultados el 2026-09-29; verifica compatibilidad del plugin y servidor antes de instalar."
-  mcp: "Protocolo y documentaciÃ³n consultados el 2026-09-29; las funciones dependen del cliente MCP."
+  mcp: "Protocolo y documentación consultados el 2026-09-29; las funciones dependen del cliente MCP."
 evidence:
   windows: "docs-oficiales"
   macos: "docs-oficiales"
@@ -49,101 +49,143 @@ errors: []
 
 import { Badge } from "@/components/ui/badge";
 
-Esta guÃ­a te ayuda a entender las conexiones MCP para QGIS y a escoger un proyecto segÃºn tu agente, versiÃ³n de QGIS y nivel de confianza. No instala nada ni garantiza que una combinaciÃ³n concreta funcione en tu computadora. La guÃ­a genÃ©rica de MCP para el agente todavÃ­a no estÃ¡ disponible; por eso aquÃ­ explicamos lo necesario para comparar, sin enlazar una pÃ¡gina pendiente.
+Esta guía te ayuda a entender las conexiones MCP para QGIS y a escoger un proyecto según tu agente, versión de QGIS y nivel de confianza. No instala nada ni garantiza que una combinación concreta funcione en tu computadora. La guía genérica de MCP para el agente todavía no está disponible; por eso aquí explicamos lo necesario para comparar, sin enlazar una página pendiente.
 
-Si es tu primera vez con QGIS, empezÃ¡ por [instalar y preparar QGIS](/guias/qgis-instalar-y-preparar). Para aprender a revisar complementos, consultÃ¡ [instalar y gestionar plugins](/guias/qgis-plugins-instalar-y-gestionar).
+Si es tu primera vez con QGIS, empezá por [instalar y preparar QGIS](/guias/qgis-instalar-y-preparar). Para aprender a revisar complementos, consultá [instalar y gestionar plugins](/guias/qgis-plugins-instalar-y-gestionar).
 
-## QuÃ© significa conectar QGIS con MCP
+## Qué significa conectar QGIS con MCP
 
-MCP es un protocolo para que una aplicaciÃ³n cliente de IA use herramientas que ofrece otro programa. El cliente puede ser un editor o agente de cÃ³digo; el modelo que usa ese cliente puede ser local o remoto. El servidor MCP traduce las solicitudes a operaciones del complemento dentro de QGIS. La palabra â€œlocalâ€ describe dÃ³nde corre esa conexiÃ³n, no necesariamente dÃ³nde se procesa el texto que enviÃ¡s al modelo.
+MCP es un protocolo para que una aplicación cliente de IA use herramientas que ofrece otro programa. El cliente puede ser un editor o agente de código; el modelo que usa ese cliente puede ser local o remoto. El servidor MCP traduce las solicitudes a operaciones del complemento dentro de QGIS. La palabra “local” describe dónde corre esa conexión, no necesariamente dónde se procesa el texto que enviás al modelo.
 
 ```text
 Persona
-  â”‚ pide una tarea
-  â–¼
-Agente / cliente MCP â”€â”€ stdio â”€â”€â–º Servidor MCP local
-                                      â”‚
-                                      â”‚ socket TCP local (127.0.0.1)
-                                      â–¼
+  │ pide una tarea
+  ▼
+Agente / cliente MCP ── stdio ──► Servidor MCP local
+                                      │
+                                      │ socket TCP local (127.0.0.1)
+                                      ▼
                                 Plugin de QGIS
-                                      â”‚ API PyQGIS
-                                      â–¼
+                                      │ API PyQGIS
+                                      ▼
                                     QGIS
 ```
 
-Esta arquitectura es la que varios proyectos describen. No todos comparten los mismos formatos, puertos, controles ni funciones; algunos pueden omitir una pieza o combinar servidor y plugin. ConfirmÃ¡ el README y la versiÃ³n de cada componente antes de conectar.
+Esta arquitectura es la que varios proyectos describen. No todos comparten los mismos formatos, puertos, controles ni funciones; algunos pueden omitir una pieza o combinar servidor y plugin. Confirmá el README y la versión de cada componente antes de conectar.
 
-<Badge status="verified" label="Lectura: documentaciÃ³n oficial de MCP y QGIS" />
+<Badge status="verified" label="Lectura: documentación oficial de MCP y QGIS" />
 
-## QuÃ© puede hacer y quÃ© no hace MCP
+## Qué puede hacer y qué no hace MCP
 
-Un servidor puede exponer operaciones como consultar capas, filtrar elementos, ejecutar algoritmos de Processing, cambiar estilos, exportar archivos o editar entidades. Cada acciÃ³n disponible depende del proyecto y del plugin. MCP no es un modelo, no valida por sÃ­ solo que el anÃ¡lisis geogrÃ¡fico sea correcto y no decide si tenÃ©s autorizaciÃ³n para modificar un conjunto de datos.
+Un servidor puede exponer operaciones como consultar capas, filtrar elementos, ejecutar algoritmos de Processing, cambiar estilos, exportar archivos o editar entidades. Cada acción disponible depende del proyecto y del plugin. MCP no es un modelo, no valida por sí solo que el análisis geográfico sea correcto y no decide si tenés autorización para modificar un conjunto de datos.
 
-RevisÃ¡ los parÃ¡metros y resultados antes de guardar cambios. Para practicar, usÃ¡ una copia del proyecto y datos de ejemplo. Pedile al agente que explique quÃ© capa, archivo y operaciÃ³n va a tocar; no aceptÃ©s una orden vaga como â€œarreglÃ¡ el mapaâ€ si puede modificar datos.
+Revisá los parámetros y resultados antes de guardar cambios. Para practicar, usá una copia del proyecto y datos de ejemplo. Pedile al agente que explique qué capa, archivo y operación va a tocar; no aceptés una orden vaga como “arreglá el mapa” si puede modificar datos.
 
 ## Proyectos que encontramos
 
-La tabla resume las pÃ¡ginas consultadas el **2026-09-29**. â€œLecturaâ€ significa que contrastamos el README o ficha del proyecto; no equivale a instalarlo ni ejecutar sus herramientas. Las fechas son las Ãºltimas fechas de commit que mostraba la pÃ¡gina de GitHub al consultar; GitHub no expuso el dÃ­a en todos los repositorios revisados. Las cifras de herramientas son declaraciones de sus autores, no una prueba independiente de cobertura ni calidad.
+La tabla resume las páginas consultadas el **2026-09-29**. “Lectura” significa que contrastamos el README o ficha del proyecto; no equivale a instalarlo ni ejecutar sus herramientas. Las fechas son las últimas fechas de commit que mostraba la página de GitHub al consultar; GitHub no expuso el día en todos los repositorios revisados. Las cifras de herramientas son declaraciones de sus autores, no una prueba independiente de cobertura ni calidad.
 
-| Proyecto | Encaje declarado | QGIS y cliente | Aspectos para revisar |
-| --- | --- | --- | --- |
-| [nkarasiak/qgis-mcp](https://github.com/nkarasiak/qgis-mcp) <Badge status="verified" label="LeÃ­do Â· commit: no verificado" /> | Servidor FastMCP y plugin separados; README anuncia 125 herramientas. | Declara QGIS 3.28â€“4.x y mÃºltiples clientes, incluido Codex CLI. | `uvx --from` usa la rama `main` en el ejemplo: no fija una versiÃ³n. Plugin y servidor deben mantenerse compatibles. README documenta `QGIS_MCP_TOKEN` opcional; no lo trates como aislamiento de procesos del mismo usuario. Licencia declarada GPL-2.0-or-later para plugin y MIT para servidor. |
-| [piatkowski/qgis-mcp](https://github.com/piatkowski/qgis-mcp) <Badge status="verified" label="LeÃ­do Â· commit: no verificado" /> | Proceso servidor en Python y plugin dentro de QGIS; orientado inicialmente a Claude Desktop. | README declara QGIS 3.22 o posterior, Python 3.12+ para el servidor y Windows, macOS y Linux. | Usa socket local y el servidor arranca al habilitar el plugin, segÃºn su README. Requiere clonar/configurar y apunta a una ruta local del entorno virtual. No asumir que el rango declarado prueba todas las combinaciones de SO. Licencia del repo indicada como GPL-2.0. |
-| [Aaa2122/QGIS-MCP](https://github.com/Aaa2122/QGIS-MCP) <Badge status="verified" label="LeÃ­do Â· commit: no verificado" /> | Plugin empacado y puente MCP con flujo de conexiÃ³n/configuraciÃ³n asistido; README anuncia mÃ¡s de 100 herramientas. | Declara QGIS 3.44 LTR a 4.x y clientes como Codex, OpenCode, Claude y Cursor. | Requiere una versiÃ³n reciente de QGIS frente a opciones que declaran compatibilidad anterior. README afirma validaciÃ³n en versiones concretas, pero esta guÃ­a no la repitiÃ³. La declaraciÃ³n MIT del repositorio no sustituye revisar licencias de dependencias y componentes empacados. |
-| [jkoets/QGIS-MCP-Server](https://github.com/jkoets/QGIS-MCP-Server) <Badge status="review" label="LeÃ­do Â· commit: no verificado" /> | Plugin â€œQGIS MCP Bridgeâ€ y servidor externo; README incluye ejecuciÃ³n de fragmentos PyQGIS arbitrarios. | README se centra en Claude Code/Desktop; la configuraciÃ³n mostrada usa uv. | La ejecuciÃ³n arbitraria de cÃ³digo PyQGIS amplÃ­a mucho el impacto de una instrucciÃ³n equivocada. Socket local no equivale a autenticaciÃ³n. El README pide habilitar plugins experimentales en los pasos descritos. Solo un commit visible en la pÃ¡gina consultada: dato contextual, no juicio de calidad. |
-| [lefcgis/qgis-mcp](https://github.com/lefcgis/qgis-mcp) <Badge status="review" label="LeÃ­do Â· fork relacionado" /> | Fork de `nkarasiak/qgis-mcp` con medidas opcionales de token descritas en el README. | Hereda requisitos y arquitectura declarados por el proyecto de origen; revisar diferencias del fork. | El README consultado presenta `QGIS_MCP_TOKEN` opcional. Un fork puede divergir y su README puede quedar atrÃ¡s: compara cambios, releases y cÃ³digo antes de usarlo. No se recomienda solo por aÃ±adir una opciÃ³n de token. |
-| Plugin [QGIS MCP en el repositorio oficial de complementos](https://plugins.qgis.org/plugins/qgis_mcp_plugin/) <Badge status="verified" label="LeÃ­do Â· ficha consultada 2026-09-29" /> | Ficha de distribuciÃ³n del plugin vinculado al servidor `nkarasiak/qgis-mcp`, no un servidor MCP independiente. | La ficha consultada indicaba una versiÃ³n publicada y compatibilidad declarada por el mantenedor; el proyecto vinculado especifica clientes. | Instalar este plugin no completa la conexiÃ³n: la ficha dice que tambiÃ©n se necesita el servidor MCP. Comprueba que plugin y servidor correspondan al mismo proyecto y release. |
+<div className="my-5 overflow-x-auto rounded-md border border-outline-variant">
+  <table className="w-full border-collapse text-left text-sm">
+    <thead className="bg-surface-container text-on-surface">
+      <tr>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Proyecto</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Encaje declarado</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">QGIS y cliente</th>
+        <th scope="col" className="border-b border-outline-variant px-3 py-2 font-semibold">Aspectos para revisar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">[nkarasiak/qgis-mcp](https://github.com/nkarasiak/qgis-mcp) <Badge status="verified" label="Leído · commit: no verificado" /></td>
+        <td className="border-t border-outline-variant px-3 py-2">Servidor FastMCP y plugin separados; README anuncia 125 herramientas.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Declara QGIS 3.28–4.x y múltiples clientes, incluido Codex CLI.</td>
+        <td className="border-t border-outline-variant px-3 py-2">`uvx --from` usa la rama `main` en el ejemplo: no fija una versión. Plugin y servidor deben mantenerse compatibles. README documenta `QGIS_MCP_TOKEN` opcional; no lo trates como aislamiento de procesos del mismo usuario. Licencia declarada GPL-2.0-or-later para plugin y MIT para servidor.</td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">[piatkowski/qgis-mcp](https://github.com/piatkowski/qgis-mcp) <Badge status="verified" label="Leído · commit: no verificado" /></td>
+        <td className="border-t border-outline-variant px-3 py-2">Proceso servidor en Python y plugin dentro de QGIS; orientado inicialmente a Claude Desktop.</td>
+        <td className="border-t border-outline-variant px-3 py-2">README declara QGIS 3.22 o posterior, Python 3.12+ para el servidor y Windows, macOS y Linux.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Usa socket local y el servidor arranca al habilitar el plugin, según su README. Requiere clonar/configurar y apunta a una ruta local del entorno virtual. No asumir que el rango declarado prueba todas las combinaciones de SO. Licencia del repo indicada como GPL-2.0.</td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">[Aaa2122/QGIS-MCP](https://github.com/Aaa2122/QGIS-MCP) <Badge status="verified" label="Leído · commit: no verificado" /></td>
+        <td className="border-t border-outline-variant px-3 py-2">Plugin empacado y puente MCP con flujo de conexión/configuración asistido; README anuncia más de 100 herramientas.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Declara QGIS 3.44 LTR a 4.x y clientes como Codex, OpenCode, Claude y Cursor.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Requiere una versión reciente de QGIS frente a opciones que declaran compatibilidad anterior. README afirma validación en versiones concretas, pero esta guía no la repitió. La declaración MIT del repositorio no sustituye revisar licencias de dependencias y componentes empacados.</td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">[jkoets/QGIS-MCP-Server](https://github.com/jkoets/QGIS-MCP-Server) <Badge status="review" label="Leído · commit: no verificado" /></td>
+        <td className="border-t border-outline-variant px-3 py-2">Plugin “QGIS MCP Bridge” y servidor externo; README incluye ejecución de fragmentos PyQGIS arbitrarios.</td>
+        <td className="border-t border-outline-variant px-3 py-2">README se centra en Claude Code/Desktop; la configuración mostrada usa uv.</td>
+        <td className="border-t border-outline-variant px-3 py-2">La ejecución arbitraria de código PyQGIS amplía mucho el impacto de una instrucción equivocada. Socket local no equivale a autenticación. El README pide habilitar plugins experimentales en los pasos descritos. Solo un commit visible en la página consultada: dato contextual, no juicio de calidad.</td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">[lefcgis/qgis-mcp](https://github.com/lefcgis/qgis-mcp) <Badge status="review" label="Leído · fork relacionado" /></td>
+        <td className="border-t border-outline-variant px-3 py-2">Fork de `nkarasiak/qgis-mcp` con medidas opcionales de token descritas en el README.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Hereda requisitos y arquitectura declarados por el proyecto de origen; revisar diferencias del fork.</td>
+        <td className="border-t border-outline-variant px-3 py-2">El README consultado presenta `QGIS_MCP_TOKEN` opcional. Un fork puede divergir y su README puede quedar atrás: compara cambios, releases y código antes de usarlo. No se recomienda solo por añadir una opción de token.</td>
+      </tr>
+      <tr className="align-top even:bg-surface-container-low">
+        <td className="border-t border-outline-variant px-3 py-2">Plugin [QGIS MCP en el repositorio oficial de complementos](https://plugins.qgis.org/plugins/qgis_mcp_plugin/) <Badge status="verified" label="Leído · ficha consultada 2026-09-29" /></td>
+        <td className="border-t border-outline-variant px-3 py-2">Ficha de distribución del plugin vinculado al servidor `nkarasiak/qgis-mcp`, no un servidor MCP independiente.</td>
+        <td className="border-t border-outline-variant px-3 py-2">La ficha consultada indicaba una versión publicada y compatibilidad declarada por el mantenedor; el proyecto vinculado especifica clientes.</td>
+        <td className="border-t border-outline-variant px-3 py-2">Instalar este plugin no completa la conexión: la ficha dice que también se necesita el servidor MCP. Comprueba que plugin y servidor correspondan al mismo proyecto y release.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-Los proyectos no son intercambiables por compartir â€œQGIS MCPâ€ en el nombre. La prueba previa documentada para esta guÃ­a encontrÃ³ dos discrepancias: los totales de herramientas anunciados en algunos README no coincidÃ­an con las herramientas enumeradas al revisar la descripciÃ³n, y una llamada `ping` fallÃ³ con QGIS cerrado. Esa observaciÃ³n procede de una prueba anterior, no de una ejecuciÃ³n de esta guÃ­a; por sÃ­ sola no identifica cuÃ¡l combinaciÃ³n produjo cada discrepancia ni demuestra un defecto general. Un `ping` que requiere que QGIS y el plugin estÃ©n activos es una comprobaciÃ³n de conexiÃ³n, no una prueba de calidad geogrÃ¡fica.
+Los proyectos no son intercambiables por compartir “QGIS MCP” en el nombre. La prueba previa documentada para esta guía encontró dos discrepancias: los totales de herramientas anunciados en algunos README no coincidían con las herramientas enumeradas al revisar la descripción, y una llamada `ping` falló con QGIS cerrado. Esa observación procede de una prueba anterior, no de una ejecución de esta guía; por sí sola no identifica cuál combinación produjo cada discrepancia ni demuestra un defecto general. Un `ping` que requiere que QGIS y el plugin estén activos es una comprobación de conexión, no una prueba de calidad geográfica.
 
-<Badge status="review" label="No verificado aquÃ­: instalaciÃ³n, ping y prueba funcional en QGIS" />
+<Badge status="review" label="No verificado aquí: instalación, ping y prueba funcional en QGIS" />
 
-## CÃ³mo elegir
+## Cómo elegir
 
-SeguÃ­ estas preguntas en orden:
+Seguí estas preguntas en orden:
 
-1. **Â¿QuÃ© cliente MCP usÃ¡s?** RevisÃ¡ primero la documentaciÃ³n oficial de ese cliente y confirma que admita servidores locales por `stdio`. Codex, Claude Code, Cursor y otros clientes pueden guardar la configuraciÃ³n en lugares diferentes. Un README que menciona un cliente no certifica todos sus sistemas operativos.
-2. **Â¿QuÃ© versiÃ³n de QGIS tenÃ©s?** ComparÃ¡ la versiÃ³n instalada con el rango del plugin y el servidor. Si usÃ¡s QGIS 3.28 o una versiÃ³n anterior, no elijÃ¡s una opciÃ³n que declare Ãºnicamente QGIS 3.44+. Si vas a actualizar QGIS para este uso, primero comprueba que tus otros plugins y proyectos sean compatibles.
-3. **Â¿QuerÃ©s usar un modelo local?** MCP conecta cliente y herramientas, pero no obliga a usar un proveedor concreto. VerificÃ¡ en la documentaciÃ³n vigente del cliente cÃ³mo enruta solicitudes a un modelo local y quÃ© datos siguen saliendo del equipo. La conexiÃ³n local a QGIS no garantiza procesamiento local del modelo.
-4. **Â¿Es para un taller de principiantes?** PreferÃ­ una opciÃ³n cuya ficha explique claramente cliente, versiones, instalaciÃ³n del plugin, instalaciÃ³n/configuraciÃ³n del servidor y cÃ³mo desconectarla. En una actividad grupal, usÃ¡ un proyecto de prÃ¡ctica sin datos personales, hacÃ© la conexiÃ³n en una mÃ¡quina de prueba y fijÃ¡ una misma combinaciÃ³n de versiones para el grupo.
-5. **Â¿El servidor y el plugin se distribuyen por separado?** AnotÃ¡ sus versiones y cÃ³mo fijarlas. EvitÃ¡ copiar sin cambios comandos que descarguen `main` o `latest`: el contenido remoto puede cambiar y dejar componentes incompatibles. PreferÃ­ un release versionado o un commit especÃ­fico y conserva esa referencia para repetir la configuraciÃ³n.
+1. **¿Qué cliente MCP usás?** Revisá primero la documentación oficial de ese cliente y confirma que admita servidores locales por `stdio`. Codex, Claude Code, Cursor y otros clientes pueden guardar la configuración en lugares diferentes. Un README que menciona un cliente no certifica todos sus sistemas operativos.
+2. **¿Qué versión de QGIS tenés?** Compará la versión instalada con el rango del plugin y el servidor. Si usás QGIS 3.28 o una versión anterior, no elijás una opción que declare únicamente QGIS 3.44+. Si vas a actualizar QGIS para este uso, primero comprueba que tus otros plugins y proyectos sean compatibles.
+3. **¿Querés usar un modelo local?** MCP conecta cliente y herramientas, pero no obliga a usar un proveedor concreto. Verificá en la documentación vigente del cliente cómo enruta solicitudes a un modelo local y qué datos siguen saliendo del equipo. La conexión local a QGIS no garantiza procesamiento local del modelo.
+4. **¿Es para un taller de principiantes?** Preferí una opción cuya ficha explique claramente cliente, versiones, instalación del plugin, instalación/configuración del servidor y cómo desconectarla. En una actividad grupal, usá un proyecto de práctica sin datos personales, hacé la conexión en una máquina de prueba y fijá una misma combinación de versiones para el grupo.
+5. **¿El servidor y el plugin se distribuyen por separado?** Anotá sus versiones y cómo fijarlas. Evitá copiar sin cambios comandos que descarguen `main` o `latest`: el contenido remoto puede cambiar y dejar componentes incompatibles. Preferí un release versionado o un commit específico y conserva esa referencia para repetir la configuración.
 
-Para empezar a comparar, el proyecto `nkarasiak/qgis-mcp` declara una gama amplia de clientes y documenta tanto el servidor como su plugin. No lo recomendamos automÃ¡ticamente: si la versiÃ³n de QGIS no coincide, si querÃ©s otro modelo/cliente o si no podÃ©s fijar componentes, la mejor opciÃ³n puede ser esperar o practicar sin conexiÃ³n MCP. El proyecto `jkoets` requiere especial cautela en un taller porque declara ejecuciÃ³n de cÃ³digo PyQGIS arbitrario.
+Para empezar a comparar, el proyecto `nkarasiak/qgis-mcp` declara una gama amplia de clientes y documenta tanto el servidor como su plugin. No lo recomendamos automáticamente: si la versión de QGIS no coincide, si querés otro modelo/cliente o si no podés fijar componentes, la mejor opción puede ser esperar o practicar sin conexión MCP. El proyecto `jkoets` requiere especial cautela en un taller porque declara ejecución de código PyQGIS arbitrario.
 
 ## Riesgos y controles para empezar
 
 <Callout type="peligro">
-Aunque el servidor y QGIS corran en tu computadora, las instrucciones y resultados que mandÃ¡s al agente pueden enviarse al proveedor del modelo. Capas, nombres de archivo, atributos, consultas, capturas y rutas pueden contener informaciÃ³n sensible. Revisa las reglas de privacidad del cliente y proveedor; para probar, usa datos pÃºblicos o ficticios.
+Aunque el servidor y QGIS corran en tu computadora, las instrucciones y resultados que mandás al agente pueden enviarse al proveedor del modelo. Capas, nombres de archivo, atributos, consultas, capturas y rutas pueden contener información sensible. Revisa las reglas de privacidad del cliente y proveedor; para probar, usa datos públicos o ficticios.
 </Callout>
 
-- **CÃ³digo y ediciÃ³n de datos:** si una herramienta puede ejecutar cÃ³digo o editar capas, tratÃ¡ cada llamada como una acciÃ³n con impacto. UsÃ¡ copias, revisÃ¡ el plan, confirmÃ¡ antes de escribir/exportar y guardÃ¡ una copia de respaldo.
-- **Socket local sin autenticaciÃ³n:** `127.0.0.1` limita la escucha a la mÃ¡quina segÃºn la configuraciÃ³n declarada, pero cualquier proceso local con acceso suficiente podrÃ­a intentar conectarse. No expongÃ¡s el puerto a la red ni uses tÃºneles/reenviadores; detenÃ© el plugin cuando terminÃ©s. Un token opcional es una capa adicional, no una caja de aislamiento.
-- **Versiones que cambian:** evitÃ¡ `main`, `master` o etiquetas flotantes como referencia de instalaciÃ³n permanente. ElegÃ­ release/commit, anotÃ¡ versiÃ³n del plugin y del servidor, y actualizÃ¡ ambos de forma coordinada.
-- **Instrucciones dentro de datos:** un nombre de capa, atributo o archivo podrÃ­a contener texto como â€œignora instrucciones anterioresâ€. TratÃ¡ esos datos como contenido, no como Ã³rdenes. El agente debe seguir tus instrucciones y no ejecutar texto encontrado en los datos como cÃ³digo.
-- **Privilegios y daÃ±os:** corrÃ© el agente con una cuenta normal, sin permisos administrativos innecesarios. QuitÃ¡ herramientas que no ocupÃ©s si el proyecto permite limitar capacidades, y no conectÃ©s carpetas completas si basta un proyecto de muestra.
-- **Cadena de suministro:** revisÃ¡ el autor, el repositorio de origen, release, licencia, dependencias y avisos antes de instalar. El repositorio oficial de plugins ayuda a descubrir y distribuir complementos, pero no reemplaza la revisiÃ³n de confianza y compatibilidad.
+- **Código y edición de datos:** si una herramienta puede ejecutar código o editar capas, tratá cada llamada como una acción con impacto. Usá copias, revisá el plan, confirmá antes de escribir/exportar y guardá una copia de respaldo.
+- **Socket local sin autenticación:** `127.0.0.1` limita la escucha a la máquina según la configuración declarada, pero cualquier proceso local con acceso suficiente podría intentar conectarse. No expongás el puerto a la red ni uses túneles/reenviadores; detené el plugin cuando terminés. Un token opcional es una capa adicional, no una caja de aislamiento.
+- **Versiones que cambian:** evitá `main`, `master` o etiquetas flotantes como referencia de instalación permanente. Elegí release/commit, anotá versión del plugin y del servidor, y actualizá ambos de forma coordinada.
+- **Instrucciones dentro de datos:** un nombre de capa, atributo o archivo podría contener texto como “ignora instrucciones anteriores”. Tratá esos datos como contenido, no como órdenes. El agente debe seguir tus instrucciones y no ejecutar texto encontrado en los datos como código.
+- **Privilegios y daños:** corré el agente con una cuenta normal, sin permisos administrativos innecesarios. Quitá herramientas que no ocupés si el proyecto permite limitar capacidades, y no conectés carpetas completas si basta un proyecto de muestra.
+- **Cadena de suministro:** revisá el autor, el repositorio de origen, release, licencia, dependencias y avisos antes de instalar. El repositorio oficial de plugins ayuda a descubrir y distribuir complementos, pero no reemplaza la revisión de confianza y compatibilidad.
 
-La documentaciÃ³n de seguridad de MCP tambiÃ©n recomienda tratar con cuidado el acceso a herramientas, consentimiento y datos. La interfaz de aprobaciÃ³n del cliente ayuda a revisar acciones, pero no vuelve confiable a un servidor desconocido.
+La documentación de seguridad de MCP también recomienda tratar con cuidado el acceso a herramientas, consentimiento y datos. La interfaz de aprobación del cliente ayuda a revisar acciones, pero no vuelve confiable a un servidor desconocido.
 
-## CÃ³mo identificar el plugin correcto
+## Cómo identificar el plugin correcto
 
-1. AbrÃ­ el README del servidor que decidiste evaluar y copiÃ¡ el nombre exacto del plugin, repositorio y release.
-2. En QGIS, abrÃ­ **Complementos â†’ Administrar e instalar complementos** y buscÃ¡ ese nombre exacto. RevisÃ¡ autor, versiÃ³n, compatibilidad y enlace al cÃ³digo fuente.
-3. Si el README indica instalar desde ZIP o desde un repositorio adicional, confirmÃ¡ que el enlace lleve al proyecto elegido y no a un fork con nombre parecido. No habilitÃ©s repositorios experimentales solo para probar al azar.
-4. ComparÃ¡ las instrucciones de arranque, puerto y versiÃ³n del servidor MCP con las del plugin. Un resultado `ping` exitoso confirma comunicaciÃ³n bÃ¡sica cuando el plugin estÃ¡ ejecutÃ¡ndose; no valida cambios, anÃ¡lisis ni exportaciones.
-5. Si no logrÃ¡s determinar que ambos componentes pertenecen al mismo proyecto y release, detenete y no conectÃ©s tus datos.
+1. Abrí el README del servidor que decidiste evaluar y copiá el nombre exacto del plugin, repositorio y release.
+2. En QGIS, abrí **Complementos → Administrar e instalar complementos** y buscá ese nombre exacto. Revisá autor, versión, compatibilidad y enlace al código fuente.
+3. Si el README indica instalar desde ZIP o desde un repositorio adicional, confirmá que el enlace lleve al proyecto elegido y no a un fork con nombre parecido. No habilités repositorios experimentales solo para probar al azar.
+4. Compará las instrucciones de arranque, puerto y versión del servidor MCP con las del plugin. Un resultado `ping` exitoso confirma comunicación básica cuando el plugin está ejecutándose; no valida cambios, análisis ni exportaciones.
+5. Si no lográs determinar que ambos componentes pertenecen al mismo proyecto y release, detenete y no conectés tus datos.
 
-## Â¿CÃ³mo sÃ© que funcionÃ³?
+## ¿Cómo sé que funcionó?
 
-La guÃ­a cumpliÃ³ su propÃ³sito cuando podÃ©s explicar quÃ© papel cumplen el cliente, servidor, socket y plugin; encontrÃ¡s el rango de QGIS declarado por el proyecto que estÃ¡s evaluando; y podÃ©s seÃ±alar al menos un riesgo y su control antes de instalar.
+La guía cumplió su propósito cuando podés explicar qué papel cumplen el cliente, servidor, socket y plugin; encontrás el rango de QGIS declarado por el proyecto que estás evaluando; y podés señalar al menos un riesgo y su control antes de instalar.
 
-Esta guÃ­a no proporciona una salida de terminal esperada porque no instala ni ejecuta un servidor. Para confirmar una instalaciÃ³n real, seguÃ­ la prueba `ping` que documente el proyecto elegido, con QGIS abierto y el plugin iniciado. Si QGIS estÃ¡ cerrado, que falle la conexiÃ³n solo indica que el puente no estÃ¡ disponible; no demuestra que la instalaciÃ³n estÃ© mal.
+Esta guía no proporciona una salida de terminal esperada porque no instala ni ejecuta un servidor. Para confirmar una instalación real, seguí la prueba `ping` que documente el proyecto elegido, con QGIS abierto y el plugin iniciado. Si QGIS está cerrado, que falle la conexión solo indica que el puente no está disponible; no demuestra que la instalación esté mal.
 
 ## Fuentes consultadas
 
-Consultadas el **2026-09-29**. Los detalles de cada proyecto, sus capacidades, licencias y compatibilidad son declaraciones de sus README o fichas y pueden cambiar. La secciÃ³n de seguridad distingue los controles recomendados por la guÃ­a de lo que cada proyecto implementa.
+Consultadas el **2026-09-29**. Los detalles de cada proyecto, sus capacidades, licencias y compatibilidad son declaraciones de sus README o fichas y pueden cambiar. La sección de seguridad distingue los controles recomendados por la guía de lo que cada proyecto implementa.
 
-- [IntroducciÃ³n oficial a MCP](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro), [arquitectura](https://modelcontextprotocol.io/docs/2026-07-28/concepts/architecture) y [seguridad](https://modelcontextprotocol.io/docs/2026-07-28/concepts/security).
+- [Introducción oficial a MCP](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro), [arquitectura](https://modelcontextprotocol.io/docs/2026-07-28/concepts/architecture) y [seguridad](https://modelcontextprotocol.io/docs/2026-07-28/concepts/security).
 - [QGIS MCP de `nkarasiak`](https://github.com/nkarasiak/qgis-mcp) y su [ficha en el repositorio oficial de plugins](https://plugins.qgis.org/plugins/qgis_mcp_plugin/).
 - [QGIS MCP de `piatkowski`](https://github.com/piatkowski/qgis-mcp).
 - [QGIS Agent MCP de `Aaa2122`](https://github.com/Aaa2122/QGIS-MCP).
