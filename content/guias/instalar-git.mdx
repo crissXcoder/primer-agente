@@ -1,0 +1,76 @@
+---
+title: "Instalación y Configuración Inicial de Git"
+slug: "instalar-git"
+summary: "Aprende a instalar el sistema de control de versiones Git en Windows, macOS o Linux y configura tu identidad de desarrollador."
+track: "git"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "git"
+tags:
+  - "control-de-versiones"
+  - "terminal"
+  - "git"
+  - "herramientas-base"
+prerequisites: []
+related:
+  - "instalar-nodejs"
+timeMinutes: 10
+verifiedAt: "2026-09-29"
+appliesTo:
+  git: ">=2.40.0"
+evidence:
+  windows: "ejecutada"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://git-scm.com/downloads"
+  - "https://git-scm.com/book/en/v2/Getting-Started-Installing-Git"
+errors:
+  - symptom: "'git' no se reconoce como un comando interno o externo"
+    cause: "El ejecutable de Git no se agregó a la variable de entorno PATH de Windows."
+    fix: "Reinicia la terminal de PowerShell. Si persiste, reinstala Git marcando la casilla 'Git from the command line and also from 3rd-party software'."
+---
+
+Git es el sistema de control de versiones fundamental para clonar repositorios, colaborar en código y configurar agentes de IA modernos.
+
+<Steps>
+  <Step number="1" title="Instala Git según tu Sistema Operativo">
+    Selecciona la pestaña de tu sistema operativo y ejecuta el comando oficial recomendado:
+
+    <OsTabs
+      windowsCmd="winget install --id Git.Git -e --source winget"
+      windowsDesc="Ejecuta en PowerShell (recomendado para Windows 10/11):"
+      macosCmd="brew install git"
+      macosDesc="Usa Homebrew en la terminal de macOS:"
+      linuxCmd="sudo apt update && sudo apt install git -y"
+      linuxDesc="Para distribuciones basadas en Debian/Ubuntu:"
+    />
+  </Step>
+
+  <Step number="2" title="Configura tu Identidad Global">
+    Git necesita saber quién eres para firmar tus cambios. Ejecuta los siguientes dos comandos reemplazando con tus datos reales:
+
+    <CodeBlock
+      filename="config-identidad.sh"
+      language="bash"
+      code={`git config --global user.name "Tu Nombre"
+git config --global user.email "tu-correo@ejemplo.com"`}
+    />
+  </Step>
+</Steps>
+
+<Verify
+  command="git --version"
+  expectedOutput="git version 2.53.0.windows.2"
+  description="Abre una nueva ventana de terminal y ejecuta el comando de comprobación. Debes observar un número de versión superior a 2.40.0:"
+>
+  Si ves la versión en pantalla, ¡todo listo! Tu sistema ya puede clonar y gestionar repositorios de código.
+</Verify>
+
+<Callout type="tip" title="Consejo para principiantes">
+  Si estás en Windows y acabas de instalar Git, debes cerrar todas las consolas abiertas y abrir una nueva para que reconozca el comando <code>git</code>.
+</Callout>

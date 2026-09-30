@@ -1,0 +1,82 @@
+---
+title: "Instalación de Node.js y Gestor pnpm"
+slug: "instalar-nodejs"
+summary: "Instala el entorno de ejecución Node.js (versión LTS) y el gestor de paquetes de alto rendimiento pnpm para tus proyectos de agentes de IA."
+track: "nodejs"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "node"
+  - "npm"
+  - "pnpm"
+tags:
+  - "javascript"
+  - "runtime"
+  - "pnpm"
+  - "mcp"
+  - "herramientas-base"
+prerequisites:
+  - "instalar-git"
+related:
+  - "instalar-git"
+timeMinutes: 12
+verifiedAt: "2026-09-29"
+appliesTo:
+  node: ">=20.0.0"
+  pnpm: ">=9.0.0"
+evidence:
+  windows: "ejecutada"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://nodejs.org/en/download"
+  - "https://pnpm.io/installation"
+errors:
+  - symptom: "'node' o 'pnpm' no se reconoce como un comando ejecutable"
+    cause: "El instalador no terminó de refrescar las variables de entorno del sistema."
+    fix: "Cierra y vuelve a abrir tu terminal de comandos para que lea el nuevo PATH."
+---
+
+Node.js es el entorno que permite ejecutar código JavaScript del lado del servidor y es indispensable para la mayoría de herramientas y servidores del protocolo MCP (Model Context Protocol).
+
+<Steps>
+  <Step number="1" title="Instala Node.js (Versión LTS Recomendada)">
+    Ejecuta el comando oficial correspondiente a tu sistema:
+
+    <OsTabs
+      windowsCmd="winget install OpenJS.NodeJS.LTS"
+      windowsDesc="En Windows con PowerShell (instala la versión LTS estable):"
+      macosCmd="brew install node@22"
+      macosDesc="En macOS usando Homebrew:"
+      linuxCmd="curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt install -y nodejs"
+      linuxDesc="En Ubuntu/Debian mediante el repositorio NodeSource oficial:"
+    />
+  </Step>
+
+  <Step number="2" title="Habilita e Instala pnpm">
+    Node.js incluye la herramienta `corepack` para activar gestores modernos como `pnpm` sin instalaciones adicionales:
+
+    <CodeBlock
+      filename="instalar-pnpm.sh"
+      language="bash"
+      code={`corepack enable
+corepack use pnpm@latest`}
+    />
+  </Step>
+</Steps>
+
+<Verify
+  command="node --version; pnpm --version"
+  expectedOutput={`v24.14.0
+10.32.1`}
+  description="Comprueba que Node y pnpm responden con sus versiones activas:"
+>
+  Cualquier versión de Node superior a v20.x y de pnpm superior a v9.x es completamente compatible.
+</Verify>
+
+<Callout type="aviso" title="Nota sobre versiones">
+  Recomendamos utilizar siempre versiones LTS (Long Term Support) de Node.js para asegurar máxima estabilidad con los SDKs de agentes.
+</Callout>

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "instalar-git",
+    "slug": "instalar-git",
+    "title": "Instalación y Configuración Inicial de Git",
+    "titleNormalized": "instalacion y configuracion inicial de git",
+    "summary": "Aprende a instalar el sistema de control de versiones Git en Windows, macOS o Linux y configura tu identidad de desarrollador.",
+    "summaryNormalized": "aprende a instalar el sistema de control de versiones git en windows, macos o linux y configura tu identidad de desarrollador.",
+    "track": "git",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "git"
+    ],
+    "toolsNormalized": [
+      "git"
+    ],
+    "tags": [
+      "control-de-versiones",
+      "terminal",
+      "git",
+      "herramientas-base"
+    ],
+    "tagsNormalized": [
+      "control-de-versiones",
+      "terminal",
+      "git",
+      "herramientas-base"
+    ],
+    "errorSymptoms": [
+      "'git' no se reconoce como un comando interno o externo"
+    ],
+    "errorSymptomsNormalized": [
+      "'git' no se reconoce como un comando interno o externo"
+    ]
+  },
+  {
+    "id": "instalar-nodejs",
+    "slug": "instalar-nodejs",
+    "title": "Instalación de Node.js y Gestor pnpm",
+    "titleNormalized": "instalacion de node.js y gestor pnpm",
+    "summary": "Instala el entorno de ejecución Node.js (versión LTS) y el gestor de paquetes de alto rendimiento pnpm para tus proyectos de agentes de IA.",
+    "summaryNormalized": "instala el entorno de ejecucion node.js (version lts) y el gestor de paquetes de alto rendimiento pnpm para tus proyectos de agentes de ia.",
+    "track": "nodejs",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "node",
+      "npm",
+      "pnpm"
+    ],
+    "toolsNormalized": [
+      "node",
+      "npm",
+      "pnpm"
+    ],
+    "tags": [
+      "javascript",
+      "runtime",
+      "pnpm",
+      "mcp",
+      "herramientas-base"
+    ],
+    "tagsNormalized": [
+      "javascript",
+      "runtime",
+      "pnpm",
+      "mcp",
+      "herramientas-base"
+    ],
+    "errorSymptoms": [
+      "'node' o 'pnpm' no se reconoce como un comando ejecutable"
+    ],
+    "errorSymptomsNormalized": [
+      "'node' o 'pnpm' no se reconoce como un comando ejecutable"
+    ]
+  }
+]

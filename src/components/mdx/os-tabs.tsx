@@ -1,0 +1,109 @@
+"use client";
+
+import * as React from "react";
+import { Tabs, TabItem } from "@/components/ui/tabs";
+import { CodeBlock } from "@/components/ui/code-block";
+
+export interface CommandProps {
+  os: "windows" | "macos" | "linux";
+  cmd: string;
+  language?: string;
+  filename?: string;
+  description?: string;
+}
+
+export function Command({
+  cmd,
+  language,
+  filename,
+  description,
+}: CommandProps) {
+  return (
+    <div className="space-y-2">
+      {description && (
+        <p className="font-sans text-sm text-on-surface-variant">
+          {description}
+        </p>
+      )}
+      <CodeBlock
+        code={cmd}
+        language={language}
+        filename={filename}
+      />
+    </div>
+  );
+}
+
+export interface OsTabsProps {
+  children?: React.ReactNode;
+  windowsCmd?: string;
+  macosCmd?: string;
+  linuxCmd?: string;
+  windowsDesc?: string;
+  macosDesc?: string;
+  linuxDesc?: string;
+}
+
+export function OsTabs({
+  windowsCmd,
+  macosCmd,
+  linuxCmd,
+  windowsDesc,
+  macosDesc,
+  linuxDesc,
+}: OsTabsProps) {
+  const items: TabItem[] = [];
+
+  if (windowsCmd) {
+    items.push({
+      id: "windows",
+      label: "Windows (PowerShell)",
+      icon: <span>🪟</span>,
+      content: (
+        <Command
+          os="windows"
+          cmd={windowsCmd}
+          language="powershell"
+          filename="powershell.exe"
+          description={windowsDesc}
+        />
+      ),
+    });
+  }
+
+  if (macosCmd) {
+    items.push({
+      id: "macos",
+      label: "macOS (Terminal/Zsh)",
+      icon: <span>🍎</span>,
+      content: (
+        <Command
+          os="macos"
+          cmd={macosCmd}
+          language="bash"
+          filename="zsh"
+          description={macosDesc}
+        />
+      ),
+    });
+  }
+
+  if (linuxCmd) {
+    items.push({
+      id: "linux",
+      label: "Linux (Bash)",
+      icon: <span>🐧</span>,
+      content: (
+        <Command
+          os="linux"
+          cmd={linuxCmd}
+          language="bash"
+          filename="bash"
+          description={linuxDesc}
+        />
+      ),
+    });
+  }
+
+  return <Tabs items={items} defaultTabId="windows" />;
+}

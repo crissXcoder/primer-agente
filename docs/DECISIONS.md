@@ -71,3 +71,26 @@ Adoptar **`minisearch`** con un índice generado durante el proceso de build.
 4. **Implementación de Componentes sin Dependencias Pesadas**:
    * *Decisión*: Se implementan `Button`, `Badge/Chip`, `Card`, `Input`, `Callout`, `CodeBlock` y `Tabs` utilizando primitivas accesibles nativas en React 19 + TypeScript + Tailwind v4 con atributos ARIA completos (`role="tablist"`, `aria-selected`, `aria-live`, etc.), en lugar de instalar librerías externas que añadan peso al bundle o causen conflictos de dependencias con React 19.
 
+---
+
+## 4. Dependencias del Pipeline de Contenido y Testing
+
+### Justificación de Paquetes Incorporados
+
+1. **`gray-matter` (^4.0.3)**:
+   * *Propósito*: Extracción eficiente de metadatos frontmatter (YAML) y del cuerpo en archivos `.mdx`.
+   * *Justificación*: Estándar en la industria para SSG en Node.js, ligero, sin dependencias nativas y compatible con el loader puro de contenido.
+2. **`next-mdx-remote` (^6.0.0)**:
+   * *Propósito*: Compilación y renderizado de componentes MDX dentro de React Server Components de Next.js App Router.
+   * *Justificación*: Desacopla la lectura de archivos del compilador MDX, permitiendo la validación Zod previa de los metadatos antes de renderizar.
+3. **`minisearch` (^7.2.0)**:
+   * *Propósito*: Motor de búsqueda cliente sobre el índice estático generado en build time.
+   * *Justificación*: Pesa menos de 5kB gzipped, no requiere backend ni servicios externos de pago y soporta búsqueda con prefijos y ponderación de campos.
+4. **`vitest` (^5.0.2)**:
+   * *Propósito*: Framework de pruebas unitarias ultrarrápido y compatible con ESM nativo y TypeScript.
+   * *Justificación*: Permite ejecutar pruebas adversariales del validador de contenido y normalización sin necesidad de configurar Jest o compiladores lentos.
+5. **`tsx` (^4.23.15)**:
+   * *Propósito*: Ejecutor de scripts TypeScript para el paso de `prebuild` (`scripts/build-search-index.ts`).
+   * *Justificación*: Permite correr validaciones previas al build de producción directamente desde TypeScript sin pasos manuales de transpilación.
+
+
