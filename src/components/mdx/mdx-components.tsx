@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Steps, Step } from "./steps";
-import { OsTabs, Command } from "./os-tabs";
+import { OsTabs, OsInstructions, Command } from "./os-tabs";
 import { Verify } from "./verify";
 import { Screenshot } from "./screenshot";
 import { Callout } from "@/components/ui/callout";
@@ -14,6 +14,7 @@ export const mdxComponents = {
   Steps,
   Step,
   OsTabs,
+  OsInstructions,
   RutaArchivos,
   Command,
   Verify,

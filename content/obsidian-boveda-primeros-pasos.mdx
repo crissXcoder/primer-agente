@@ -1,0 +1,189 @@
+---
+title: "Obsidian desde cero: crea tu bóveda y encuentra su ruta"
+slug: "obsidian-boveda-primeros-pasos"
+summary: "Crea una bóveda de Obsidian, haz una primera nota y aprende a copiar la ruta de su carpeta antes de conectarla con un agente."
+track: "conocimiento"
+audience: "todos"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "obsidian"
+tags:
+  - "obsidian"
+  - "boveda"
+  - "markdown"
+  - "ruta"
+prerequisites: []
+related:
+  - "instalar-git"
+timeMinutes: 20
+verifiedAt: "2026-09-29"
+appliesTo:
+  obsidian: "Obsidian Desktop; CLI opcional con instalador 1.12.7 o posterior"
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://obsidian.md/help/install"
+  - "https://obsidian.md/help/manage-vaults"
+  - "https://obsidian.md/help/data-storage"
+  - "https://obsidian.md/help/properties"
+  - "https://obsidian.md/help/links"
+  - "https://obsidian.md/help/callouts"
+  - "https://obsidian.md/help/cli"
+  - "https://obsidian.md/help/sync"
+  - "https://obsidian.md/help/sync-notes"
+  - "https://obsidian.md/help/sync/faq"
+  - "https://obsidian.md/help/backup"
+  - "https://forum.obsidian.md/t/onedrive-made-my-files-disappear/82514/3"
+  - "https://forum.obsidian.md/t/shared-folder-on-macos-failed-to-open-no-permission-to-access-folder/62508"
+  - "https://forum.obsidian.md/t/windows-11-pro-obsidian-freezes-when-creating-accessing-vault-in-documents-folder-or-subfolder/37722/4"
+  - "https://forum.obsidian.md/t/new-mac-obsidian-isnt-picking-up-file-changes/94174"
+  - "https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file"
+  - "https://support.apple.com/en-sa/guide/mac-help/mchlp1774/mac"
+  - "https://support.apple.com/en-jo/guide/terminal/apd3cf6fe02-3ec8-48f1-951f-866e52955fc8/mac"
+errors:
+  - symptom: "Obsidian no abre una carpeta como bóveda o no puede acceder a ella."
+    cause: "En casos reportados en macOS y Windows hubo restricciones de acceso a la carpeta; el motivo depende de los permisos y la configuración de cada equipo."
+    fix: "Prueba con una carpeta normal dentro de tu espacio de usuario y revisa los permisos del sistema para Obsidian. Si el problema continúa, consulta soporte para tu sistema operativo."
+  - symptom: "Archivos con ciertos símbolos no se pueden crear en el sistema o no se enlazan como se esperaba."
+    cause: "Algunos caracteres están reservados por el sistema de archivos; otros, como #, ^, [, ] y |, tienen un significado especial en los enlaces de Obsidian."
+    fix: "Usa nombres sencillos con letras, números, espacios o guiones. En Windows evita < > : \" / \\ | ? *; no uses los símbolos de enlace en nombres que quieras enlazar."
+  - symptom: "Una bóveda sincronizada en OneDrive muestra archivos que todavía no están disponibles en el equipo."
+    cause: "Los archivos configurados como solo en línea pueden no estar descargados localmente; el foro documenta un caso donde se reportó la desaparición de archivos tras el uso de OneDrive."
+    fix: "En OneDrive marca la carpeta de la bóveda para que siempre se conserve en este dispositivo y deja que termine la descarga antes de abrirla. Evita combinar servicios de sincronización sobre la misma bóveda."
+  - symptom: "Un cambio hecho fuera de Obsidian no aparece de inmediato en la aplicación."
+    cause: "Obsidian normalmente detecta cambios externos, pero hay un caso de foro en macOS en el que se reportó que no los detectaba; la causa no quedó confirmada."
+    fix: "Confirma que el archivo externo está dentro de la carpeta de la bóveda y vuelve a abrir la bóveda si sigue sin actualizarse. Esto es una posibilidad basada en un caso reportado, no un fallo general confirmado."
+---
+
+# Obsidian desde cero: crea tu bóveda y encuentra su ruta
+
+## Qué vas a lograr y cuánto tarda
+
+En unos 20 minutos vas a instalar Obsidian, crear una bóveda, guardar una nota de prueba y localizar la ruta de la carpeta. Esa ruta es la que vas a compartir con el agente en las siguientes guías.
+
+Una bóveda es una carpeta normal de tu computadora. Dentro hay notas guardadas como archivos de texto Markdown (`.md`) y una carpeta de configuración llamada `.obsidian`, que suele estar oculta. Pensala como una carpeta de documentos con una pequeña libreta de ajustes junto a tus notas.
+
+## Instala Obsidian
+
+Descargá la aplicación de escritorio desde [obsidian.md](https://obsidian.md/download). Elegí la pestaña de tu sistema y seguí el instalador publicado para esa plataforma. Los nombres de botones pueden cambiar entre versiones.
+
+<OsInstructions
+  windows="Descargá el instalador para Windows desde la página oficial y abrilo. Seguí las indicaciones de instalación."
+  macos="Descargá la versión para macOS que corresponda a tu Mac y abrí el archivo descargado. Seguí las indicaciones de la página oficial de instalación."
+  linux="Elegí en la página oficial el paquete que corresponda a tu distribución de Linux y seguí las instrucciones publicadas para ese paquete."
+/>
+
+**Comprobación:** abrí Obsidian. Debés ver la pantalla para crear o abrir una bóveda. Si aparece una nota o bóveda existente, usá el perfil de bóveda abajo a la izquierda y elegí administrar bóvedas.
+
+## Crea una bóveda o abre una carpeta que ya existe
+
+En la pantalla de bóvedas, elegí **Create** para crear una bóveda nueva. Para reutilizar una carpeta existente, abrí **Manage Vaults…**, elegí **Open folder as vault**, después **Open**, y seleccioná la carpeta.
+
+Para empezar, una ubicación corta y fácil de encontrar ayuda. Por ejemplo, una carpeta llamada `Obsidian` dentro de Documentos. Evitá carpetas del sistema y no pongás la bóveda dentro de un repositorio de código: así tus notas y ajustes no terminan mezclados con el proyecto.
+
+Si la carpeta vive en OneDrive, iCloud o Dropbox, esperá a que esté disponible en el equipo antes de trabajar. Los archivos “solo en línea” pueden no estar presentes localmente; con OneDrive, la ayuda de Obsidian recomienda conservar la bóveda en el dispositivo. Combinar la sincronización de Obsidian con otro servicio sobre la misma bóveda puede causar conflictos o copias duplicadas. Si usás una carpeta sincronizada, comprobá que los archivos se hayan descargado y evitá activar varios servicios para esa misma carpeta.
+
+El nombre que le das a la bóveda también es el nombre de su carpeta. Si lo cambiás desde Obsidian, se renombra la carpeta. Para cambiar entre bóvedas, usá el perfil de bóveda abajo a la izquierda o **Open another vault** desde la paleta de comandos; las etiquetas exactas pueden variar por versión.
+
+## Mira qué hay dentro de la carpeta
+
+Abrí la ubicación de la bóveda en el explorador de archivos de tu sistema. Activá la vista de archivos ocultos para encontrar `.obsidian`:
+
+- **Windows:** Explorador de archivos → **Ver** → **Mostrar** → **Elementos ocultos** (la etiqueta puede variar según la versión).
+- **macOS:** Finder → presioná `Command` + `Shift` + `.` para alternar la visualización de archivos ocultos.
+- **Linux:** en muchos administradores de archivos, `Ctrl` + `H` alterna los archivos ocultos; el atajo depende del entorno.
+
+`.obsidian` guarda ajustes de la bóveda, como preferencias, temas y complementos. No la borrés ni edites sus archivos para hacer este recorrido. Tus notas son archivos `.md` normales; Obsidian puede detectar cambios hechos con otro editor.
+
+## Tu primera nota en cinco minutos
+
+En Obsidian, creá una nota nueva y poné como título `Primera nota`. Escribí un par de líneas sobre algo que querés recordar. Para enlazar otra nota, escribí `[[` y empezá a poner su nombre; podés crear el enlace aunque la otra nota todavía no exista.
+
+Obsidian guarda las propiedades al inicio de la nota. Añadí `tags` y `aliases` en plural. Por ejemplo:
+
+```yaml
+---
+tags:
+  - prueba
+aliases:
+  - Mi primera nota
+---
+```
+
+Las propiedades `tag`, `alias` y `cssclass` en singular dejaron de ser las formas compatibles desde Obsidian 1.9.0. Para cerrar, añadí un callout sencillo en el texto:
+
+```md
+> [!tip] Una idea
+> Puedo enlazar esta nota desde otra.
+```
+
+**Comprobación:** la nota muestra la etiqueta `prueba`, permite encontrarla también por el alias y el callout aparece como un recuadro destacado. Al hacer clic en el enlace `[[...]]`, Obsidian abre o crea la nota enlazada.
+
+## Cómo obtener la RUTA de tu bóveda
+
+Esta es la parte que vas a reutilizar más adelante. La ruta identifica la carpeta completa de tu bóveda en este equipo. Podés verla en **Manage Vaults…** al seleccionar la bóveda; el aspecto de esa pantalla puede cambiar entre versiones.
+
+Para entender el formato, esta ruta de ejemplo representa un archivo dentro de una bóveda llamada `Mi bóveda`:
+
+<RutaArchivos relativePath="Mi bóveda/Notas/Primera nota.md" />
+
+También podés copiar la ruta de la carpeta con las herramientas del sistema:
+
+<OsInstructions
+  windows="En el Explorador de archivos, encontrá la carpeta de la bóveda, hacé clic derecho y elegí Copiar como ruta de acceso. Si no aparece esa opción, la ubicación se ve en la barra de direcciones del Explorador."
+  macos="En Finder, abrí la carpeta de la bóveda. En el menú Ver podés activar Mostrar barra de ruta; hacé clic secundario en la carpeta de la ruta y elegí copiarla como nombre de ruta. También podés mantener Option mientras abrís el menú contextual para mostrar la opción Copiar como ruta."
+  linux="Abrí una terminal en la carpeta de la bóveda desde tu administrador de archivos; la forma de hacerlo depende de la distribución. Escribí pwd y presioná Enter: la terminal muestra la ruta de la carpeta actual."
+/>
+
+Si la ruta contiene espacios, conservá las comillas que copie el sistema cuando pegues la ruta en un campo de comando. Si la escribís a mano, ponela entre comillas para que los espacios no se interpreten como separadores. Copiá y pegá la ruta completa; no la acortés ni cambiés sus barras.
+
+Como alternativa, Obsidian tiene una interfaz de línea de comandos oficial. Requiere un instalador 1.12.7 o posterior, hay que activarla en **Settings → General → Command line interface**, y Obsidian debe estar abierto. Luego, en una terminal, ejecutá:
+
+```sh
+obsidian vault info=path
+```
+
+El resultado es la ruta de la bóveda. Si el comando no se reconoce, comprobá primero la versión del instalador y que la interfaz de línea de comandos esté activada y registrada.
+
+**Comprobación:** compará la ruta obtenida con el nombre de la bóveda que ves en Obsidian. La carpeta debe terminar en ese nombre. Podés abrirla en el explorador de archivos y reconocer dentro tus notas y `.obsidian`.
+
+## Una estructura inicial pequeña
+
+Si te ayuda a ordenar, empezá con estas carpetas:
+
+- `Inbox` para ideas que todavía no has ordenado.
+- `Proyectos` para cosas que tienen un resultado concreto.
+- `Conceptos` para notas sobre temas que querés entender.
+- `Referencias` para material que consultás.
+- `Diario` para apuntes por fecha.
+
+No hace falta crear todo hoy. Empezá con una nota y agregá carpetas cuando ya sepás qué necesitás; demasiada estructura desde el principio puede hacer más difícil guardar una idea rápido.
+
+## Haz un respaldo antes de dar acceso a un agente
+
+Antes de permitir que una herramienta o agente lea la bóveda, guardá una copia independiente de la carpeta. También podés usar Git para llevar un historial; la guía [Instalación y configuración inicial de Git](/guias/instalar-git) explica cómo instalarlo.
+
+Obsidian Sync es una opción adicional de pago, pero no es requisito para usar Obsidian. Sin importar cómo sincronizás, mantené un respaldo separado: sincronizar no sustituye una copia de seguridad.
+
+<Callout type="peligro" title="Datos y privacidad">
+  Las notas de tu bóveda son tuyas y pueden estar guardadas en tu computadora. Si conectás un agente y este lee archivos, el contenido que lea se envía al proveedor del modelo para generar respuestas, aunque los archivos originales sigan en local. Revisá qué carpeta y qué archivos compartís antes de darle acceso.
+</Callout>
+
+## Siguientes pasos
+
+La ruta que copiaste aquí se usará al configurar un agente. Las guías para conectar un agente sin programar y para desarrolladores están **próximamente**.
+
+## ¿Cómo sé que funcionó?
+
+- Obsidian abre y muestra una bóveda.
+- Dentro de la carpeta encontrás la nota `Primera nota` y, al mostrar archivos ocultos, `.obsidian`.
+- La nota tiene el enlace, las propiedades en plural y el callout.
+- La ruta copiada apunta a la carpeta correcta y termina con el nombre de la bóveda.
+
+Si usaste `obsidian vault info=path`, la salida es una ruta. Si la obtuviste desde el explorador, comprobala abriendo la carpeta y confirmando que contiene tus notas.

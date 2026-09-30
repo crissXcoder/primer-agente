@@ -45,6 +45,22 @@ export interface OsTabsProps {
   linuxDesc?: string;
 }
 
+export interface OsInstructionsProps {
+  windows: string;
+  macos: string;
+  linux: string;
+}
+
+export function OsInstructions({ windows, macos, linux }: OsInstructionsProps) {
+  const items: TabItem[] = [
+    { id: "windows", label: "Windows", icon: <span>🪟</span>, content: <p>{windows}</p> },
+    { id: "macos", label: "macOS", icon: <span>🍎</span>, content: <p>{macos}</p> },
+    { id: "linux", label: "Linux", icon: <span>🐧</span>, content: <p>{linux}</p> },
+  ];
+
+  return <Tabs items={items} defaultTabId="windows" />;
+}
+
 export function OsTabs({
   windowsCmd,
   macosCmd,

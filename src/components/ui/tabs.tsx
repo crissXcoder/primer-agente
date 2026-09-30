@@ -29,6 +29,7 @@ export function Tabs({
   );
 
   const activeTab = selectedTabId !== undefined ? selectedTabId : internalTab;
+  const instanceId = `tabs-${React.useId().replace(/:/g, "")}`;
 
   const tabListRef = React.useRef<HTMLDivElement>(null);
 
@@ -84,9 +85,9 @@ export function Tabs({
             <button
               key={tab.id}
               role="tab"
-              id={`tab-${tab.id}`}
+              id={`${instanceId}-tab-${tab.id}`}
               aria-selected={isSelected}
-              aria-controls={`tabpanel-${tab.id}`}
+              aria-controls={`${instanceId}-tabpanel-${tab.id}`}
               tabIndex={isSelected ? 0 : -1}
               onClick={() => handleSelect(tab.id)}
               onKeyDown={(e) => handleKeyDown(e, idx)}
@@ -109,8 +110,8 @@ export function Tabs({
       {activeItem && (
         <div
           role="tabpanel"
-          id={`tabpanel-${activeItem.id}`}
-          aria-labelledby={`tab-${activeItem.id}`}
+          id={`${instanceId}-tabpanel-${activeItem.id}`}
+          aria-labelledby={`${instanceId}-tab-${activeItem.id}`}
           tabIndex={0}
           className="rounded-b-lg border-x border-b border-outline-variant bg-surface-container-lowest p-5 font-sans text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-container"
         >

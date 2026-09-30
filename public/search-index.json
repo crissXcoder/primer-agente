@@ -1,5 +1,50 @@
 [
   {
+    "id": "obsidian-boveda-primeros-pasos",
+    "slug": "obsidian-boveda-primeros-pasos",
+    "title": "Obsidian desde cero: crea tu bóveda y encuentra su ruta",
+    "titleNormalized": "obsidian desde cero: crea tu boveda y encuentra su ruta",
+    "summary": "Crea una bóveda de Obsidian, haz una primera nota y aprende a copiar la ruta de su carpeta antes de conectarla con un agente.",
+    "summaryNormalized": "crea una boveda de obsidian, haz una primera nota y aprende a copiar la ruta de su carpeta antes de conectarla con un agente.",
+    "track": "conocimiento",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "obsidian"
+    ],
+    "toolsNormalized": [
+      "obsidian"
+    ],
+    "tags": [
+      "obsidian",
+      "boveda",
+      "markdown",
+      "ruta"
+    ],
+    "tagsNormalized": [
+      "obsidian",
+      "boveda",
+      "markdown",
+      "ruta"
+    ],
+    "errorSymptoms": [
+      "Obsidian no abre una carpeta como bóveda o no puede acceder a ella.",
+      "Archivos con ciertos símbolos no se pueden crear en el sistema o no se enlazan como se esperaba.",
+      "Una bóveda sincronizada en OneDrive muestra archivos que todavía no están disponibles en el equipo.",
+      "Un cambio hecho fuera de Obsidian no aparece de inmediato en la aplicación."
+    ],
+    "errorSymptomsNormalized": [
+      "obsidian no abre una carpeta como boveda o no puede acceder a ella.",
+      "archivos con ciertos simbolos no se pueden crear en el sistema o no se enlazan como se esperaba.",
+      "una boveda sincronizada en onedrive muestra archivos que todavia no estan disponibles en el equipo.",
+      "un cambio hecho fuera de obsidian no aparece de inmediato en la aplicacion."
+    ]
+  },
+  {
     "id": "instalar-git",
     "slug": "instalar-git",
     "title": "Instalación y Configuración Inicial de Git",
