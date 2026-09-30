@@ -117,3 +117,17 @@ Adoptar **`minisearch`** con un índice generado durante el proceso de build.
 ## 6. Componente de rutas de archivos por sistema operativo
 
 <OsTabs> representa comandos y asigna lenguaje y archivo de terminal a cada pestaña. Las rutas son datos de texto y requieren instrucciones para copiar y pegar, así que <RutaArchivos> compone el primitivo accesible Tabs directamente y construye variantes para cada sistema operativo a partir de una ruta relativa común.
+
+## 7. Pista geoespacial y herramienta QGIS
+
+### Contexto
+
+El catálogo incorpora una guía para preparar QGIS para principiantes que trabajarán con datos geoespaciales y agentes de IA. La guía requiere una pista visible y filtrado por herramienta.
+
+### Decisión
+
+Agregar `geoespacial` como valor de `TrackEnum` y mostrarlo como **QGIS y datos geoespaciales**. La propiedad `tools` permanece como arreglo de cadenas libres: los filtros de herramientas se derivan de las guías disponibles, de modo que incluir `qgis` en el frontmatter de la guía hace que aparezca en el filtro sin mantener un enum paralelo.
+
+### Justificación
+
+La nueva pista organiza futuras guías de datos geoespaciales sin mezclar contenido con las pistas de Python o conocimiento. Mantener `tools` libre conserva la extensión del catálogo sin cambios estructurales cada vez que se agregue una herramienta.

@@ -6,13 +6,14 @@ export type OsType = z.infer<typeof OsEnum>;
 export const LevelEnum = z.enum(["principiante", "intermedio"]);
 export type LevelType = z.infer<typeof LevelEnum>;
 
-export const TrackEnum = z.enum(["git", "nodejs", "python", "conocimiento"]);
+export const TrackEnum = z.enum(["git", "nodejs", "python", "conocimiento", "geoespacial"]);
 export type TrackType = z.infer<typeof TrackEnum>;
 export const TRACK_LABELS: Record<TrackType, string> = {
   git: "Git",
   nodejs: "Node.js",
   python: "Python",
   conocimiento: "Bóveda y conocimiento",
+  geoespacial: "QGIS y datos geoespaciales",
 };
 
 export const AudienceEnum = z.enum(["todos", "programadores", "no-programadores"]);

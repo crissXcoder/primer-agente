@@ -1,0 +1,190 @@
+---
+title: "Instalar QGIS y dejarlo listo para trabajar con un agente"
+slug: "qgis-instalar-y-preparar"
+summary: "Instala QGIS LTR, prepara un proyecto de prueba y ubica el perfil y la consola de Python para colaborar con un agente de IA."
+track: "geoespacial"
+audience: "todos"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "qgis"
+  - "python"
+  - "uv"
+tags:
+  - "qgis"
+  - "instalacion"
+  - "ltr"
+  - "perfil"
+  - "consola-python"
+prerequisites:
+  - "instalar-python"
+  - "instalar-uv"
+related:
+  - "instalar-python"
+  - "instalar-uv"
+timeMinutes: 40
+verifiedAt: "2026-09-29"
+appliesTo:
+  qgis: "Descargas consultadas el 2026-09-29: LTR 3.44.15 recomendada; latest 4.2.3. Sigue la página oficial para versiones vigentes."
+  python: "Python integrado y configurado por la distribución oficial de QGIS; no sustituye la guía de Python del sitio."
+  uv: "Consulta la guía instalar-uv del sitio para instalarlo y comprobarlo."
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://qgis.org/download/"
+  - "https://www.qgis.org/resources/installation-guide/"
+  - "https://blog.qgis.org/2025/10/07/update-on-qgis-4-0-release-schedule-and-ltr-plans/"
+  - "https://docs.qgis.org/4.2/en/docs/user_manual/introduction/qgis_configuration.html"
+  - "https://docs.qgis.org/4.2/en/docs/user_manual/plugins/python_console.html"
+  - "https://docs.qgis.org/4.2/en/docs/user_manual/introduction/project_files.html"
+  - "https://docs.qgis.org/4.2/en/docs/pyqgis_developer_cookbook/intro.html"
+  - "https://api.qgis.org/api/4.2/classQgsApplication.html"
+  - "https://docs.qgis.org/3.44/en/docs/user_manual/introduction/getting_started.html"
+  - "https://github.com/qgis/QGIS/blob/master/resources/data/README_world_map.md"
+  - "https://plugins.qgis.org/plugins/new_qgis_ready/"
+  - "https://www.naturalearthdata.com/about/terms-of-use/"
+errors: []
+---
+
+QGIS es un programa de escritorio para explorar, analizar y presentar información vinculada a lugares. Un agente puede ayudarte a preparar datos o automatizar pasos, pero necesita que le expliques qué archivos usar y qué resultado esperas. Pensalo como una persona nueva en la oficina: sabe hacer tareas, pero no conoce tus carpetas ni debe decidir por su cuenta qué datos cambiar.
+
+En unos 40 minutos vas a instalar QGIS, guardar un proyecto pequeño, ubicar su perfil y comprobar que la consola integrada de Python responde. La instalación de QGIS ya incluye su propio entorno de Python; tener Python y `uv` listos también ayuda para las tareas que hagás fuera de QGIS. Antes de seguir, revisá las guías de [Python](/guias/instalar-python) y [uv](/guias/instalar-uv).
+
+## Antes de empezar
+
+Necesitás permisos para instalar programas y conexión a Internet durante la descarga. QGIS ofrece instaladores y paquetes para los tres sistemas cubiertos. No encontré en las páginas oficiales consultadas un requisito mínimo único de RAM o espacio total en disco aplicable a todas las versiones y sistemas. Como referencia fechada, la guía oficial indicaba que desde QGIS 4.0.1 el instalador regular para Windows ocupa alrededor de 0.5 GiB y el instalador que incluye las cuadrículas de proyección alrededor de 1.2 GiB; eso describe la descarga, no el espacio total requerido una vez instalado. Revisá lo que indique el instalador para tu equipo.
+
+Guardá el proyecto de práctica en una carpeta propia, por ejemplo `qgis-practica`, y no dentro de la carpeta de instalación de QGIS.
+
+## Elegir una versión
+
+La página de descargas consultada el **29 de setiembre de 2026** mostraba una versión más reciente y otra LTR. Los números cambian, así que consultá la página antes de descargar. QGIS recomienda LTR a quien no tenga una razón específica para usar las funciones más nuevas. Para una persona principiante que podría necesitar complementos de terceros, esta guía recomienda **LTR**.
+
+| Opción | Cuándo elegirla | Qué tener presente |
+| --- | --- | --- |
+| LTR | Recomendación para empezar y priorizar estabilidad. | Recibe mantenimiento de largo plazo según la política publicada por QGIS. |
+| Más reciente | Si una función o un curso requiere expresamente la versión actual. | Comprobá antes que cada complemento que ocupás sea compatible. |
+
+QGIS 4 está basado en Qt6; las versiones anteriores de QGIS 3 usan Qt5. En OSGeo4W, la guía oficial identifica los paquetes de escritorio `qgis` (versión más reciente) y `qgis-ltr` (LTR); el LTR listado en la fecha de esta revisión es QGIS 3, basado en Qt5. QGIS también anunció compilaciones Qt6 de ramas de lanzamiento por OSGeo4W; el instalador avanzado puede ofrecer paquetes Qt6 para algunas ramas con nombres distintos, como `qgis-qt6`. Revisá el nombre, la versión y la compatibilidad de los complementos en el instalador antes de escoger una variante. No asumás que un complemento de terceros funciona en ambas. El repositorio oficial mantiene una lista de complementos preparados para QGIS 4. Al consultar las descargas el 2026-09-29, QGIS listaba **3.44.15 LTR** y **4.2.3 latest**; estos números describen esa fecha y pueden cambiar.
+
+## Instalar QGIS
+
+Elegí tu sistema operativo para ver la opción de instalación resumida. Los pasos siguientes indican dónde encontrar las descargas oficiales y, para Linux, los comandos de Debian/Ubuntu y Flatpak.
+
+<OsInstructions
+  windows="Descargá QGIS LTR independiente. Usá OSGeo4W si necesitás administrar varias versiones."
+  macos="Descargá el instalador oficial LTR para macOS y mové QGIS a Aplicaciones."
+  linux="En Debian/Ubuntu seguí los pasos apt. En otras distribuciones, usá el paquete indicado por la guía oficial o Flatpak."
+/>
+
+### Windows
+
+La opción más directa para una primera instalación es descargar el instalador independiente LTR desde [Descargas de QGIS](https://qgis.org/download/) y seguir el asistente. La página también ofrece el instalador de red OSGeo4W. QGIS lo recomienda para mantener QGIS actualizado y administrar varias versiones; elegí esa opción si necesitás tener LTR y la versión más reciente en paralelo o si tu organización ya usa OSGeo4W.
+
+Después de instalar, abrí QGIS y buscá **Ayuda → Acerca de**. Anotá la versión que aparece.
+
+### macOS
+
+Descargá el instalador LTR para macOS desde [Descargas de QGIS](https://qgis.org/download/). Abrí el archivo `.dmg` y arrastrá QGIS a **Aplicaciones**, según la guía oficial. Los paquetes oficiales actuales se describen como firmados y notarizados. Abrí QGIS desde Aplicaciones y consultá **Ayuda → Acerca de** para anotar la versión.
+
+### Linux
+
+La guía de instalación oficial detalla los pasos para Debian y Ubuntu con `apt`, incluida la llave del archivo en `/etc/apt/keyrings` y los repositorios stable o LTR. Los siguientes comandos son los publicados por QGIS para Debian/Ubuntu amd64; el nombre clave (`codename`) debe corresponder a tu distribución. La guía oficial lista cuáles son compatibles. Para LTR, usá el repositorio `https://qgis.org/ubuntu-ltr` en el archivo de fuentes. Si tu equipo usa otra arquitectura o distribución, consultá las opciones vigentes en esa guía antes de instalar.
+
+Primero instalá las herramientas, descargá la llave firmada y creá `/etc/apt/sources.list.d/qgis.sources` con el contenido indicado en la [guía oficial para Linux](https://www.qgis.org/resources/installation-guide/):
+
+```bash
+sudo apt install gnupg software-properties-common
+sudo mkdir -m755 -p /etc/apt/keyrings
+sudo wget -O /etc/apt/keyrings/qgis-archive-keyring.gpg https://download.qgis.org/downloads/qgis-archive-keyring.gpg
+```
+
+En `qgis.sources`, cambiá `tu-codename` por el nombre correcto de tu distribución:
+
+```text
+Types: deb deb-src
+URIs: https://qgis.org/ubuntu-ltr
+Suites: tu-codename
+Architectures: amd64
+Components: main
+Signed-By: /etc/apt/keyrings/qgis-archive-keyring.gpg
+```
+
+Luego actualizá el índice e instalá QGIS:
+
+```bash
+sudo apt update
+sudo apt install qgis qgis-plugin-grass
+```
+
+También hay paquetes Flatpak stable y LTR mantenidos por la comunidad de Flathub. El comando que publica QGIS instala la aplicación y luego permite seleccionar la versión:
+
+```bash
+flatpak install flathub org.qgis.qgis
+```
+
+Elegí una opción; no mezcles comandos de distribuciones distintas. Abrí QGIS desde el lanzador de aplicaciones y revisá **Ayuda → Acerca de**.
+
+## Primer proyecto y datos de prueba
+
+1. Abrí QGIS y dejá el proyecto nuevo vacío.
+2. En **Proyecto → Guardar como…**, guardá `qgis-practica/proyecto-prueba.qgz`.
+3. Para localizar el mapa mundial incluido con QGIS, abrí la consola de Python como se explica más adelante y ejecutá `QgsApplication.pkgDataPath()`. Esa función muestra la ruta base de recursos de QGIS de tu instalación. En el explorador de archivos de tu sistema, abrí esa ruta y luego `resources/data/world_map.gpkg`; arrastrá el archivo a QGIS y elegí la capa `countries` si el programa pregunta cuál cargar. Esta ubicación se deriva de la estructura oficial del paquete QGIS; los directorios anteriores a `resources/data` dependen de cada sistema e instalador. Si tu paquete no incluye el archivo, descargá el [conjunto de datos de ejemplo oficial](https://docs.qgis.org/3.44/en/docs/user_manual/introduction/getting_started.html#downloading-sample-data), descomprimilo y abrí una de sus capas.
+4. En el panel **Capas**, comprobá que aparezca la capa y que se vea en el mapa. Guardá el proyecto de nuevo.
+
+Como alternativa para practicar con datos públicos, [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/) publica datos cartográficos de dominio público. Descargá únicamente el conjunto que necesités y conservá intacto el archivo original.
+
+## Encontrar el perfil de usuario
+
+Un perfil guarda ajustes y complementos separados de los datos de tus proyectos. Es útil para identificar dónde vive la configuración que QGIS o un agente podrían necesitar consultar. La documentación de QGIS 4 usa `QGIS4` en las carpetas de perfil; las rutas `QGIS3` corresponden a instalaciones anteriores.
+
+En QGIS, abrí **Configuración → Perfiles de usuario → Abrir carpeta del perfil activo**. En inglés, la opción aparece como *Open Active Profile Folder*. La carpeta predeterminada suele llamarse `default`; si usás otro perfil, el menú abrirá ese perfil activo. Dentro de la carpeta del perfil, la carpeta de complementos de Python está en `python/plugins` cuando exista.
+
+Las ubicaciones típicas del directorio de perfiles predeterminado en QGIS 4 son:
+
+<OsInstructions
+  windows="C:\\Users\\USUARIO\\AppData\\Roaming\\QGIS\\QGIS4\\profiles\\default"
+  macos="~/Library/Application Support/QGIS/QGIS4/profiles/default"
+  linux="~/.local/share/QGIS/QGIS4/profiles/default"
+/>
+
+Si la subcarpeta `python/plugins` todavía no existe, no creés una para esta práctica. Se puede crear cuando QGIS o la instalación de un complemento la necesite. Para ver los nombres exactos y abrir la ubicación correcta de tu instalación, usá el menú de QGIS; los perfiles pueden tener nombres distintos de `default`.
+
+## Probar la consola de Python
+
+La consola permite consultar objetos y datos cargados en QGIS con PyQGIS. En el menú, elegí **Complementos → Consola de Python**; el atajo documentado es `Ctrl+Alt+P`. En la consola escribí esta línea inocua, que solo consulta y muestra la versión:
+
+```python
+print(Qgis.QGIS_VERSION)
+```
+
+La salida debe mostrar la versión de QGIS que abriste. La consola ya carga los módulos principales de QGIS al abrirse, por eso `Qgis` está disponible sin instalar paquetes adicionales. Para localizar los datos incluidos con QGIS en tu sistema, también podés ejecutar `QgsApplication.pkgDataPath()`; devuelve la ruta base de datos y recursos de la instalación. Desde ahí seguí `resources/data/world_map.gpkg` en el explorador de archivos.
+
+## Preparar los datos para trabajar con un agente
+
+- Conservá los datos originales sin modificarlos y trabajá con una copia cuando el flujo lo permita.
+- Separá los resultados en otra carpeta, como `salidas`.
+- Usá nombres descriptivos y, cuando sea práctico, sin espacios ni tildes para reducir problemas al escribir rutas.
+- Antes de pedirle a un agente que cambie un proyecto, duplicá el archivo `.qgz` y trabajá sobre la copia.
+- Indicá al agente qué archivos puede leer o cambiar y dónde guardar resultados. Revisá las operaciones antes de aplicarlas a datos importantes.
+
+<Callout type="peligro" title="Privacidad de tus archivos">
+  Si un agente lee archivos y envía su contenido a un proveedor de modelos, esos datos salen de tu computadora aunque los archivos originales estén guardados localmente. No le des acceso a información privada o sensible sin revisar primero cómo se procesará.
+</Callout>
+
+## ¿Cómo sé que funcionó?
+
+La preparación está completa cuando podés marcar todos estos puntos:
+
+- [ ] QGIS abre y anotaste la versión que aparece en **Ayuda → Acerca de**.
+- [ ] Guardaste `proyecto-prueba.qgz` y ves una capa de ejemplo en el mapa.
+- [ ] Abriste la consola de Python y `print(Qgis.QGIS_VERSION)` mostró una versión.
+- [ ] Ubicaste la carpeta del perfil activo desde el menú **Configuración → Perfiles de usuario**.
+- [ ] Python y `uv` están instalados según sus guías y `uv --version` muestra una versión.
+- [ ] Creaste una carpeta de trabajo y otra para las salidas; conservaste los datos originales.
+- [ ] Hiciste una copia del proyecto antes de permitir que un agente lo modifique.

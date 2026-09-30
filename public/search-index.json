@@ -316,6 +316,47 @@
     ]
   },
   {
+    "id": "qgis-instalar-y-preparar",
+    "slug": "qgis-instalar-y-preparar",
+    "title": "Instalar QGIS y dejarlo listo para trabajar con un agente",
+    "titleNormalized": "instalar qgis y dejarlo listo para trabajar con un agente",
+    "summary": "Instala QGIS LTR, prepara un proyecto de prueba y ubica el perfil y la consola de Python para colaborar con un agente de IA.",
+    "summaryNormalized": "instala qgis ltr, prepara un proyecto de prueba y ubica el perfil y la consola de python para colaborar con un agente de ia.",
+    "track": "geoespacial",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "qgis",
+      "python",
+      "uv"
+    ],
+    "toolsNormalized": [
+      "qgis",
+      "python",
+      "uv"
+    ],
+    "tags": [
+      "qgis",
+      "instalacion",
+      "ltr",
+      "perfil",
+      "consola-python"
+    ],
+    "tagsNormalized": [
+      "qgis",
+      "instalacion",
+      "ltr",
+      "perfil",
+      "consola-python"
+    ],
+    "errorSymptoms": [],
+    "errorSymptomsNormalized": []
+  },
+  {
     "id": "instalar-git",
     "slug": "instalar-git",
     "title": "Instalación y Configuración Inicial de Git",
