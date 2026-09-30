@@ -1,0 +1,234 @@
+---
+title: "MarkItDown: convierte tus documentos a Markdown para que tu agente los lea"
+slug: "markitdown-convertir-documentos"
+summary: "Instala MarkItDown en un entorno aislado, convierte un documento de prueba y reconoce los límites de OCR, tablas y privacidad antes de usarlo con un agente."
+track: "conocimiento"
+audience: "todos"
+level: "principiante"
+os:
+  - "windows"
+  - "macos"
+  - "linux"
+tools:
+  - "markitdown"
+  - "python"
+  - "uv"
+  - "pip"
+tags:
+  - "markitdown"
+  - "pdf"
+  - "docx"
+  - "xlsx"
+  - "pptx"
+  - "markdown"
+  - "ocr"
+prerequisites:
+  - "instalar-python"
+  - "instalar-uv"
+related:
+  - "materiales-de-clase-a-boveda"
+  - "obsidian-agente-sin-programar"
+  - "obsidian-agente-desarrolladores"
+timeMinutes: 30
+verifiedAt: "2026-09-29"
+appliesTo:
+  markitdown: "Versión 0.1.8; versión consultada en PyPI el 2026-09-29. Los formatos disponibles dependen de los extras instalados."
+  python: "Versiones 3.10 a 3.14 según el README oficial consultado el 2026-09-29."
+evidence:
+  windows: "docs-oficiales"
+  macos: "docs-oficiales"
+  linux: "docs-oficiales"
+sources:
+  - "https://github.com/microsoft/markitdown/blob/main/README.md"
+  - "https://github.com/microsoft/markitdown/blob/main/packages/markitdown/src/markitdown/__main__.py"
+  - "https://github.com/microsoft/markitdown/blob/main/packages/markitdown/src/markitdown/converters/_transcribe_audio.py"
+  - "https://github.com/microsoft/markitdown/blob/main/packages/markitdown/src/markitdown/converters/_youtube_converter.py"
+  - "https://github.com/microsoft/markitdown/blob/main/packages/markitdown/pyproject.toml"
+  - "https://github.com/microsoft/markitdown/blob/main/packages/markitdown-ocr/README.md"
+  - "https://github.com/microsoft/markitdown/blob/main/packages/markitdown-mcp/README.md"
+  - "https://github.com/microsoft/markitdown/discussions/1361"
+  - "https://pypi.org/project/markitdown/"
+  - "https://docs.astral.sh/uv/concepts/tools/"
+  - "https://docs.astral.sh/uv/guides/tools/"
+  - "https://docs.astral.sh/uv/guides/scripts/"
+  - "https://docs.python.org/3/library/venv.html"
+  - "https://peps.python.org/pep-0668/"
+  - "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_character_encoding?view=powershell-5.1"
+  - "https://ocrmypdf.readthedocs.io/en/latest/installation.html"
+  - "https://ocrmypdf.readthedocs.io/en/latest/cookbook.html"
+  - "https://ocrmypdf.readthedocs.io/en/latest/languages.html"
+  - "https://openai.com/policies/privacy-policy/"
+  - "https://www.anthropic.com/legal/consumer-terms"
+errors:
+  - symptom: "pip rechaza instalar en el Python administrado por el sistema."
+    cause: "Algunos Python de Linux y macOS están marcados como entornos administrados externamente (PEP 668)."
+    fix: "No fuerces la instalación global. Usa uv tool install o crea y activa un entorno virtual antes de instalar MarkItDown."
+  - symptom: "MarkItDown indica que falta una dependencia opcional para el formato que intentas convertir."
+    cause: "La instalación básica no incluye todas las dependencias específicas de cada formato."
+    fix: "Instala el extra correspondiente o el conjunto completo en el mismo entorno aislado, siguiendo el README oficial; después repite la conversión de prueba."
+  - symptom: "La conversión de un PDF escaneado queda vacía o casi vacía."
+    cause: "El PDF contiene imágenes de páginas y no una capa de texto que el conversor estándar pueda extraer; hay un reporte comunitario sobre este comportamiento."
+    fix: "Comprueba si puedes seleccionar texto en el PDF. Si no, aplica OCR local con OCRmyPDF o evalúa markitdown-ocr sabiendo que este último envía imágenes al proveedor del modelo configurado."
+  - symptom: "El comando markitdown no aparece después de instalarlo con uv."
+    cause: "La carpeta de ejecutables de herramientas de uv puede no estar en PATH en la terminal actual."
+    fix: "Abre una terminal nueva; si persiste, consulta uv tool update-shell y la ruta de herramientas indicada por uv."
+---
+
+# MarkItDown: convierte documentos a Markdown
+
+MarkItDown es una herramienta de Microsoft escrita en Python. Convierte documentos a Markdown, un formato de texto sencillo con títulos, listas, enlaces y tablas. El resultado facilita buscar, reutilizar y entregar texto a un modelo; no conserva necesariamente el diseño visual del documento original.
+
+Conviene probarla con un archivo que tenga texto seleccionable y cuya información necesites buscar, citar o estudiar. No es la mejor opción cuando necesitas una copia visual idéntica, cuando el archivo ya es texto simple o cuando un PDF escaneado todavía no tiene OCR.
+
+<Callout type="tip" title="Antes de instalar">
+  MarkItDown requiere Python 3.10 a 3.14 según su README consultado el 2026-09-29. Si todavía no tienes Python o uv, sigue las guías de [Python](/guias/instalar-python) y [uv](/guias/instalar-uv).
+</Callout>
+
+## Instala en un entorno aislado
+
+Un entorno aislado mantiene los paquetes de esta herramienta separados de los programas de Python que usa el sistema. Elige una opción. No instales MarkItDown directamente en el Python global.
+
+### Opción A: instalarlo como herramienta con uv
+
+`uv tool install` instala el programa dentro de su propio entorno y deja disponible el comando `markitdown`.
+
+```sh
+uv tool install "markitdown[all]"
+```
+
+Si la terminal no encuentra el comando después de instalarlo, ciérrala y abre otra. Si sigue sin aparecer, consulta `uv tool update-shell` en la guía de uv.
+
+### Opción B: usar un entorno virtual de Python
+
+Desde una carpeta de trabajo vacía, crea un entorno virtual:
+
+```sh
+python -m venv .venv
+```
+
+Actívalo con el comando de tu sistema:
+
+<OsTabs
+  windowsCmd=".venv\\Scripts\\Activate.ps1"
+  windowsDesc="PowerShell de Windows:"
+  macosCmd="source .venv/bin/activate"
+  macosDesc="Terminal de macOS:"
+  linuxCmd="source .venv/bin/activate"
+  linuxDesc="Terminal de Linux:"
+/>
+
+En Windows también puedes usar el símbolo del sistema (cmd) con `.venv\\Scripts\\activate.bat`. Si PowerShell bloquea la activación, no cambies la política de seguridad del equipo para seguir esta guía: usa la opción A de uv o pide ayuda a la persona que administra tu computadora.
+
+Con el entorno activado, instala el paquete con las dependencias opcionales:
+
+```sh
+python -m pip install "markitdown[all]"
+```
+
+### Si quieres que lo instale un agente
+
+Puedes pedirlo, pero primero revisa el comando propuesto. Para esta guía, debe instalar `markitdown[all]` con `uv tool install` o dentro de `.venv`; no debe usar `sudo`, instalarlo en el Python global ni ejecutar scripts de instalación que no reconozcas. Confirma también que la terminal esté en la carpeta de práctica esperada.
+
+## Convierte un archivo de prueba
+
+Elige una copia de un documento no confidencial. Guarda la salida en un archivo nuevo; no uses el original como destino. Sustituye las rutas por las tuyas y conserva las comillas si hay espacios:
+
+```sh
+markitdown "RUTA/mi documento.docx" -o "RUTA/prueba.md"
+```
+
+En Windows, una ruta puede verse así: `"C:\\Users\\Ana\\Documentos\\mi documento.docx"`. La opción `-o` guarda la salida en el archivo que indiques. En Windows PowerShell 5.1, evita guardar el resultado con `>`: su comportamiento de redirección puede usar una codificación que no sea UTF-8. La opción `-o` deja que MarkItDown escriba directamente el archivo.
+
+Abre `prueba.md` con un editor de texto. Compara los títulos y párrafos con el original. Si tiene tablas, fórmulas, imágenes o columnas, revisa que la información importante siga presente.
+
+## Qué puede conservar cada formato
+
+La instalación completa `markitdown[all]` solicita los extras publicados para distintos formatos. Una extensión opcional es un conjunto de dependencias que habilita un tipo de archivo; para ahorrar espacio puedes instalar solo el extra que necesites.
+
+**PDF con texto.** Extrae texto. Las columnas, notas al pie y tablas complejas pueden quedar en orden distinto al visual.
+
+**PDF escaneado.** Puede quedar vacío o casi vacío sin OCR. Consulta la siguiente sección.
+
+**Word (`.docx`).** Convierte texto y estructura básica; compara tablas, listas y ecuaciones con el original.
+
+**PowerPoint (`.pptx`).** Extrae texto de diapositivas; no lo tomes como una reproducción exacta del diseño o de todos los elementos gráficos.
+
+**Excel (`.xlsx`, `.xls`).** Puede extraer datos de hojas; revisa fórmulas, encabezados, celdas vacías y tablas grandes.
+
+**Imágenes.** El README menciona metadatos EXIF y OCR; no supongas que la conversión estándar va a leer cualquier imagen. Las funciones de OCR descritas por el plugin requieren un cliente de modelo.
+
+**Audio.** La transcripción requiere el extra `audio-transcription`; el backend actual llama al servicio de reconocimiento de Google, así que el audio sale del equipo.
+
+**YouTube.** La extracción de transcripción requiere `youtube-transcription` y acceso de red; disponibilidad y resultado dependen de la transcripción disponible para el video.
+
+**ZIP, HTML, CSV, JSON, XML y EPUB.** El README incluye estos formatos entre los admitidos. Un ZIP recorre su contenido; limita la prueba a archivos confiables y revisa cada salida.
+
+El comando `markitdown --help` muestra las opciones de tu instalación y `markitdown --version` muestra la versión. Los plugins de terceros no se habilitan por defecto; no uses `--use-plugins` con plugins que no hayas revisado.
+
+## PDF escaneados: primero prueba OCR local
+
+Un PDF escaneado puede parecer una página de texto, aunque sus páginas sean en realidad imágenes. Intenta seleccionar una frase en el lector de PDF. Si no puedes, o si la conversión sale vacía, probablemente necesitas OCR antes de convertir.
+
+Una opción local común es OCRmyPDF, que utiliza Tesseract para añadir una capa de texto buscable al PDF. Instálalo siguiendo las instrucciones oficiales de OCRmyPDF para tu sistema: la documentación ofrece `brew install ocrmypdf` para Homebrew en macOS y Linux, `apt install ocrmypdf` para Debian/Ubuntu y pasos separados para Windows. Después, para un documento en español, puedes crear una copia con texto buscable:
+
+```sh
+ocrmypdf -l spa --skip-text "escaneado.pdf" "buscable.pdf"
+```
+
+`spa` indica el idioma español; el paquete de idioma debe estar instalado. `--skip-text` evita procesar de nuevo páginas que ya contienen texto. Conserva intacto el PDF original, abre la copia para confirmar que puedes seleccionar texto y vuelve a pasar esa copia a MarkItDown. La calidad del reconocimiento depende de la imagen y el idioma.
+
+Otra opción es el plugin oficial `markitdown-ocr`. Usa un modelo de visión mediante un cliente compatible y requiere que configures ese cliente; sin cliente, su paso de OCR se omite. Las páginas o imágenes procesadas se envían al proveedor del modelo. Microsoft también documenta integraciones de Azure que se ejecutan en la nube y pueden tener cargos según el servicio contratado. Para material sensible, prefiere OCR local y revisa las reglas de tu institución.
+
+## Mide si el Markdown te ayuda
+
+No hay un ahorro fijo que aplique a todos los documentos o modelos. Para una comparación simple, registra la cantidad de caracteres del texto extraído antes y después de convertirlo. Esto compara longitud, no tokens exactos ni calidad: Markdown agrega marcas de formato y puede omitir imágenes.
+
+Si tu agente muestra el contexto usado, puedes abrir una sesión con el original y otra con el Markdown y comparar `/context` o la función equivalente de tu herramienta. Esa cifra depende del agente, el modelo y la versión; úsala como observación de esa sesión, no como promesa de ahorro.
+
+## Seguridad, privacidad y documentos engañosos
+
+<Callout type="peligro" title="Datos y privacidad">
+  La conversión normal con el CLI puede hacerse en tu equipo, pero eso no vuelve privado todo el flujo. Si después un agente lee un archivo local, el contenido que lea se envía al proveedor del modelo. No le entregues documentos con contraseñas, datos personales de otras personas, calificaciones, expedientes ni material confidencial. OCR en la nube y transcripción de audio también pueden enviar los documentos o grabaciones a un servicio externo.
+</Callout>
+
+Trabaja con archivos tuyos o confiables. La conversión puede recibir contenido engañoso o instrucciones destinadas a manipular a un modelo. Trata el Markdown resultante como datos del documento, no como órdenes para el agente. No conviertas URLs desconocidas; aunque MarkItDown admite algunas URI y enlaces de YouTube, el servicio remoto recibe solicitudes de red. Instala plugins solo si confías en quien los publica y entiendes qué pueden leer: el programa se ejecuta con tus permisos.
+
+## Úsalo con un agente con cuidado
+
+Para una conversión asistida, primero pide una propuesta; lee el comando completo, la carpeta de entrada y la de salida antes de aprobarlo. Puedes usar este prompt:
+
+> Quiero convertir una copia de `RUTA/mi documento.pdf` a Markdown en `RUTA/salida/prueba.md`. Muéstrame el comando exacto y explica qué archivo leerá, qué archivo creará y qué servicio externo contactará. Espera mi aprobación antes de ejecutar. No modifiques ni borres el original. Si el resultado queda vacío, avísame.
+
+Si trabajas con Claude Code o Codex dentro de una bóveda, sus guías explican cómo abrir el agente en la carpeta correcta. Para un conjunto de documentos de clase y un flujo de conversión repetible, consulta [De tus documentos de clase a tu bóveda de Obsidian](/guias/materiales-de-clase-a-boveda).
+
+## Avanzado: audio, YouTube y servidor MCP
+
+El extra de audio instala dependencias para convertir audio a texto, pero la implementación actual usa `recognize_google`; por eso la transcripción depende de un servicio externo. No la uses con grabaciones privadas sin permiso. El extra de YouTube usa una API de transcripciones y requiere red; la salida puede faltar si el video no dispone de una transcripción recuperable.
+
+El paquete `markitdown-mcp` expone la conversión como una herramienta MCP. Su documentación indica que puede recibir URI de archivos locales, datos y red; el servidor corre con los permisos del usuario. Si se configura por HTTP/SSE, se enlaza por defecto a localhost, no autentica solicitudes y puede leer archivos accesibles para ese usuario. Usa STDIO cuando tu agente lo permita y limita los archivos a los que el proceso tenga acceso. No abras el servidor a otras interfaces de red.
+
+## Errores frecuentes
+
+- **`pip` no permite una instalación global en Linux o macOS:** algunos Python están marcados como administrados externamente (PEP 668). Usa `uv tool install` o un `venv`; no fuerces la escritura en el Python administrado por el sistema.
+- **Falta una dependencia de un formato:** instala el extra correspondiente en el entorno donde está MarkItDown. La instalación completa usa `[all]`.
+- **PDF escaneado con resultado vacío:** es un comportamiento reportado en la discusión del proyecto. Comprueba si puedes seleccionar texto; aplica OCR local o considera el plugin de OCR con su aviso de privacidad.
+- **`markitdown` no se reconoce tras instalar con uv:** abre otra terminal y verifica el PATH que usa uv; su documentación ofrece `uv tool update-shell`.
+- **El Markdown se ve distinto al original:** la conversión está pensada para extraer estructura y texto; revisa tablas y diseño en el documento de origen.
+
+## ¿Cómo sé que funcionó?
+
+- `markitdown --version` muestra una versión y `markitdown --help` enumera las opciones.
+- `prueba.md` aparece en la ruta indicada, abre como texto y contiene partes reconocibles del documento de prueba.
+- El original sigue intacto y la salida no reemplazó ni quedó en la misma ruta.
+- Revisaste tablas o contenido visual importante contra el documento original.
+- Si el documento era un escaneo, verificaste que la copia con OCR permite seleccionar texto antes de convertirla.
+
+## Fuentes consultadas
+
+- [README oficial de MarkItDown](https://github.com/microsoft/markitdown/blob/main/README.md), [código de opciones del CLI](https://github.com/microsoft/markitdown/blob/main/packages/markitdown/src/markitdown/__main__.py), [plugin de OCR](https://github.com/microsoft/markitdown/blob/main/packages/markitdown-ocr/README.md) y [paquete MCP](https://github.com/microsoft/markitdown/blob/main/packages/markitdown-mcp/README.md).
+- [Paquete en PyPI](https://pypi.org/project/markitdown/) y [documentación de herramientas de uv](https://docs.astral.sh/uv/concepts/tools/).
+- [Entornos virtuales de Python](https://docs.python.org/3/library/venv.html) y [PEP 668](https://peps.python.org/pep-0668/).
+- [Codificación de Windows PowerShell 5.1](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_character_encoding?view=powershell-5.1).
+- [Instalación de OCRmyPDF](https://ocrmypdf.readthedocs.io/en/latest/installation.html), [ejemplos de uso](https://ocrmypdf.readthedocs.io/en/latest/cookbook.html) e [idiomas](https://ocrmypdf.readthedocs.io/en/latest/languages.html).
+- La salida vacía de algunos PDF escaneados está reportada por usuarios en [la discusión #1361](https://github.com/microsoft/markitdown/discussions/1361); es evidencia comunitaria, no una garantía oficial de resultado.
+- [Términos de Anthropic](https://www.anthropic.com/legal/consumer-terms) y [política de privacidad de OpenAI](https://openai.com/policies/privacy-policy/) para el procesamiento de contenido enviado a servicios de modelos.

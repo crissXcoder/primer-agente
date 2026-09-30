@@ -1,5 +1,62 @@
 [
   {
+    "id": "markitdown-convertir-documentos",
+    "slug": "markitdown-convertir-documentos",
+    "title": "MarkItDown: convierte tus documentos a Markdown para que tu agente los lea",
+    "titleNormalized": "markitdown: convierte tus documentos a markdown para que tu agente los lea",
+    "summary": "Instala MarkItDown en un entorno aislado, convierte un documento de prueba y reconoce los límites de OCR, tablas y privacidad antes de usarlo con un agente.",
+    "summaryNormalized": "instala markitdown en un entorno aislado, convierte un documento de prueba y reconoce los limites de ocr, tablas y privacidad antes de usarlo con un agente.",
+    "track": "conocimiento",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "markitdown",
+      "python",
+      "uv",
+      "pip"
+    ],
+    "toolsNormalized": [
+      "markitdown",
+      "python",
+      "uv",
+      "pip"
+    ],
+    "tags": [
+      "markitdown",
+      "pdf",
+      "docx",
+      "xlsx",
+      "pptx",
+      "markdown",
+      "ocr"
+    ],
+    "tagsNormalized": [
+      "markitdown",
+      "pdf",
+      "docx",
+      "xlsx",
+      "pptx",
+      "markdown",
+      "ocr"
+    ],
+    "errorSymptoms": [
+      "pip rechaza instalar en el Python administrado por el sistema.",
+      "MarkItDown indica que falta una dependencia opcional para el formato que intentas convertir.",
+      "La conversión de un PDF escaneado queda vacía o casi vacía.",
+      "El comando markitdown no aparece después de instalarlo con uv."
+    ],
+    "errorSymptomsNormalized": [
+      "pip rechaza instalar en el python administrado por el sistema.",
+      "markitdown indica que falta una dependencia opcional para el formato que intentas convertir.",
+      "la conversion de un pdf escaneado queda vacia o casi vacia.",
+      "el comando markitdown no aparece despues de instalarlo con uv."
+    ]
+  },
+  {
     "id": "materiales-de-clase-a-boveda",
     "slug": "materiales-de-clase-a-boveda",
     "title": "De tus documentos de clase a tu bóveda de Obsidian con MarkItDown",
