@@ -357,6 +357,43 @@
     "errorSymptomsNormalized": []
   },
   {
+    "id": "qgis-mcp-que-es-y-como-elegir",
+    "slug": "qgis-mcp-que-es-y-como-elegir",
+    "title": "QGIS y MCP: quÃ© conecta y cÃ³mo elegir",
+    "titleNormalized": "qgis y mcp: qua© conecta y ca³mo elegir",
+    "summary": "Entiende cÃ³mo un agente se conecta con QGIS, compara proyectos comunitarios y elige una opciÃ³n con controles de seguridad bÃ¡sicos.",
+    "summaryNormalized": "entiende ca³mo un agente se conecta con qgis, compara proyectos comunitarios y elige una opcia³n con controles de seguridad ba¡sicos.",
+    "track": "geoespacial",
+    "level": "principiante",
+    "os": [
+      "windows",
+      "macos",
+      "linux"
+    ],
+    "tools": [
+      "qgis",
+      "mcp"
+    ],
+    "toolsNormalized": [
+      "qgis",
+      "mcp"
+    ],
+    "tags": [
+      "qgis",
+      "mcp",
+      "agentes",
+      "seguridad"
+    ],
+    "tagsNormalized": [
+      "qgis",
+      "mcp",
+      "agentes",
+      "seguridad"
+    ],
+    "errorSymptoms": [],
+    "errorSymptomsNormalized": []
+  },
+  {
     "id": "qgis-plugins-instalar-y-gestionar",
     "slug": "qgis-plugins-instalar-y-gestionar",
     "title": "Plugins de QGIS: instalar, actualizar, quitar y confiar bien",
