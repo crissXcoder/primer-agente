@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import matter from "gray-matter";
 import { GuideFrontmatterSchema, Guide } from "../src/lib/content/schema";
+import { loadGuideFromFile } from "../src/lib/content/loader";
+import { getOsFilePaths } from "../src/lib/content/os-file-paths";
 import {
   validateContentIntegrity,
   validateImageAltText,
@@ -11,7 +17,8 @@ describe("1. Validación Zod de Frontmatter (GuideFrontmatterSchema)", () => {
     title: "Guía de Prueba Válida",
     slug: "guia-de-prueba",
     summary: "Este es un resumen válido con más de diez caracteres.",
-    track: "terminal",
+    track: "git",
+    audience: "todos" as const,
     level: "principiante" as const,
     os: ["windows" as const, "linux" as const],
     tools: ["git", "bash"],
@@ -38,6 +45,32 @@ describe("1. Validación Zod de Frontmatter (GuideFrontmatterSchema)", () => {
   it("debe aceptar un frontmatter completamente válido", () => {
     const result = GuideFrontmatterSchema.safeParse(validFrontmatter);
     expect(result.success).toBe(true);
+  });
+
+  it("reconoce la pista conocimiento", () => {
+    expect(GuideFrontmatterSchema.safeParse({ ...validFrontmatter, track: "conocimiento" }).success).toBe(true);
+  });
+
+  it("debe aceptar cada audiencia permitida y rechazar valores desconocidos", () => {
+    for (const audience of ["todos", "programadores", "no-programadores"]) {
+      expect(GuideFrontmatterSchema.safeParse({ ...validFrontmatter, audience }).success).toBe(true);
+    }
+    expect(GuideFrontmatterSchema.safeParse({ ...validFrontmatter, audience: "expertos" }).success).toBe(false);
+  });
+
+  it("el pipeline de carga rechaza una guía sin audiencia", () => {
+    const temporaryDirectory = mkdtempSync(join(tmpdir(), "primer-agente-"));
+    const guidePath = join(temporaryDirectory, "sin-audiencia.mdx");
+    const frontmatterWithoutAudience = Object.fromEntries(
+      Object.entries(validFrontmatter).filter(([key]) => key !== "audience")
+    );
+    writeFileSync(guidePath, matter.stringify("Contenido de prueba.", frontmatterWithoutAudience));
+
+    try {
+      expect(() => loadGuideFromFile(guidePath)).toThrow(/audience/);
+    } finally {
+      rmSync(temporaryDirectory, { recursive: true, force: true });
+    }
   });
 
   it("adversarial: debe fallar si verifiedAt es una fecha en el futuro", () => {
@@ -95,6 +128,16 @@ describe("1. Validación Zod de Frontmatter (GuideFrontmatterSchema)", () => {
   });
 });
 
+describe("Rutas de archivos por sistema operativo", () => {
+  it("construye la misma ruta relativa desde las carpetas de usuario de cada sistema", () => {
+    expect(getOsFilePaths("Documents/Notas personales.md", "ana")).toEqual({
+      windows: "C:\\Users\\ana\\Documents\\Notas personales.md",
+      macos: "/Users/ana/Documents/Notas personales.md",
+      linux: "/home/ana/Documents/Notas personales.md",
+    });
+  });
+});
+
 describe("2. Integridad de la Colección y Grafo de Dependencias", () => {
   const baseGuide = (slug: string, prereqs: string[] = [], related: string[] = []): Guide => ({
     filePath: `/content/guias/${slug}.mdx`,
@@ -103,7 +146,8 @@ describe("2. Integridad de la Colección y Grafo de Dependencias", () => {
       title: `Guía ${slug}`,
       slug,
       summary: "Resumen de prueba para validación de grafo.",
-      track: "general",
+      track: "git",
+      audience: "todos",
       level: "principiante",
       os: ["windows"],
       tools: ["test"],
@@ -213,6 +257,7 @@ describe("4. Normalización Lingüística e Índice de Búsqueda", () => {
         slug: "instalar-python",
         summary: "Configuración inicial de entornos virtuales.",
         track: "python",
+        audience: "todos",
         level: "principiante",
         os: ["windows"],
         tools: ["Python", "UV"],

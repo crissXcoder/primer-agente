@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllGuides, getGuideBySlug } from "@/lib/content/loader";
+import { AUDIENCE_LABELS, TRACK_LABELS } from "@/lib/content/schema";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -93,7 +94,8 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
       <header className="space-y-4 border-b border-outline-variant/60 pb-8">
         <div className="flex flex-wrap items-center gap-2">
           <Badge status="verified" label={`Verificada: ${frontmatter.verifiedAt}`} />
-          <Badge status="neutral" label={`Pista: ${frontmatter.track}`} />
+          <Badge status="neutral" label={`Pista: ${TRACK_LABELS[frontmatter.track]}`} />
+          <Badge status="neutral" label={AUDIENCE_LABELS[frontmatter.audience]} />
           <span className="font-mono text-xs text-on-surface-variant capitalize">
             Nivel {frontmatter.level} · ⏱ {frontmatter.timeMinutes} minutos
           </span>

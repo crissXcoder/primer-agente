@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { GuideFrontmatter } from "@/lib/content/schema";
+import { AUDIENCE_LABELS, type AudienceType, type GuideFrontmatter, TRACK_LABELS } from "@/lib/content/schema";
 import { normalizeText } from "@/lib/content/search-index";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,7 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
   const queryParam = searchParams.get("q") || "";
   const osParam = searchParams.get("os") || "";
   const trackParam = searchParams.get("track") || "";
+  const audienceParam = searchParams.get("audience") || "";
   const levelParam = searchParams.get("level") || "";
   const toolParam = searchParams.get("tool") || "";
 
@@ -101,6 +102,10 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
         return false;
       }
 
+      if (audienceParam && guide.audience !== audienceParam) {
+        return false;
+      }
+
       // Filtro de Nivel
       if (levelParam && guide.level !== levelParam) {
         return false;
@@ -113,9 +118,9 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
 
       return true;
     });
-  }, [initialGuides, searchQuery, osParam, trackParam, levelParam, toolParam]);
+  }, [initialGuides, searchQuery, osParam, trackParam, audienceParam, levelParam, toolParam]);
 
-  const hasActiveFilters = Boolean(searchQuery || osParam || trackParam || levelParam || toolParam);
+  const hasActiveFilters = Boolean(searchQuery || osParam || trackParam || audienceParam || levelParam || toolParam);
 
   return (
     <div className="space-y-8">
@@ -137,7 +142,7 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
         </div>
 
         {/* Filtros desplegables y chips */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2">
           {/* Filtro Sistema Operativo */}
           <div>
             <label htmlFor="filter-os" className="font-mono text-xs text-on-surface-variant font-medium block mb-1">
@@ -172,8 +177,25 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
               <option value="">Todas las pistas</option>
               {availableTracks.map((t) => (
                 <option key={t} value={t}>
-                  {t.toUpperCase()}
+                  {TRACK_LABELS[t]}
                 </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="filter-audience" className="font-mono text-xs text-on-surface-variant font-medium block mb-1">
+              Audiencia
+            </label>
+            <select
+              id="filter-audience"
+              value={audienceParam}
+              onChange={(e) => updateFilters({ audience: e.target.value })}
+              className="w-full h-10 px-3 rounded border border-outline-variant bg-surface text-on-surface font-sans text-xs focus:ring-2 focus:ring-primary focus:outline-none"
+            >
+              <option value="">Todas las audiencias</option>
+              {(Object.keys(AUDIENCE_LABELS) as AudienceType[]).map((audience) => (
+                <option key={audience} value={audience}>{AUDIENCE_LABELS[audience]}</option>
               ))}
             </select>
           </div>
@@ -248,7 +270,8 @@ export function GuidesCatalog({ initialGuides }: GuidesCatalogProps) {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <Badge status="verified" label="Verificada" />
-                    <Badge status="neutral" label={guide.track} />
+                    <Badge status="neutral" label={TRACK_LABELS[guide.track]} />
+                    <Badge status="neutral" label={AUDIENCE_LABELS[guide.audience]} />
                   </div>
                   <span className="font-mono text-xs text-on-surface-variant">
                     ⏱ {guide.timeMinutes} min

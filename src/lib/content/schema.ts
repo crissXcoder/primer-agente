@@ -6,6 +6,23 @@ export type OsType = z.infer<typeof OsEnum>;
 export const LevelEnum = z.enum(["principiante", "intermedio"]);
 export type LevelType = z.infer<typeof LevelEnum>;
 
+export const TrackEnum = z.enum(["git", "nodejs", "python", "conocimiento"]);
+export type TrackType = z.infer<typeof TrackEnum>;
+export const TRACK_LABELS: Record<TrackType, string> = {
+  git: "Git",
+  nodejs: "Node.js",
+  python: "Python",
+  conocimiento: "Bóveda y conocimiento",
+};
+
+export const AudienceEnum = z.enum(["todos", "programadores", "no-programadores"]);
+export type AudienceType = z.infer<typeof AudienceEnum>;
+export const AUDIENCE_LABELS: Record<AudienceType, string> = {
+  todos: "Todas las personas",
+  programadores: "Programadores",
+  "no-programadores": "No programadores",
+};
+
 export const EvidenceEnum = z.enum(["docs-oficiales", "ejecutada"]);
 export type EvidenceType = z.infer<typeof EvidenceEnum>;
 
@@ -22,7 +39,8 @@ export const GuideFrontmatterSchema = z.object({
     .string()
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "El slug debe estar en formato kebab-case (ej. instalar-git)"),
   summary: z.string().min(10, "El resumen debe tener al menos 10 caracteres"),
-  track: z.string().min(2, "El track formativo no puede estar vacío"),
+  track: TrackEnum,
+  audience: AudienceEnum,
   level: LevelEnum,
   os: z.array(OsEnum).min(1, "Debe soportar al menos un sistema operativo"),
   tools: z.array(z.string().min(1)).min(1, "Debe especificar al menos una herramienta"),

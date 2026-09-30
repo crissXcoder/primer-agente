@@ -7,12 +7,14 @@ import { Screenshot } from "./screenshot";
 import { Callout } from "@/components/ui/callout";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Badge } from "@/components/ui/badge";
+import { RutaArchivos } from "./ruta-archivos";
 
 export const mdxComponents = {
   // Componentes de Guía
   Steps,
   Step,
   OsTabs,
+  RutaArchivos,
   Command,
   Verify,
   Screenshot,

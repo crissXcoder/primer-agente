@@ -113,3 +113,7 @@ Adoptar **`minisearch`** con un índice generado durante el proceso de build.
    * *Impacto*: Evita que el servidor de desarrollo bloquee peticiones de automatización del navegador Playwright contra `127.0.0.1`.
 
 
+
+## 6. Componente de rutas de archivos por sistema operativo
+
+<OsTabs> representa comandos y asigna lenguaje y archivo de terminal a cada pestaña. Las rutas son datos de texto y requieren instrucciones para copiar y pegar, así que <RutaArchivos> compone el primitivo accesible Tabs directamente y construye variantes para cada sistema operativo a partir de una ruta relativa común.

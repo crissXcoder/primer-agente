@@ -55,6 +55,20 @@ test.describe("Pruebas E2E de Catálogo y Guías (primer-agente)", () => {
     ).toBeVisible();
   });
 
+  test("filtrar por audiencia sincroniza la URL y se puede limpiar", async ({ page }) => {
+    await page.goto("/guias");
+    await page.locator("#filter-audience").selectOption("programadores");
+
+    await expect(page).toHaveURL(/audience=programadores/);
+    await expect(page.getByText("¡Pucha! No encontramos ninguna guía con esos filtros")).toBeVisible();
+
+    await page.getByRole("button", { name: /Limpiar filtros/i }).click();
+    await expect(page).toHaveURL("/guias");
+    await expect(page.locator("#filter-audience")).toHaveValue("");
+    await expect(page.getByRole("link", { name: "Instalación y Configuración Inicial de Git" })).toBeVisible();
+    await expect(page.getByText("Todas las personas", { exact: true }).nth(1)).toBeVisible();
+  });
+
   test("3. Cambiar de sistema operativo muestra el comando correcto y permite copiar", async ({
     page,
   }) => {
@@ -67,6 +81,7 @@ test.describe("Pruebas E2E de Catálogo y Guías (primer-agente)", () => {
     await expect(
       page.getByRole("heading", { name: "Instalación y Configuración Inicial de Git" })
     ).toBeVisible();
+    await expect(page.getByText("Todas las personas")).toBeVisible();
 
     // En las pestañas de OsTabs, cambiar a pestaña Linux
     const linuxTab = page.getByRole("tab", { name: /Linux/i }).first();
